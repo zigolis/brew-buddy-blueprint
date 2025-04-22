@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { EquipmentForm } from "@/components/equipment/EquipmentForm";
 import { useBrewContext } from "@/contexts/BrewContext";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function EditEquipment() {
   const { equipmentId } = useParams();
@@ -23,9 +24,14 @@ export default function EditEquipment() {
           <h1 className="text-3xl font-bold">Edit Equipment</h1>
           <p className="text-muted-foreground">Modify your equipment details</p>
         </div>
-        <div className="max-w-2xl">
-          <EquipmentForm equipment={equipmentItem} />
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Edit {equipmentItem.name}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <EquipmentForm equipment={equipmentItem} />
+          </CardContent>
+        </Card>
       </div>
     </Layout>
   );

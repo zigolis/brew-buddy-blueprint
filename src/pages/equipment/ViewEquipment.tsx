@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { EquipmentDetails } from "@/components/equipment/EquipmentDetails";
 import { useBrewContext } from "@/contexts/BrewContext";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function ViewEquipment() {
   const { equipmentId } = useParams();
@@ -23,9 +24,7 @@ export default function ViewEquipment() {
           <h1 className="text-3xl font-bold">Equipment Details</h1>
           <p className="text-muted-foreground">View your equipment details</p>
         </div>
-        <div className="max-w-2xl">
-          <EquipmentDetails equipment={equipmentItem} />
-        </div>
+        <EquipmentDetails equipment={equipmentItem} />
       </div>
     </Layout>
   );
