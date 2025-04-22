@@ -1,16 +1,17 @@
-
-import { MapPin, Currency, Thermometer } from "lucide-react";
+import { MapPin, Currency, Thermometer, Moon, Sun } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useSettings } from "@/contexts/SettingsContext";
 import { Layout } from "@/components/layout/Layout";
+import { useTheme } from "@/hooks/use-theme";
 
 const locations = ["United States", "Canada", "United Kingdom", "Australia", "Germany", "France", "Spain", "Italy"];
 const currencies = ["USD", "CAD", "GBP", "AUD", "EUR"];
 
 export default function Settings() {
   const { settings, updateSettings } = useSettings();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <Layout>
@@ -71,6 +72,24 @@ export default function Settings() {
               <Switch 
                 checked={settings.useMetric}
                 onCheckedChange={(checked) => updateSettings({ useMetric: checked })}
+              />
+            </div>
+          </Card>
+
+          <Card className="p-6">
+            <div className="flex items-center gap-4">
+              {theme === 'dark' ? (
+                <Moon className="h-5 w-5 text-muted-foreground" />
+              ) : (
+                <Sun className="h-5 w-5 text-muted-foreground" />
+              )}
+              <div className="flex-1 space-y-1">
+                <h3 className="font-medium">Dark Mode</h3>
+                <p className="text-sm text-muted-foreground">Toggle between light and dark theme</p>
+              </div>
+              <Switch 
+                checked={theme === 'dark'}
+                onCheckedChange={toggleTheme}
               />
             </div>
           </Card>
