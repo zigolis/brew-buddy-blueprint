@@ -44,7 +44,7 @@ export const FermentableSearch = ({
     }
   }, [open, value]);
   
-  // Safely get suggestions, ensuring we always return an array
+  // Get suggestions based on the current search query
   const getSuggestions = (query: string) => {
     try {
       if (!query || query.trim() === '') {
@@ -60,6 +60,16 @@ export const FermentableSearch = ({
 
   // Get suggestions based on the current search query
   const suggestions = getSuggestions(searchQuery);
+
+  const handleSelect = (selectedValue: string) => {
+    onSelect(selectedValue);
+    setOpen(false);
+  };
+
+  const handleCreateNew = () => {
+    onCreateNew();
+    setOpen(false);
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -78,19 +88,14 @@ export const FermentableSearch = ({
           <CommandInput 
             placeholder="Search fermentable..." 
             value={searchQuery} 
-            onValueChange={(newValue) => setSearchQuery(newValue)}
+            onValueChange={setSearchQuery}
           />
           <CommandList>
             {suggestions.length === 0 ? (
               <CommandEmpty>
                 {searchQuery.trim() !== '' && (
                   <CommandItem
-                    value="create-new-empty"
-                    className="text-primary"
-                    onSelect={() => {
-                      onCreateNew();
-                      setOpen(false);
-                    }}
+                    onSelect={() => handleCreateNew()}
                   >
                     <Plus className="mr-2 h-4 w-4" />
                     Create "{searchQuery}"
@@ -103,21 +108,14 @@ export const FermentableSearch = ({
                   <CommandItem
                     key={item.id || `fermentable-${Math.random()}`}
                     value={item.name}
-                    onSelect={(selectedValue) => {
-                      onSelect(selectedValue);
-                      setOpen(false);
-                    }}
+                    onSelect={() => handleSelect(item.name)}
                   >
                     {item.name}
                   </CommandItem>
                 ))}
                 <CommandItem
-                  value="create-new"
+                  onSelect={() => handleCreateNew()}
                   className="text-primary"
-                  onSelect={() => {
-                    onCreateNew();
-                    setOpen(false);
-                  }}
                 >
                   <Plus className="mr-2 h-4 w-4" />
                   Create "{searchQuery}"
