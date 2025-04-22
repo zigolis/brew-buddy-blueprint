@@ -17,7 +17,7 @@ export function Sidebar() {
   const location = useLocation();
   
   return (
-    <aside className="hidden md:flex h-screen w-64 flex-col bg-card border-r px-3 py-4">
+    <aside className="h-screen w-64 flex-col bg-card border-r px-3 py-4">
       <div className="mb-8 flex items-center px-2">
         <span className="text-2xl font-bold text-brewing-amber">iBeer Brewing Pro</span>
       </div>
