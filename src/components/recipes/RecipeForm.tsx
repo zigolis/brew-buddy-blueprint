@@ -126,17 +126,31 @@ export function RecipeForm({ onSubmit, initialData, visibleSections }: RecipeFor
 
   return (
     <Form {...form}>
-      <form id="recipe-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {sectionsToRender.map(([key, Component]) => (
-          <Component key={key} form={form} />
+      <form
+        id="recipe-form"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-12 px-1 md:px-8 py-8 bg-muted/30 rounded-2xl shadow-md max-w-5xl mx-auto"
+      >
+        {sectionsToRender.map(([key, Component], sectionIdx) => (
+          <div
+            key={key}
+            className={`p-4 md:p-8 bg-background/80 rounded-xl space-y-8 shadow-md ${
+              sectionIdx !== 0 ? "mt-12" : ""
+            }`}
+          >
+            <Component form={form} />
+          </div>
         ))}
-        
+
         {(visibleSections?.includes('bottling') || !visibleSections) && (
-          <div className="flex justify-between items-center pt-4">
-            <div className="text-lg font-semibold">
-              Total Recipe Cost: ${totalCost.toFixed(2)}
+          <div className="flex flex-col md:flex-row justify-between items-center pt-6 gap-6">
+            <div className="text-lg font-semibold text-center md:text-left">
+              Total Recipe Cost: <span className="text-primary">${totalCost.toFixed(2)}</span>
             </div>
-            <Button type="submit">
+            <Button
+              type="submit"
+              className="w-full md:w-auto px-10 py-3 rounded-lg text-lg font-bold shadow bg-primary hover:bg-primary/90 mt-2"
+            >
               {visibleSections?.includes('bottling') ? 'Create Recipe' : 'Save and Continue'}
             </Button>
           </div>
