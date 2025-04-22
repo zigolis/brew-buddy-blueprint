@@ -1,4 +1,3 @@
-
 import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { useBrewContext } from "@/contexts/BrewContext";
@@ -72,8 +71,7 @@ export function ViewRecipe() {
         </div>
 
         <div className="grid gap-8 md:grid-cols-2">
-          {/* Recipe Details */}
-          <Card className="shadow-xl rounded-2xl border-0 card-gradient">
+          <Card className="shadow-xl rounded-2xl border-0 card-gradient animate-fade-in">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Beer className="h-5 w-5 text-brewing-amber" />
@@ -133,8 +131,7 @@ export function ViewRecipe() {
             </CardContent>
           </Card>
 
-          {/* Ingredients */}
-          <Card className="shadow-xl rounded-2xl border-0 card-gradient">
+          <Card className="shadow-xl rounded-2xl border-0 card-gradient animate-fade-in">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Package className="h-5 w-5 text-brewing-hops" />
@@ -281,159 +278,191 @@ export function ViewRecipe() {
             </CardContent>
           </Card>
 
-          {/* Brewing Process */}
-          <Card className="md:col-span-2 shadow-xl rounded-2xl border-0 card-gradient">
+          <Card className="md:col-span-2 shadow-xl rounded-2xl border-0 card-gradient animate-fade-in">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <FileText className="h-5 w-5 text-brewing-stout" />
                 Brewing Process
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 mt-2">
-              <div>
-                <div className="font-semibold mb-1 text-md">Mash Schedule</div>
+            <CardContent className="space-y-6 mt-2">
+              <section className="bg-muted/70 rounded-lg p-4 space-y-2 border-l-4 border-brewing-amber shadow-sm">
+                <div className="flex items-center gap-2">
+                  <span className="bg-brewing-amber/20 text-brewing-amber px-2 rounded text-xs font-bold uppercase tracking-wide">Mash</span>
+                  <span className="ml-2 font-semibold text-sm">Mash Schedule</span>
+                </div>
                 {Array.isArray(recipe.mash?.steps) && recipe.mash.steps.length > 0 ? (
-                  <ul className="list-disc pl-4 fade-in">
+                  <ul className="list-none space-y-1 mt-2">
                     {recipe.mash.steps.map((step, i) => (
-                      <li key={i}>
+                      <li
+                        key={i}
+                        className="flex gap-2 items-center bg-white/70 border px-3 py-1.5 rounded hover:shadow transition animate-fade-in"
+                      >
+                        <span className="inline-block w-7 h-7 rounded-full bg-brewing-amber/10 flex items-center justify-center font-semibold text-brewing-amber">{i + 1}</span>
                         <span className="font-medium">{step.name || `Step ${i + 1}`}</span>
-                        {step.type ? ` | ${step.type}` : ""}
-                        {typeof step.temperature !== "undefined" ? `, ${step.temperature}°C` : ""}
-                        {typeof step.time !== "undefined" ? `, ${step.time} min` : ""}
+                        <span className="text-xs text-muted-foreground ml-2">{step.type ? `| ${step.type}` : ""}</span>
+                        <span className="ml-auto font-mono text-xs px-2 tracking-tight">{typeof step.temperature !== "undefined" ? `${step.temperature}°C` : ""} {typeof step.time !== "undefined" ? `, ${step.time} min` : ""}</span>
                       </li>
                     ))}
                   </ul>
                 ) : (
                   <div className="text-muted-foreground">No mash steps.</div>
                 )}
-              </div>
-
-              <div>
-                <div className="font-semibold mb-1 text-md">Fermentation</div>
+              </section>
+              <section className="bg-muted/70 rounded-lg p-4 space-y-2 border-l-4 border-brewing-hops shadow-sm">
+                <div className="flex items-center gap-2">
+                  <span className="bg-brewing-hops/10 text-brewing-hops px-2 rounded text-xs font-bold uppercase tracking-wide">Fermentation</span>
+                  <span className="ml-2 font-semibold text-sm">Fermentation Schedule</span>
+                </div>
                 {recipe.fermentation?.steps && Array.isArray(recipe.fermentation.steps) && recipe.fermentation.steps.length > 0 ? (
-                  <ul className="list-disc pl-4 fade-in">
+                  <ul className="list-none space-y-1 mt-2">
                     {recipe.fermentation.steps.map((step, i) => (
-                      <li key={i}>
+                      <li
+                        key={i}
+                        className="flex gap-2 items-center bg-white/70 border px-3 py-1.5 rounded hover:shadow transition animate-fade-in"
+                      >
+                        <span className="inline-block w-7 h-7 rounded-full bg-brewing-hops/10 flex items-center justify-center font-semibold text-brewing-hops">{i + 1}</span>
                         <span className="font-medium">{step.name || `Step ${i + 1}`}</span>
-                        {step.type ? ` | ${step.type}` : ""}
-                        {typeof step.temperature !== "undefined" ? `, ${step.temperature}°C` : ""}
-                        {typeof step.time !== "undefined" ? `, ${step.time} days` : ""}
-                        {typeof step.period !== "undefined" ? `, period: ${step.period} days` : ""}
-                        {step.notes ? ` – ${step.notes}` : ""}
+                        <span className="text-xs text-muted-foreground ml-2">{step.type ? `| ${step.type}` : ""}</span>
+                        <span className="ml-auto font-mono text-xs px-2 tracking-tight">
+                          {typeof step.temperature !== "undefined" ? `${step.temperature}°C, ` : ""}
+                          {typeof step.period !== "undefined" ? `Period: ${step.period} days` : ""}
+                          {typeof step.time !== "undefined" ? `, ${step.time} days` : ""}
+                        </span>
+                        {step.notes && <span className="ml-3 italic text-muted-foreground text-xs">{step.notes}</span>}
                       </li>
                     ))}
                   </ul>
                 ) : recipe.fermentation ? (
-                  <div>
-                    {recipe.fermentation.name || "Primary"}
-                    {recipe.fermentation.type ? ` | ${recipe.fermentation.type}` : ""}
-                    {typeof recipe.fermentation.temperature !== "undefined" ? `, ${recipe.fermentation.temperature}°C` : ""}
-                    {typeof recipe.fermentation.period !== "undefined" ? `, ${recipe.fermentation.period} days` : ""}
-                    {recipe.fermentation.notes ? ` – ${recipe.fermentation.notes}` : ""}
+                  <div className="flex gap-2 items-center mt-2 bg-white/70 border px-3 py-1.5 rounded shadow-sm">
+                    <span className="inline-block w-7 h-7 rounded-full bg-brewing-hops/10 flex items-center justify-center font-semibold text-brewing-hops">1</span>
+                    <span className="font-medium">{recipe.fermentation.name || "Primary"}</span>
+                    <span className="text-xs text-muted-foreground ml-2">{recipe.fermentation.type ? `| ${recipe.fermentation.type}` : ""}</span>
+                    <span className="ml-auto font-mono text-xs px-2 tracking-tight">
+                      {typeof recipe.fermentation.temperature !== "undefined" ? `${recipe.fermentation.temperature}°C, ` : ""}
+                      {typeof recipe.fermentation.period !== "undefined" ? `${recipe.fermentation.period} days` : ""}
+                    </span>
+                    {recipe.fermentation.notes && <span className="ml-3 italic text-muted-foreground text-xs">{recipe.fermentation.notes}</span>}
                   </div>
                 ) : (
                   <div className="text-muted-foreground">No fermentation info.</div>
                 )}
+              </section>
+              <section className="flex flex-col sm:flex-row items-center gap-6 bg-muted/60 border-l-4 border-brewing-copper rounded-lg p-4 shadow-sm">
+                <div className="flex flex-col gap-2 flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="bg-brewing-copper/20 text-brewing-copper px-2 rounded text-xs font-bold uppercase tracking-wide">Boil</span>
+                    <span className="ml-2 font-semibold text-sm">Boil Stage</span>
+                  </div>
+                  {recipe.boil ? (
+                    <div className="flex gap-3 items-center font-mono text-base">
+                      <span>{recipe.boil.name || "Standard Boil"}</span>
+                      <span>•</span>
+                      <span>{recipe.boil.time || 60} min</span>
+                      <span>•</span>
+                      <span>{recipe.boil.temperature || 100}°C</span>
+                    </div>
+                  ) : (
+                    <div className="text-muted-foreground">No boil info.</div>
+                  )}
+                </div>
+              </section>
+              <div className="grid md:grid-cols-2 gap-4">
+                <section className="bg-muted/60 rounded-lg p-4 flex flex-col border-l-4 border-brewing-copper/80 shadow-sm">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="bg-brewing-copper/50 text-brewing-copper px-2 rounded text-xs font-bold uppercase tracking-wide">Clarification</span>
+                    <span className="ml-2 font-semibold text-sm">Clarification</span>
+                  </div>
+                  {recipe.clarification ? (
+                    <div className="text-sm space-y-0.5">
+                      <span>{recipe.clarification.name || "Standard"},</span>
+                      <span>{recipe.clarification.type ? ` ${recipe.clarification.type},` : ""}</span>
+                      <span>{typeof recipe.clarification.amount === "number" ? ` ${recipe.clarification.amount}g,` : ""}</span>
+                      <span>{typeof recipe.clarification.temperature === "number" ? ` ${recipe.clarification.temperature}°C` : ""}</span>
+                    </div>
+                  ) : (
+                    <div className="text-muted-foreground">No clarification info.</div>
+                  )}
+                </section>
+                <section className="bg-muted/60 rounded-lg p-4 flex flex-col border-l-4 border-brewing-hops/60 shadow-sm">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="bg-brewing-hops/30 text-brewing-hops px-2 rounded text-xs font-bold uppercase tracking-wide">Cold Crash</span>
+                    <span className="ml-2 font-semibold text-sm">Cold Crash</span>
+                  </div>
+                  {recipe.coldCrash ? (
+                    <div className="text-sm space-y-0.5">
+                      <span>{recipe.coldCrash.name || "Standard"},</span>
+                      <span>{typeof recipe.coldCrash.temperature === "number" ? ` ${recipe.coldCrash.temperature}°C,` : ""}</span>
+                      <span>{typeof recipe.coldCrash.period === "number" ? ` ${recipe.coldCrash.period} hours` : ""}</span>
+                    </div>
+                  ) : (
+                    <div className="text-muted-foreground">No cold crash info.</div>
+                  )}
+                </section>
+                <section className="bg-muted/60 rounded-lg p-4 flex flex-col border-l-4 border-brewing-wheat/60 shadow-sm">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="bg-brewing-wheat/30 text-brewing-wheat px-2 rounded text-xs font-bold uppercase tracking-wide">Carbonation</span>
+                    <span className="ml-2 font-semibold text-sm">Carbonation</span>
+                  </div>
+                  {recipe.carbonation ? (
+                    <div className="text-sm space-y-0.5">
+                      <span>{recipe.carbonation.name || "Standard"},</span>
+                      <span>{recipe.carbonation.type ? ` ${recipe.carbonation.type},` : ""}</span>
+                      <span>{typeof recipe.carbonation.volumeCo2 === "number" ? ` ${recipe.carbonation.volumeCo2} CO₂,` : ""}</span>
+                      <span>{typeof recipe.carbonation.temperature === "number" ? ` ${recipe.carbonation.temperature}°C,` : ""}</span>
+                      <span>{typeof recipe.carbonation.period === "number" ? ` ${recipe.carbonation.period} days` : ""}</span>
+                    </div>
+                  ) : (
+                    <div className="text-muted-foreground">No carbonation info.</div>
+                  )}
+                </section>
+                <section className="bg-muted/60 rounded-lg p-4 flex flex-col border-l-4 border-brewing-brown/60 shadow-sm">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="bg-brewing-brown/30 text-brewing-brown px-2 rounded text-xs font-bold uppercase tracking-wide">Bottling</span>
+                    <span className="ml-2 font-semibold text-sm">Bottling</span>
+                  </div>
+                  {recipe.bottling ? (
+                    <div className="text-sm space-y-0.5">
+                      <span>{recipe.bottling.name || "Standard"},</span>
+                      <span>{recipe.bottling.type ? ` ${recipe.bottling.type},` : ""}</span>
+                      <span>{typeof recipe.bottling.temperature === "number" ? ` ${recipe.bottling.temperature}°C,` : ""}</span>
+                      <span>{typeof recipe.bottling.period === "number" ? ` ${recipe.bottling.period} days` : ""}</span>
+                    </div>
+                  ) : (
+                    <div className="text-muted-foreground">No bottling info.</div>
+                  )}
+                </section>
               </div>
-
-              <div>
-                <div className="font-semibold mb-1 text-md">Boil</div>
-                {recipe.boil ? (
-                  <span>
-                    {recipe.boil.name || "Standard Boil"}, {recipe.boil.time || 60} min, {recipe.boil.temperature || 100}°C
-                  </span>
-                ) : (
-                  <div className="text-muted-foreground">No boil info.</div>
-                )}
-              </div>
-
-              <div>
-                <div className="font-semibold mb-1 text-md">Clarification</div>
-                {recipe.clarification ? (
-                  <span>
-                    {recipe.clarification.name || "Standard Clarification"}, 
-                    {recipe.clarification.type ? ` ${recipe.clarification.type},` : ""} 
-                    {typeof recipe.clarification.amount !== "undefined" ? ` ${recipe.clarification.amount}g,` : ""} 
-                    {typeof recipe.clarification.temperature !== "undefined" ? ` ${recipe.clarification.temperature}°C` : ""}
-                  </span>
-                ) : (
-                  <div className="text-muted-foreground">No clarification info.</div>
-                )}
-              </div>
-
-              <div>
-                <div className="font-semibold mb-1 text-md">Cold Crash</div>
-                {recipe.coldCrash ? (
-                  <span>
-                    {recipe.coldCrash.name || "Standard Cold Crash"}, 
-                    {typeof recipe.coldCrash.temperature !== "undefined" ? ` ${recipe.coldCrash.temperature}°C,` : ""} 
-                    {typeof recipe.coldCrash.period !== "undefined" ? ` ${recipe.coldCrash.period} hours` : ""}
-                  </span>
-                ) : (
-                  <div className="text-muted-foreground">No cold crash info.</div>
-                )}
-              </div>
-
-              <div>
-                <div className="font-semibold mb-1 text-md">Carbonation</div>
-                {recipe.carbonation ? (
-                  <span>
-                    {recipe.carbonation.name || "Standard Carbonation"}, 
-                    {recipe.carbonation.type ? ` ${recipe.carbonation.type},` : ""} 
-                    {typeof recipe.carbonation.volumeCo2 !== "undefined" ? ` ${recipe.carbonation.volumeCo2} CO₂,` : ""} 
-                    {typeof recipe.carbonation.temperature !== "undefined" ? ` ${recipe.carbonation.temperature}°C,` : ""} 
-                    {typeof recipe.carbonation.period !== "undefined" ? ` ${recipe.carbonation.period} days` : ""}
-                  </span>
-                ) : (
-                  <div className="text-muted-foreground">No carbonation info.</div>
-                )}
-              </div>
-
-              <div>
-                <div className="font-semibold mb-1 text-md">Bottling</div>
-                {recipe.bottling ? (
-                  <span>
-                    {recipe.bottling.name || "Standard Bottling"}, 
-                    {recipe.bottling.type ? ` ${recipe.bottling.type},` : ""} 
-                    {typeof recipe.bottling.temperature !== "undefined" ? ` ${recipe.bottling.temperature}°C,` : ""} 
-                    {typeof recipe.bottling.period !== "undefined" ? ` ${recipe.bottling.period} days` : ""}
-                  </span>
-                ) : (
-                  <div className="text-muted-foreground">No bottling info.</div>
-                )}
-              </div>
-
-              <div>
-                <div className="font-semibold mb-1 text-md">Water Profile</div>
+              <section className="bg-muted/70 rounded-lg p-4 border-l-4 border-brewing-amber/50 shadow-sm">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="bg-brewing-amber/30 text-brewing-amber px-2 rounded text-xs font-bold uppercase tracking-wide">Water</span>
+                  <span className="ml-2 font-semibold text-sm">Water Profile</span>
+                </div>
                 {recipe.waterProfile ? (
-                  <ul className="list-disc pl-4">
+                  <ul className="list-disc pl-6">
                     <li>
                       {Object.entries(recipe.waterProfile)
                         .filter(([k, _]) => k !== "name" && k !== "notes")
                         .map(([k, v]) => (
-                          <span key={k} className="mr-3 capitalize">
-                            {k}: {typeof v === "number" ? v : String(v)}
-                          </span>
+                          <span key={k} className="mr-3 capitalize text-brewing-brown/80 font-mono">{k}: {typeof v === "number" ? v : String(v)}</span>
                         ))}
                     </li>
                     {recipe.waterProfile.notes && (
-                      <li>Notes: {recipe.waterProfile.notes}</li>
+                      <li className="pt-1">Notes: <span className="italic">{recipe.waterProfile.notes}</span></li>
                     )}
                   </ul>
                 ) : (
                   <span className="text-muted-foreground">No water profile.</span>
                 )}
-              </div>
-
+              </section>
               {recipe.notes && (
-                <div>
+                <section className="bg-amber-50/80 rounded-lg border-l-4 border-brewing-amber p-4 shadow">
                   <div className="font-semibold mb-1 text-md">Other Notes</div>
-                  <p className="whitespace-pre-wrap">{recipe.notes}</p>
-                </div>
+                  <p className="whitespace-pre-wrap text-brewing-brown-800 font-serif">{recipe.notes}</p>
+                </section>
               )}
             </CardContent>
           </Card>
-
         </div>
       </div>
     </Layout>
