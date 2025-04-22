@@ -27,7 +27,7 @@ export function RecipeActivityChart() {
   });
 
   return (
-    <Card className="col-span-4">
+    <Card>
       <CardHeader>
         <CardTitle>Recipe Activity {currentYear}</CardTitle>
       </CardHeader>

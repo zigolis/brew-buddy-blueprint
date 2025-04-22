@@ -1,3 +1,4 @@
+
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -84,66 +85,74 @@ const HomePage = () => {
           </Card>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <RecipeActivityChart />
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          <div className="md:col-span-6">
+            <RecipeActivityChart />
+          </div>
           
-          <Card className="card-hover">
-            <CardHeader className="space-y-1">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-xl font-semibold">Brewing Guide</CardTitle>
-                <FileText className="h-5 w-5 text-primary" />
-              </div>
-              <CardDescription>Step-by-step brewing instructions</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Interactive brewing guides to help you brew with confidence. Get started with a guided brewing session.
-              </p>
-            </CardContent>
-            <CardFooter>
-              <Button asChild className="w-full">
-                <Link to="/brewing-guide">Start Brewing</Link>
-              </Button>
-            </CardFooter>
-          </Card>
+          <div className="md:col-span-6">
+            <Card className="card-hover h-full">
+              <CardHeader className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-xl font-semibold">Brewing Guide</CardTitle>
+                  <FileText className="h-5 w-5 text-primary" />
+                </div>
+                <CardDescription>Step-by-step brewing instructions</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Interactive brewing guides to help you brew with confidence. Get started with a guided brewing session.
+                </p>
+              </CardContent>
+              <CardFooter>
+                <Button asChild className="w-full">
+                  <Link to="/brewing-guide">Start Brewing</Link>
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
           
-          <Card className="card-hover">
-            <CardHeader className="space-y-1">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-xl font-semibold">Cost Calculator</CardTitle>
-                <Calculator className="h-5 w-5 text-primary" />
-              </div>
-              <CardDescription>Track and analyze brewing costs</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Calculate the cost of your recipes, including ingredients, equipment, and utilities.
-              </p>
-            </CardContent>
-            <CardFooter>
-              <Button asChild variant="outline" className="w-full">
-                <Link to="/calculator">Open Calculator</Link>
-              </Button>
-            </CardFooter>
-          </Card>
+          <div className="md:col-span-6">
+            <Card className="card-hover h-full">
+              <CardHeader className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-xl font-semibold">Cost Calculator</CardTitle>
+                  <Calculator className="h-5 w-5 text-primary" />
+                </div>
+                <CardDescription>Track and analyze brewing costs</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Calculate the cost of your recipes, including ingredients, equipment, and utilities.
+                </p>
+              </CardContent>
+              <CardFooter>
+                <Button asChild variant="outline" className="w-full">
+                  <Link to="/calculator">Open Calculator</Link>
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
+          
+          <div className="md:col-span-6">
+            <Card className="bg-accent h-full">
+              <CardHeader>
+                <CardTitle className="text-xl font-semibold">Import BeerXML</CardTitle>
+                <CardDescription>
+                  Import your existing recipes from BeerSmith, Brewfather or other brewing software
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  iBeer Brewing Pro supports the industry-standard BeerXML format for importing recipes.
+                </p>
+                <Button asChild>
+                  <Link to="/import">Import Recipe</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-        
-        <Card className="bg-accent mt-8">
-          <CardHeader>
-            <CardTitle className="text-xl font-semibold">Import BeerXML</CardTitle>
-            <CardDescription>
-              Import your existing recipes from BeerSmith, Brewfather or other brewing software
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground mb-4">
-              iBeer Brewing Pro supports the industry-standard BeerXML format for importing recipes.
-            </p>
-            <Button asChild>
-              <Link to="/import">Import Recipe</Link>
-            </Button>
-          </CardContent>
-        </Card>
       </div>
     </Layout>
   );
