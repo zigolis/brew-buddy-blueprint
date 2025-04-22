@@ -11,9 +11,6 @@ export function Footer() {
           <h3 className="text-xl font-semibold text-brewing-amber hover:text-brewing-amber/80 transition-colors">
             BrewMaster Pro
           </h3>
-          <p className="text-sm text-gray-300 leading-relaxed">
-            Your complete brewing management solution for crafting the perfect brew every time.
-          </p>
 
           <div className="flex items-center justify-center space-x-2 text-xs text-gray-400">
             <Copyright className="h-3 w-3" />
