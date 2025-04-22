@@ -31,6 +31,8 @@ const ingredientTypes = [
   "Other",
 ] as const;
 
+type IngredientType = typeof ingredientTypes[number];
+
 interface IngredientFormProps {
   onSubmit: (data: Omit<Ingredient, 'id' | 'createdAt' | 'updatedAt'>) => void;
   onCancel: () => void;
@@ -75,7 +77,10 @@ export function IngredientForm({ onSubmit, onCancel, defaultValues }: Ingredient
           render={({ field }) => (
             <FormItem>
               <FormLabel>Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select 
+                onValueChange={(value) => field.onChange(value as IngredientType)} 
+                defaultValue={field.value}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select type" />

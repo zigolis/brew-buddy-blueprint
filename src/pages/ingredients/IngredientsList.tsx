@@ -39,7 +39,7 @@ const IngredientsList = () => {
     setEditingIngredient(null);
   };
 
-  const getFormDefaultValues = () => {
+  const getFormDefaultValues = (): Omit<Ingredient, 'id' | 'createdAt' | 'updatedAt'> => {
     if (editingIngredient) {
       const ingredient = getIngredientById(editingIngredient);
       if (ingredient) {
@@ -57,7 +57,7 @@ const IngredientsList = () => {
     
     return {
       name: "",
-      type: "Grain",
+      type: "Grain" as const,
       amount: 0,
       unit: "kg",
       costPerUnit: 0,
