@@ -1,4 +1,4 @@
-
+import { useState } from "react";
 import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -15,7 +15,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
 
 export const YeastSection = ({ form }) => {
   const [openPopover, setOpenPopover] = useState(false);
@@ -37,15 +36,16 @@ export const YeastSection = ({ form }) => {
     }
   };
 
-  // Safely get the yeast cost value
+  // Safely get the yeast cost and amount values
   const yeastCost = parseFloat(form.watch('ingredients.yeasts.0.costPerUnit') || '0') || 0;
+  const yeastAmount = parseFloat(form.watch('ingredients.yeasts.0.amount') || '0') || 0;
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold">Yeast</h2>
         <div className="text-sm text-muted-foreground">
-          Cost: ${yeastCost.toFixed(2)}
+          Cost: ${(yeastCost * (yeastAmount / 1000)).toFixed(2)}
         </div>
       </div>
 
@@ -98,6 +98,28 @@ export const YeastSection = ({ form }) => {
                   </Command>
                 </PopoverContent>
               </Popover>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="ingredients.yeasts.0.amount"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Amount (g)*</FormLabel>
+              <FormControl>
+                <Input 
+                  type="number" 
+                  step="1" 
+                  placeholder="11.5"
+                  {...field} 
+                  onChange={(e) => {
+                    const value = e.target.value ? Number(e.target.value) : 0;
+                    field.onChange(value);
+                  }}
+                />
+              </FormControl>
             </FormItem>
           )}
         />
