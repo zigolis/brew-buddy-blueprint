@@ -2,39 +2,74 @@
 import { useState, useEffect } from 'react';
 import { Ingredient } from '@/types/ingredients';
 import { v4 as uuidv4 } from 'uuid';
+import { toast } from 'sonner';
 
 export const useIngredients = () => {
   const [ingredients, setIngredients] = useState<Ingredient[]>(() => {
-    const saved = localStorage.getItem('brewMasterIngredients');
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem('brewMasterIngredients');
+      return saved ? JSON.parse(saved) : [];
+    } catch (error) {
+      console.error('Error loading ingredients from localStorage', error);
+      return [];
+    }
   });
 
   useEffect(() => {
-    localStorage.setItem('brewMasterIngredients', JSON.stringify(ingredients));
+    try {
+      localStorage.setItem('brewMasterIngredients', JSON.stringify(ingredients));
+    } catch (error) {
+      console.error('Error saving ingredients to localStorage', error);
+    }
   }, [ingredients]);
 
   const addIngredient = (ingredient: Omit<Ingredient, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const newIngredient: Ingredient = {
-      ...ingredient,
-      id: uuidv4(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    setIngredients(prev => [...prev, newIngredient]);
+    try {
+      const newIngredient: Ingredient = {
+        id: uuidv4(),
+        name: ingredient.name,
+        type: ingredient.type,
+        amount: ingredient.amount,
+        unit: ingredient.unit,
+        costPerUnit: ingredient.costPerUnit,
+        supplier: ingredient.supplier || "",
+        notes: ingredient.notes || "",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      
+      setIngredients(prev => [...prev, newIngredient]);
+      toast.success(`Added ${newIngredient.name} successfully`);
+    } catch (error) {
+      console.error('Error adding ingredient:', error);
+      toast.error('Failed to add ingredient');
+    }
   };
 
   const updateIngredient = (id: string, updatedIngredient: Partial<Ingredient>) => {
-    setIngredients(prev =>
-      prev.map(ing =>
-        ing.id === id
-          ? { ...ing, ...updatedIngredient, updatedAt: new Date().toISOString() }
-          : ing
-      )
-    );
+    try {
+      setIngredients(prev =>
+        prev.map(ing =>
+          ing.id === id
+            ? { ...ing, ...updatedIngredient, updatedAt: new Date().toISOString() }
+            : ing
+        )
+      );
+      toast.success('Ingredient updated successfully');
+    } catch (error) {
+      console.error('Error updating ingredient:', error);
+      toast.error('Failed to update ingredient');
+    }
   };
 
   const deleteIngredient = (id: string) => {
-    setIngredients(prev => prev.filter(ing => ing.id !== id));
+    try {
+      setIngredients(prev => prev.filter(ing => ing.id !== id));
+      toast.success('Ingredient deleted successfully');
+    } catch (error) {
+      console.error('Error deleting ingredient:', error);
+      toast.error('Failed to delete ingredient');
+    }
   };
 
   const getIngredientById = (id: string) => {

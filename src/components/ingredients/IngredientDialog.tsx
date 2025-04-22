@@ -47,7 +47,7 @@ interface IngredientDialogProps {
 export function IngredientDialog({ open, onClose, ingredientId }: IngredientDialogProps) {
   const { addIngredient, updateIngredient, getIngredientById } = useIngredients();
 
-  const form = useForm<Partial<Ingredient>>({
+  const form = useForm<Omit<Ingredient, 'id' | 'createdAt' | 'updatedAt'>>({
     defaultValues: {
       name: "",
       type: "Grain",
@@ -66,16 +66,25 @@ export function IngredientDialog({ open, onClose, ingredientId }: IngredientDial
         form.reset(ingredient);
       }
     } else {
-      form.reset();
+      form.reset({
+        name: "",
+        type: "Grain",
+        amount: 0,
+        unit: "kg",
+        costPerUnit: 0,
+        supplier: "",
+        notes: "",
+      });
     }
-  }, [ingredientId, form, getIngredientById]);
+  }, [ingredientId, form, getIngredientById, open]);
 
-  const onSubmit = (data: Partial<Ingredient>) => {
+  const onSubmit = (data: Omit<Ingredient, 'id' | 'createdAt' | 'updatedAt'>) => {
     if (ingredientId) {
       updateIngredient(ingredientId, data);
     } else {
-      addIngredient(data as Required<Omit<Ingredient, 'id' | 'createdAt' | 'updatedAt'>>);
+      addIngredient(data);
     }
+    form.reset();
     onClose();
   };
 
@@ -96,7 +105,7 @@ export function IngredientDialog({ open, onClose, ingredientId }: IngredientDial
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} required />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -140,7 +149,8 @@ export function IngredientDialog({ open, onClose, ingredientId }: IngredientDial
                         type="number"
                         step="0.01"
                         {...field}
-                        onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                        onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                        required
                       />
                     </FormControl>
                     <FormMessage />
@@ -155,7 +165,7 @@ export function IngredientDialog({ open, onClose, ingredientId }: IngredientDial
                   <FormItem>
                     <FormLabel>Unit</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} required />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -174,7 +184,8 @@ export function IngredientDialog({ open, onClose, ingredientId }: IngredientDial
                       type="number"
                       step="0.01"
                       {...field}
-                      onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                      onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                      required
                     />
                   </FormControl>
                   <FormMessage />
