@@ -1,3 +1,4 @@
+
 import { Beer, Calculator, FileText, List, Package, Settings } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -17,9 +18,6 @@ export function Sidebar() {
   
   return (
     <aside className="h-full w-64 flex-col bg-card border-r px-3 py-4">
-      <div className="mb-8 flex items-center px-2">
-        <span className="text-2xl font-bold text-brewing-amber">iBeer Brewing Pro</span>
-      </div>
       <nav className="space-y-1 flex-1">
         {navItems.map((item) => {
           const isActive = location.pathname.startsWith(item.path);
