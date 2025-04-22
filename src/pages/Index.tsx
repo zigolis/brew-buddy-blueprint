@@ -1,4 +1,3 @@
-
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -86,11 +85,11 @@ const HomePage = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-          <div className="md:col-span-6">
+          <div className="md:col-span-6 lg:col-span-5">
             <RecipeActivityChart />
           </div>
           
-          <div className="md:col-span-6">
+          <div className="md:col-span-6 lg:col-span-7">
             <Card className="card-hover h-full">
               <CardHeader className="space-y-1">
                 <div className="flex items-center justify-between">

@@ -27,12 +27,12 @@ export function RecipeActivityChart() {
   });
 
   return (
-    <Card>
+    <Card className="h-full overflow-hidden">
       <CardHeader>
         <CardTitle>Recipe Activity {currentYear}</CardTitle>
       </CardHeader>
-      <CardContent className="pb-4">
-        <div className="h-[200px] w-full">
+      <CardContent className="p-0 pb-4">
+        <div className="h-[200px] w-full px-2">
           <ChartContainer
             className="w-full"
             config={{
@@ -47,7 +47,7 @@ export function RecipeActivityChart() {
           >
             <AreaChart
               data={monthlyData}
-              margin={{ top: 5, right: 10, left: 10, bottom: 0 }}
+              margin={{ top: 5, right: 10, left: 0, bottom: 0 }}
             >
               <defs>
                 <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
@@ -60,12 +60,16 @@ export function RecipeActivityChart() {
                 tickLine={false}
                 axisLine={false}
                 fontSize={12}
+                tick={{ fontSize: 10 }}
+                tickMargin={5}
               />
               <YAxis
                 tickLine={false}
                 axisLine={false}
                 allowDecimals={false}
                 fontSize={12}
+                tick={{ fontSize: 10 }}
+                width={25}
               />
               <ChartTooltip 
                 content={<ChartTooltipContent />} 
