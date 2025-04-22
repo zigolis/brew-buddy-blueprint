@@ -1,6 +1,6 @@
 
 import { Layout } from "@/components/layout/Layout";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { recipeSteps } from "@/constants/recipeSteps";
 import { RecipeStepsNavigation } from "@/components/recipes/form/steps/RecipeStepsNavigation";
 import { RecipeStepNavButtons } from "@/components/recipes/form/steps/RecipeStepNavButtons";
@@ -48,6 +48,7 @@ const NewRecipe = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [recipeFormData, setRecipeFormData] = useState<Partial<Recipe>>(defaultRecipeData);
   const [shouldChangeStep, setShouldChangeStep] = useState(true);
+  const isDialogOpen = useRef(false);
 
   const { handleStepFormSubmit, handleCreateRecipe } = useCreateRecipe(recipeFormData, setRecipeFormData);
 
@@ -59,6 +60,12 @@ const NewRecipe = () => {
 
   // Modified to save form data without automatically changing step
   const handleNext = () => {
+    // Don't proceed to next step if a dialog is open
+    if (isDialogOpen.current) {
+      console.log("Dialog is open, not changing step");
+      return;
+    }
+    
     // Get form data, then move to next if shouldChangeStep is true
     const formElement = document.getElementById('recipe-form') as HTMLFormElement;
     if (formElement) {
@@ -107,6 +114,7 @@ const NewRecipe = () => {
             handleStepFormSubmit={onStepSubmit}
             handleCreateRecipe={handleCreateRecipe}
             setShouldChangeStep={setShouldChangeStep}
+            setIsDialogOpen={(isOpen) => { isDialogOpen.current = isOpen; }}
           />
           <RecipeStepNavButtons
             currentStep={currentStep}

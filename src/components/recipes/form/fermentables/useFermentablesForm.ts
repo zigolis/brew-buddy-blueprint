@@ -18,6 +18,7 @@ export const useFermentablesForm = (form: any) => {
     (event: React.FormEvent<HTMLFormElement>) => {
       // Ensure we're preventing default behavior
       event.preventDefault();
+      event.stopPropagation();
       
       const formData = new FormData(event.currentTarget);
 

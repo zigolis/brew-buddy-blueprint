@@ -25,6 +25,7 @@ export const FermentableDialogForm = ({
   // Make sure we're properly preventing default behavior to avoid form navigation
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // This is crucial to prevent form submission from triggering navigation
+    event.stopPropagation(); // Also stop propagation to prevent bubbling up
     onSubmit(event);
   };
 

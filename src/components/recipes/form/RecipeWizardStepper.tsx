@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { RecipeStepsNavigation } from "@/components/recipes/form/steps/RecipeStepsNavigation";
 import { RecipeForm } from "@/components/recipes/RecipeForm";
@@ -12,6 +12,7 @@ interface RecipeWizardStepperProps {
   handleStepFormSubmit: (d: any) => void;
   handleCreateRecipe: (d: any) => void;
   setShouldChangeStep: (shouldChange: boolean) => void;
+  setIsDialogOpen?: (isOpen: boolean) => void;
 }
 
 export const RecipeWizardStepper = ({
@@ -20,23 +21,59 @@ export const RecipeWizardStepper = ({
   recipeFormData,
   handleStepFormSubmit,
   handleCreateRecipe,
-  setShouldChangeStep
+  setShouldChangeStep,
+  setIsDialogOpen
 }: RecipeWizardStepperProps) => {
-  // When fermentable dialog is open, temporarily disable step changes
-  React.useEffect(() => {
-    const handleDialogState = (e: any) => {
-      if (e.target && e.target.getAttribute('role') === 'dialog') {
+  // Track dialog state for both fermentable dialog and any radix dialog
+  useEffect(() => {
+    const handleDialogState = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      
+      // Check if clicking on a dialog
+      if (target && target.closest('[role="dialog"]')) {
         // If dialog is open, don't allow step changes
         setShouldChangeStep(false);
+        if (setIsDialogOpen) setIsDialogOpen(true);
+        console.log("Dialog detected - disabling step changes");
       } else {
-        // Re-enable step changes when dialog closes
-        setShouldChangeStep(true);
+        // Check if we're clicking outside a dialog, indicating it's closing
+        const activeDialogs = document.querySelectorAll('[role="dialog"]');
+        if (activeDialogs.length === 0) {
+          // Re-enable step changes when dialog closes
+          setShouldChangeStep(true);
+          if (setIsDialogOpen) setIsDialogOpen(false);
+          console.log("No active dialogs - enabling step changes");
+        }
       }
     };
 
+    // Also monitor for dialog open/close via attributes
+    const mutationObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'data-state') {
+          const element = mutation.target as HTMLElement;
+          if (element.getAttribute('role') === 'dialog') {
+            const isOpen = element.getAttribute('data-state') === 'open';
+            setShouldChangeStep(!isOpen);
+            if (setIsDialogOpen) setIsDialogOpen(isOpen);
+            console.log(`Dialog ${isOpen ? 'opened' : 'closed'} - ${isOpen ? 'disabling' : 'enabling'} step changes`);
+          }
+        }
+      });
+    });
+
+    // Observe all dialogs for attribute changes
+    document.querySelectorAll('[role="dialog"]').forEach(dialog => {
+      mutationObserver.observe(dialog, { attributes: true });
+    });
+
     document.addEventListener('click', handleDialogState);
-    return () => document.removeEventListener('click', handleDialogState);
-  }, [setShouldChangeStep]);
+    
+    return () => {
+      document.removeEventListener('click', handleDialogState);
+      mutationObserver.disconnect();
+    };
+  }, [setShouldChangeStep, setIsDialogOpen]);
 
   return (
     <Tabs
