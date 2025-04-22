@@ -40,16 +40,6 @@ export function Sidebar() {
           );
         })}
       </nav>
-      <div className="mt-auto border-t pt-4">
-        <div className="rounded-md bg-accent p-3">
-          <h4 className="font-medium text-sm">Ready to Brew?</h4>
-          <p className="text-xs text-muted-foreground mt-1">Start a guided brewing session with any of your recipes.</p>
-          <Button asChild className="mt-3 w-full">
-            <Link to="/brewing-guide">Start Brewing</Link>
-          </Button>
-        </div>
-      </div>
     </aside>
   );
 }
-
