@@ -4,7 +4,7 @@ import { RecipeForm } from "@/components/recipes/RecipeForm";
 import { toast } from "sonner";
 import { useBrewContext } from "@/contexts/BrewContext";
 import { useNavigate } from "react-router-dom";
-import { Recipe } from "@/types";
+import { Recipe, Style } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
@@ -18,11 +18,35 @@ const NewRecipe = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   
+  // Create a properly typed Style object with all required properties
+  const defaultStyle: Style = {
+    name: '',
+    category: '',
+    categoryNumber: '',
+    styleLetter: '',
+    styleGuide: '',
+    type: 'Ale',
+    minOg: 1.045,
+    maxOg: 1.060,
+    minFg: 1.010,
+    maxFg: 1.015,
+    minIbu: 20,
+    maxIbu: 40,
+    minColor: 5,
+    maxColor: 15,
+    minAbv: 4.5,
+    maxAbv: 6.0,
+    notes: '',
+    profile: '',
+    ingredients: '',
+    examples: ''
+  };
+  
   // State to hold form data during the step process
   const [recipeFormData, setRecipeFormData] = useState<Partial<Recipe>>({
     name: '',
     author: '',
-    style: { name: '' },
+    style: defaultStyle,
     type: "All Grain",
     batchSize: 20,
     boilSize: 23,
