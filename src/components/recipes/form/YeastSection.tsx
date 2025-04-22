@@ -22,9 +22,9 @@ import { Plus } from "lucide-react";
 export const YeastSection = ({ form }) => {
   const [openPopover, setOpenPopover] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [yeasts, setYeasts] = useState([{ id: 0 }]);
   const { getYeastSuggestions } = useIngredientSuggestions();
 
-  // Safely get suggestions, ensuring we always return an array
   const getSuggestions = (query: string) => {
     try {
       if (!query || query.trim() === '') {
@@ -38,7 +38,6 @@ export const YeastSection = ({ form }) => {
     }
   };
 
-  // Handle yeast selection and auto-fill extra fields
   const handleYeastSelect = (item: any) => {
     form.setValue('ingredients.yeasts.0.name', item.name);
     if (item.type) form.setValue('ingredients.yeasts.0.type', item.type);
@@ -54,15 +53,13 @@ export const YeastSection = ({ form }) => {
   const yeastCost = parseFloat(form.watch('ingredients.yeasts.0.costPerUnit') || '0') || 0;
   const yeastAmount = parseFloat(form.watch('ingredients.yeasts.0.amount') || '0') || 0;
 
-  const [hops, setHops] = useState([{ id: 0 }]);
-
   const addYeast = () => {
-    setHops([...hops, { id: hops.length }]);
+    setYeasts([...yeasts, { id: yeasts.length }]);
   };
 
   const removeYeast = (id: number) => {
-    if (hops.length <= 1) return;
-    setHops(hops.filter((h) => h.id !== id));
+    if (yeasts.length <= 1) return;
+    setYeasts(yeasts.filter((y) => y.id !== id));
   };
 
   return (
@@ -73,8 +70,8 @@ export const YeastSection = ({ form }) => {
           Cost: ${(yeastCost * (yeastAmount / 1000)).toFixed(2)}
         </div>
       </div>
-      {/* Top row: Name, Amount, Type */}
-      <div className="grid gap-4 md:grid-cols-3">
+      
+      <div className="grid gap-4 md:grid-cols-3 border p-4 rounded-lg">
         <FormField
           control={form.control}
           name="ingredients.yeasts.0.name"
@@ -173,8 +170,8 @@ export const YeastSection = ({ form }) => {
           )}
         />
       </div>
-      {/* Second row: Form, Laboratory, Min Attenuation, Max Attenuation */}
-      <div className="grid gap-4 md:grid-cols-4">
+      
+      <div className="grid gap-4 md:grid-cols-4 border p-4 rounded-lg">
         <FormField
           control={form.control}
           name="ingredients.yeasts.0.form"
@@ -251,7 +248,6 @@ export const YeastSection = ({ form }) => {
         />
       </div>
       
-      {/* Add Yeast Button */}
       <Button
         type="button"
         onClick={addYeast}
