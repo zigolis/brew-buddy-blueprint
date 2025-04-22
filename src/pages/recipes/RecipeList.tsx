@@ -1,3 +1,4 @@
+
 import { Layout } from "@/components/layout/Layout";
 import { useBrewContext } from "@/contexts/BrewContext";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,16 +6,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Beer, Edit, FileText, Trash2, BookmarkPlus, BookmarkCheck } from "lucide-react";
+import { Beer, Edit, FileText, Trash2, BookmarkPlus, BookmarkCheck, Filter } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuCheckboxItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const RecipeList = () => {
   const { recipes, deleteRecipe, toggleBookmark, isBookmarked } = useBrewContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [styleFilter, setStyleFilter] = useState<string>("all");
+  const [showBookmarkedOnly, setShowBookmarkedOnly] = useState(false);
   
   const uniqueStyles = Array.from(
     new Set(
@@ -30,8 +38,9 @@ const RecipeList = () => {
                           recipe.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())) || false;
     
     const matchesStyle = styleFilter === "all" || (recipe.style && recipe.style.name === styleFilter);
+    const matchesBookmark = !showBookmarkedOnly || isBookmarked(recipe.id);
     
-    return matchesSearch && matchesStyle;
+    return matchesSearch && matchesStyle && matchesBookmark;
   });
 
   return (
@@ -59,7 +68,7 @@ const RecipeList = () => {
               className="w-full"
             />
           </div>
-          <div className="w-full md:w-1/3">
+          <div className="w-full md:w-1/6">
             <Select value={styleFilter} onValueChange={setStyleFilter}>
               <SelectTrigger>
                 <SelectValue placeholder="Filter by style" />
@@ -71,6 +80,24 @@ const RecipeList = () => {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+          <div className="w-full md:w-1/6">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="w-full">
+                  <Filter className="h-4 w-4" />
+                  Filters
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuCheckboxItem
+                  checked={showBookmarkedOnly}
+                  onCheckedChange={setShowBookmarkedOnly}
+                >
+                  Bookmarked Only
+                </DropdownMenuCheckboxItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
         
