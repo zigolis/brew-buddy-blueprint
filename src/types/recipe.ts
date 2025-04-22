@@ -1,3 +1,4 @@
+
 import { Style } from './style';
 import { Fermentable, Hop, Yeast, Misc } from './ingredients';
 import { 
@@ -29,17 +30,18 @@ export interface Recipe {
   style?: Style;
   tags?: string[];
   ingredients?: Ingredients;
-  mashSchedule?: MashStep[];
-  fermentation?: FermentationStep[];
+  mash?: MashProfile;
+  fermentation?: FermentationProfile;
   waterProfile?: WaterProfile;
   notes?: string;
   createdAt: string;
   updatedAt: string;
   isBookmarked?: boolean;
-  carbonation?: Carbonation;
-  bottling?: Bottling;
-  clarification?: Clarification;
-  coldCrash?: ColdCrash;
+  boil?: BoilProfile;
+  carbonation?: CarbonationProfile;
+  bottling?: BottlingProfile;
+  clarification?: ClarificationProfile;
+  coldCrash?: ColdCrashProfile;
   recipeStats?: {
     notes?: string;
   };
@@ -50,13 +52,14 @@ export interface Fermentable {
   name: string;
   amount: number;
   color: number;
-  potential: number;
+  potential?: number;
   type: string;
   origin?: string;
   supplier?: string;
   notes?: string;
   costPerUnit?: number;
   unit?: string;
+  yield: number;
 }
 
 export interface Hop {
@@ -82,6 +85,16 @@ export interface Yeast {
   form: YeastForm;
   notes?: string;
   costPerUnit?: number;
+  laboratory?: string;
+  productId?: string;
+  type?: string;
+  minAttenuation?: number;
+  maxAttenuation?: number;
+  tempRange?: {
+    min: number;
+    max: number;
+  };
+  flocculation?: string;
 }
 
 export interface Misc {
@@ -91,10 +104,23 @@ export interface Misc {
   form: MiscForm;
   notes?: string;
   costPerUnit?: number;
+  unit?: string;
+  time?: number;
+  use?: string;
+}
+
+export interface MashProfile {
+  name: string;
+  grainTemp?: number;
+  mashTemp?: number;
+  spargeTemp?: number;
+  ph?: number;
+  steps: MashStep[];
+  notes?: string;
 }
 
 export interface MashStep {
-  id: string;
+  id?: string;
   name: string;
   temperature: number;
   time: number;
@@ -102,42 +128,60 @@ export interface MashStep {
   notes?: string;
 }
 
+export interface FermentationProfile {
+  name: string;
+  type: string;
+  temperature: number;
+  period: number;
+  notes?: string;
+  steps?: FermentationStep[];
+}
+
 export interface FermentationStep {
-  id: string;
+  id?: string;
   name: string;
   temperature: number;
   time: number;
   notes?: string;
 }
 
-export interface Carbonation {
-  id: string;
-  method: CarbonationMethod;
-  temperature: number;
+export interface BoilProfile {
+  name: string;
   time: number;
+  temperature: number;
   notes?: string;
 }
 
-export interface Bottling {
-  id: string;
-  method: BottlingMethod;
+export interface ClarificationProfile {
+  name: string;
+  type: string;
+  amount: number;
   temperature: number;
-  time: number;
   notes?: string;
 }
 
-export interface Clarification {
-  id: string;
-  method: ClarificationMethod;
+export interface ColdCrashProfile {
+  name: string;
+  type: string;
   temperature: number;
-  time: number;
+  period: number;
   notes?: string;
 }
 
-export interface ColdCrash {
-  id: string;
+export interface CarbonationProfile {
+  name: string;
+  type: string;
+  volumeCo2?: number;
   temperature: number;
-  time: number;
+  period: number;
+  notes?: string;
+}
+
+export interface BottlingProfile {
+  name: string;
+  type: string;
+  temperature: number;
+  period: number;
   notes?: string;
 }
 
@@ -150,18 +194,18 @@ export type Ingredients = {
   miscs: Misc[];
 };
 
-export type MashStepType = 'Infusion' | 'Step Infusion' | 'Temperature Rest';
+export type MashStepType = 'Infusion' | 'Step Infusion' | 'Temperature Rest' | 'Temperature' | 'Infusion';
 
-export type HopUse = 'Boil' | 'Dry Hop' | 'First Wort' | 'Secondary' | 'Tertiary';
+export type HopUse = 'Boil' | 'Dry Hop' | 'First Wort' | 'Secondary' | 'Tertiary' | 'Mash' | 'Aroma';
 
-export type HopForm = 'Whole' | 'Pellet' | 'Leaf';
+export type HopForm = 'Whole' | 'Pellet' | 'Plug' | 'Leaf';
 
-export type YeastForm = 'Liquid' | 'Dry';
+export type YeastForm = 'Liquid' | 'Dry' | 'Slant' | 'Culture';
 
 export type MiscForm = 'Grain' | 'Hop' | 'Yeast' | 'Other';
 
-export type CarbonationMethod = 'Dissolved CO2' | 'Carbonated Water' | 'Other';
+export type CarbonationMethod = 'Dissolved CO2' | 'Carbonated Water' | 'Other' | 'Natural';
 
 export type BottlingMethod = 'Cask' | 'Bottle' | 'Other';
 
-export type ClarificationMethod = 'Fermentation' | 'Centrifugation' | 'Other';
+export type ClarificationMethod = 'Fermentation' | 'Centrifugation' | 'Other' | 'Whirlpool';

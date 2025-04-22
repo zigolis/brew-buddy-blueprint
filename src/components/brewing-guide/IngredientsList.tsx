@@ -18,7 +18,7 @@ export function IngredientsList({ recipe }: IngredientsListProps) {
   
   return (
     <div className="space-y-4">
-      {ingredients.fermentables && ingredients.fermentables.length > 0 && (
+      {ingredients?.fermentables && ingredients.fermentables.length > 0 && (
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-lg">Fermentables</CardTitle>
@@ -38,7 +38,7 @@ export function IngredientsList({ recipe }: IngredientsListProps) {
         </Card>
       )}
       
-      {ingredients.hops && ingredients.hops.length > 0 && (
+      {ingredients?.hops && ingredients.hops.length > 0 && (
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-lg">Hops</CardTitle>

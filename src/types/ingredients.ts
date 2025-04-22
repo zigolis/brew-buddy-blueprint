@@ -10,6 +10,7 @@ export interface Fermentable {
   supplier?: string;
   notes: string;
   costPerUnit: number;
+  unit?: string;
 }
 
 export interface Hop {
@@ -23,6 +24,7 @@ export interface Hop {
   form: 'Pellet' | 'Plug' | 'Leaf';
   notes: string;
   costPerUnit: number;
+  unit?: string;
 }
 
 export interface Yeast {
