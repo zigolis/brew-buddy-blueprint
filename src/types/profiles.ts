@@ -30,20 +30,22 @@ export interface ClarificationProfile {
   notes: string;
 }
 
+export interface FermentationStep {
+  name: string;
+  temperature: number;
+  time: number;
+  type?: string;
+  period?: number;
+  notes?: string;
+}
+
 export interface FermentationProfile {
   name: string;
   type: 'Primary' | 'Secondary' | 'Tertiary';
   temperature: number;
   period: number;
   notes: string;
-  steps?: {
-    name: string;
-    type?: string;
-    temperature: number;
-    time: number;
-    period?: number;
-    notes?: string;
-  }[];
+  steps?: FermentationStep[];
 }
 
 export interface ColdCrashProfile {

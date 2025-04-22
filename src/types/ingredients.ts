@@ -21,8 +21,8 @@ export interface Hop {
   alpha: number; // alpha acids (%)
   beta: number;  // beta acids (%)
   time: number;
-  use: 'Boil' | 'Dry Hop' | 'Mash' | 'First Wort' | 'Aroma';
-  form: 'Pellet' | 'Plug' | 'Leaf';
+  use: 'Boil' | 'Dry Hop' | 'Mash' | 'First Wort' | 'Aroma' | 'Secondary' | 'Tertiary';
+  form: 'Pellet' | 'Plug' | 'Leaf' | 'Whole';
   notes: string;
   costPerUnit: number;
   unit?: string;

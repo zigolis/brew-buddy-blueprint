@@ -1,12 +1,14 @@
+
 import { DOMParser } from '@xmldom/xmldom';
 import { 
   Recipe, 
-  Style, 
   HopUse, 
-  HopForm, 
+  HopForm,
   YeastForm,
-  MiscForm 
+  MiscForm
 } from '@/types/recipe';
+import { Style } from '@/types/style';
+import { MashProfile, MashStep } from '@/types/profiles';
 import { v4 as uuidv4 } from 'uuid';
 import { Fermentable, Hop, Yeast, Misc } from '@/types/ingredients';
 
@@ -221,15 +223,30 @@ function parseHops(recipeNode: any): Hop[] {
   
   for (let i = 0; i < hopNodes.length; i++) {
     const node = hopNodes[i];
+    const useValue = getElementText(node, 'USE') as HopUse || 'Boil';
+    const formValue = getElementText(node, 'FORM') as HopForm || 'Pellet';
+    
+    // Make sure we handle all HopUse variants
+    let hopUse: Hop['use'] = 'Boil';
+    if (['Boil', 'Dry Hop', 'Mash', 'First Wort', 'Aroma', 'Secondary', 'Tertiary'].includes(useValue)) {
+      hopUse = useValue as Hop['use'];
+    }
+    
+    // Make sure we handle all HopForm variants
+    let hopForm: Hop['form'] = 'Pellet';
+    if (['Pellet', 'Plug', 'Leaf', 'Whole'].includes(formValue)) {
+      hopForm = formValue as Hop['form'];
+    }
+    
     hops.push({
       id: uuidv4(),
       name: getElementText(node, 'NAME'),
       alpha: getElementFloat(node, 'ALPHA'),
       beta: getElementFloat(node, 'BETA', 0),
       amount: getElementFloat(node, 'AMOUNT'),
-      use: getElementText(node, 'USE') as HopUse || 'Boil',
+      use: hopUse,
       time: getElementFloat(node, 'TIME'),
-      form: getElementText(node, 'FORM') as HopForm || 'Pellet',
+      form: hopForm,
       notes: getElementText(node, 'NOTES') || '',
       costPerUnit: getElementFloat(node, 'COST'),
     });
@@ -286,7 +303,7 @@ function parseMiscs(recipeNode: any): Misc[] {
       use: getElementText(node, 'USE'),
       time: getElementFloat(node, 'TIME'),
       amount: getElementFloat(node, 'AMOUNT'),
-      form: 'Other',
+      form: 'Other', // Set a default form since it's required
       notes: getElementText(node, 'NOTES') || '',
       costPerUnit: getElementFloat(node, 'COST'),
     });
@@ -315,7 +332,7 @@ function parseMash(mashNode: any): MashProfile {
     const node = mashStepNodes[i];
     mashSteps.push({
       name: getElementText(node, 'NAME'),
-      type: getElementText(node, 'TYPE') as any,
+      type: getElementText(node, 'TYPE') as MashStep['type'],
       temperature: getElementFloat(node, 'STEP_TEMP'),
       time: getElementFloat(node, 'STEP_TIME'),
     });

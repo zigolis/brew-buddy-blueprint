@@ -19,6 +19,8 @@ import {
   Misc as IngredientMisc 
 } from './ingredients';
 
+export { Style };
+
 export interface Recipe {
   id: string;
   name: string;
