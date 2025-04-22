@@ -171,7 +171,7 @@ const RecipeList = () => {
                       </Button>
                       <div className="flex gap-2">
                         <Button variant="outline" size="sm" asChild>
-                          <Link to={`/recipes/${recipe.id}/edit`}>
+                          <Link to={`/recipes/edit/${recipe.id}`}>
                             <Edit className="h-4 w-4" />
                             <span className="sr-only">Edit</span>
                           </Link>
@@ -246,7 +246,7 @@ const RecipeList = () => {
                         </div>
                         <div className="flex gap-2 md:mt-4">
                           <Button variant="outline" size="sm" asChild>
-                            <Link to={`/recipes/${recipe.id}/edit`}>
+                            <Link to={`/recipes/edit/${recipe.id}`}>
                               <Edit className="h-4 w-4 mr-1" />
                               Edit
                             </Link>

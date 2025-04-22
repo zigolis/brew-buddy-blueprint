@@ -1,3 +1,4 @@
+
 import { useForm } from "react-hook-form";
 import { Recipe } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -37,7 +38,7 @@ const sectionComponents = {
   bottling: BottlingSection,
 };
 
-export function RecipeForm({ onSubmit, initialData, visibleSections = [] }: RecipeFormProps) {
+export function RecipeForm({ onSubmit, initialData, visibleSections }: RecipeFormProps) {
   const form = useForm<Partial<Recipe>>({
     defaultValues: initialData || {
       name: "",
@@ -109,19 +110,19 @@ export function RecipeForm({ onSubmit, initialData, visibleSections = [] }: Reci
   const formValues = form.watch();
   const { totalCost } = useRecipeCost(formValues);
 
+  // Determine which sections to display
+  const sectionsToRender = visibleSections && visibleSections.length > 0 
+    ? Object.entries(sectionComponents).filter(([key]) => visibleSections.includes(key))
+    : Object.entries(sectionComponents);
+
   return (
     <Form {...form}>
       <form id="recipe-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {visibleSections.length > 0
-          ? Object.entries(sectionComponents).map(([key, Component]) => {
-              if (!visibleSections.includes(key)) return null;
-              return <Component key={key} form={form} />;
-            })
-          : Object.entries(sectionComponents).map(([key, Component]) => (
-              <Component key={key} form={form} />
-            ))
-        }
-        {visibleSections.includes("bottling") && (
+        {sectionsToRender.map(([key, Component]) => (
+          <Component key={key} form={form} />
+        ))}
+        
+        {(visibleSections?.includes('bottling') || !visibleSections) && (
           <div className="flex justify-between items-center pt-4">
             <div className="text-lg font-semibold">
               Total Recipe Cost: ${totalCost.toFixed(2)}

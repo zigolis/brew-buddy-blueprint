@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,7 +12,7 @@ import { useEffect } from "react";
 import HomePage from "@/pages/Index";
 import RecipeList from "@/pages/recipes/RecipeList";
 import NewRecipe from "@/pages/recipes/NewRecipe";
-import ViewRecipe from "@/pages/recipes/ViewRecipe";
+import { ViewRecipe } from "@/pages/recipes/ViewRecipe";
 import IngredientsList from "@/pages/ingredients/IngredientsList";
 import EquipmentList from "@/pages/equipment/EquipmentList";
 import NewEquipment from "@/pages/equipment/NewEquipment";
