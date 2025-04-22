@@ -23,7 +23,7 @@ export function calculateCostPerServing(totalCost: number, servings: number): nu
 /**
  * Calculate the cost of ingredients in a recipe
  */
-function calculateIngredientCost(recipe: Recipe): number {
+export function calculateIngredientCost(recipe: Recipe): number {
   let total = 0;
   
   // Calculate fermentable costs
