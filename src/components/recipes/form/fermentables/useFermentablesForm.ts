@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useEffect } from "react";
 import { useIngredients } from "@/hooks/useIngredients";
 
@@ -16,10 +15,9 @@ export const useFermentablesForm = (form: any) => {
 
   const handleAddNewFermentable = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
-      // Ensure we're preventing default behavior
       event.preventDefault();
       event.stopPropagation();
-      
+
       const formData = new FormData(event.currentTarget);
 
       const name = formData.get("name") as string;
@@ -40,70 +38,48 @@ export const useFermentablesForm = (form: any) => {
 
       addIngredient(newFermentable);
 
-      // Add the new fermentable to the form values without creating an empty row after
-      // Get current fermentables from form
+      // Find an empty row to fill if exists, else add a new fermentable
       const currentFermentables = form.getValues('ingredients.fermentables') || [];
-      
-      // Update the last fermentable in the list if it's empty, otherwise add a new one
-      const lastIndex = currentFermentables.length - 1;
-      const lastFermentable = currentFermentables[lastIndex];
-      
-      if (lastFermentable && (!lastFermentable.name || lastFermentable.name === '')) {
-        // Update the empty fermentable with new values
+      const emptyIndex = currentFermentables.findIndex((f: any) => !f.name || f.name === '');
+      if (emptyIndex !== -1) {
+        // Update the empty row
         form.setValue(
-          `ingredients.fermentables.${lastIndex}`,
-          {
-            name,
-            type,
-            color,
-            amount: 0,
-            unit: "g",
-            costPerUnit,
-            notes,
-          },
+          `ingredients.fermentables.${emptyIndex}`,
+          newFermentable,
           { shouldDirty: true, shouldTouch: true }
         );
       } else {
-        // Add a new fermentable to the end
+        // Add the new fermentable
         form.setValue(
           `ingredients.fermentables.${currentFermentables.length}`,
-          {
-            name,
-            type,
-            color,
-            amount: 0,
-            unit: "g",
-            costPerUnit,
-            notes,
-          },
+          newFermentable,
           { shouldDirty: true, shouldTouch: true }
         );
-        
-        // Update the fermentables list but don't add another blank row
-        const newId = fermentables.length > 0 ? 
-          Math.max(...fermentables.map(f => f.id)) + 1 : 0;
-        setFermentables(prev => [...prev.filter(f => f.id !== -1), { id: newId }]);
+        // Add to fermentables array
+        const newId = fermentables.length > 0
+          ? Math.max(...fermentables.map(f => f.id)) + 1
+          : 0;
+        setFermentables(prev => [...prev, { id: newId }]);
       }
-      
+
       setShowNewFermentableDialog(false);
     },
     [addIngredient, fermentables, form]
   );
 
   useEffect(() => {
+    // Synchronize fermentables with form
     const currentFermentables = form.getValues('ingredients.fermentables') || [];
-    fermentables.forEach((_, index) => {
-      if (!currentFermentables[index]) {
-        form.setValue(`ingredients.fermentables.${index}`, { 
-          name: '', 
-          amount: 0, 
-          costPerUnit: 0 
-        }, { 
-          shouldDirty: false,
-          shouldTouch: false
-        });
-      }
-    });
+    if (fermentables.length < currentFermentables.length) {
+      // Add any missing rows (should normally always align)
+      const nextId = fermentables.length > 0
+        ? Math.max(...fermentables.map(f => f.id)) + 1
+        : 0;
+      setFermentables((prev) =>
+        [...prev, ...[...Array(currentFermentables.length - fermentables.length)].map((_, i) => ({ id: nextId + i }))]
+      );
+    }
+    // No longer auto-create blanks; just sync length
   }, [fermentables, form]);
 
   return {
