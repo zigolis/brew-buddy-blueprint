@@ -1,8 +1,22 @@
-
 import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useEffect } from "react";
+import { calculateABV } from "@/utils/beerCalculations";
+import { useFormContext } from "react-hook-form";
 
 export const RecipeStatsSection = ({ form }) => {
+  const { watch, setValue } = useFormContext();
+  
+  const originalGravity = watch("originalGravity");
+  const finalGravity = watch("finalGravity");
+  
+  useEffect(() => {
+    if (originalGravity && finalGravity) {
+      const calculatedABV = calculateABV(originalGravity, finalGravity);
+      setValue("abv", Number(calculatedABV.toFixed(1)));
+    }
+  }, [originalGravity, finalGravity, setValue]);
+
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Recipe Statistics</h2>
@@ -55,7 +69,16 @@ export const RecipeStatsSection = ({ form }) => {
             <FormItem>
               <FormLabel>Original Gravity</FormLabel>
               <FormControl>
-                <Input type="number" step="0.001" {...field} />
+                <Input 
+                  type="number" 
+                  step="0.001" 
+                  placeholder="1.050"
+                  {...field} 
+                  onChange={(e) => {
+                    const value = e.target.value ? Number(e.target.value) : null;
+                    field.onChange(value);
+                  }}
+                />
               </FormControl>
             </FormItem>
           )}
@@ -68,7 +91,16 @@ export const RecipeStatsSection = ({ form }) => {
             <FormItem>
               <FormLabel>Final Gravity</FormLabel>
               <FormControl>
-                <Input type="number" step="0.001" {...field} />
+                <Input 
+                  type="number" 
+                  step="0.001" 
+                  placeholder="1.010"
+                  {...field}
+                  onChange={(e) => {
+                    const value = e.target.value ? Number(e.target.value) : null;
+                    field.onChange(value);
+                  }}
+                />
               </FormControl>
             </FormItem>
           )}
@@ -96,7 +128,13 @@ export const RecipeStatsSection = ({ form }) => {
             <FormItem>
               <FormLabel>ABV (%)</FormLabel>
               <FormControl>
-                <Input type="number" step="0.1" {...field} />
+                <Input 
+                  type="number" 
+                  step="0.1" 
+                  {...field} 
+                  disabled 
+                  className="bg-muted"
+                />
               </FormControl>
             </FormItem>
           )}

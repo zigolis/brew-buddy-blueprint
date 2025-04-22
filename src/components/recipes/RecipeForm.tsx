@@ -26,6 +26,9 @@ export function RecipeForm({ onSubmit, initialData }: RecipeFormProps) {
       batchSize: 20,
       boilTime: 60,
       efficiency: 75,
+      originalGravity: null,
+      finalGravity: null,
+      abv: null,
       notes: "",
       tags: [],
       ingredients: {
