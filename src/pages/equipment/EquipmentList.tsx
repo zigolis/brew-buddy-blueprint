@@ -1,15 +1,12 @@
 
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { BackToHome } from "@/components/navigation/BackToHome";
 import { useBrewContext } from "@/contexts/BrewContext";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Plus, Eye, Pencil, Trash } from "lucide-react";
-import { EquipmentDetails } from "@/components/equipment/EquipmentDetails";
 import { useToast } from "@/hooks/use-toast";
 import { Equipment } from "@/types/beer";
 
@@ -17,9 +14,7 @@ const EquipmentList = () => {
   const navigate = useNavigate();
   const { equipment, deleteEquipment } = useBrewContext();
   const { toast } = useToast();
-  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
   const [equipmentToDelete, setEquipmentToDelete] = useState<Equipment | null>(null);
-  const [showDetails, setShowDetails] = useState(false);
 
   const handleDelete = () => {
     if (equipmentToDelete) {
@@ -73,10 +68,7 @@ const EquipmentList = () => {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => {
-                            setSelectedEquipment(item);
-                            setShowDetails(true);
-                          }}
+                          onClick={() => navigate(`/equipment/view/${item.id}`)}
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
@@ -111,15 +103,6 @@ const EquipmentList = () => {
           </div>
         )}
       </div>
-
-      <Dialog open={showDetails} onOpenChange={setShowDetails}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Equipment Details</DialogTitle>
-          </DialogHeader>
-          {selectedEquipment && <EquipmentDetails equipment={selectedEquipment} />}
-        </DialogContent>
-      </Dialog>
 
       <AlertDialog open={!!equipmentToDelete} onOpenChange={() => setEquipmentToDelete(null)}>
         <AlertDialogContent>

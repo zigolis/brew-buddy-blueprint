@@ -16,6 +16,7 @@ import NotFound from "./pages/NotFound";
 import ViewRecipe from "./pages/recipes/ViewRecipe";
 import NewEquipment from "./pages/equipment/NewEquipment";
 import EditEquipment from "./pages/equipment/EditEquipment";
+import ViewEquipment from "./pages/equipment/ViewEquipment";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ const App = () => (
             <Route path="/equipment" element={<EquipmentList />} />
             <Route path="/equipment/new" element={<NewEquipment />} />
             <Route path="/equipment/edit/:equipmentId" element={<EditEquipment />} />
+            <Route path="/equipment/view/:equipmentId" element={<ViewEquipment />} />
             <Route path="/calculator" element={<CostCalculator />} />
             <Route path="/import" element={<ImportRecipe />} />
             <Route path="/brewing-guide" element={<BrewingGuide />} />
