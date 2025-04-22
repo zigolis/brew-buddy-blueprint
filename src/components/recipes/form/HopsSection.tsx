@@ -45,6 +45,9 @@ export const HopsSection = ({ form }) => {
   };
 
   const removeHop = (id: number) => {
+    if (hops.length <= 1) {
+      return; // Don't remove the last hop
+    }
     setHops(hops.filter(h => h.id !== id));
   };
 
@@ -98,7 +101,7 @@ export const HopsSection = ({ form }) => {
                       <CommandGroup>
                         {getSuggestions(searchQuery).map((item) => (
                           <CommandItem
-                            key={item.id}
+                            key={item.id || `hop-${Math.random()}`}
                             value={item.name}
                             onSelect={(value) => {
                               field.onChange(value);
@@ -164,7 +167,7 @@ export const HopsSection = ({ form }) => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Use</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} defaultValue={field.value || "Boil"}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select use" />

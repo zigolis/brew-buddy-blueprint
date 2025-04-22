@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -83,7 +84,7 @@ export const YeastSection = ({ form }) => {
                     <CommandGroup>
                       {getSuggestions(searchQuery).map((item) => (
                         <CommandItem
-                          key={item.id}
+                          key={item.id || `yeast-${Math.random()}`}
                           value={item.name}
                           onSelect={(value) => {
                             field.onChange(value);
@@ -130,7 +131,7 @@ export const YeastSection = ({ form }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} defaultValue={field.value || "Ale"}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select type" />
@@ -154,7 +155,7 @@ export const YeastSection = ({ form }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Form</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} defaultValue={field.value || "Dry"}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select form" />

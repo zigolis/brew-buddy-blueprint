@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -32,6 +33,9 @@ export const FermentablesSection = ({ form }) => {
   };
 
   const removeFermentable = (id: number) => {
+    if (fermentables.length <= 1) {
+      return; // Don't remove the last fermentable
+    }
     setFermentables(fermentables.filter(f => f.id !== id));
   };
 
@@ -124,7 +128,7 @@ export const FermentablesSection = ({ form }) => {
                         <CommandGroup>
                           {getSuggestions(searchQuery).map((item) => (
                             <CommandItem
-                              key={item.id}
+                              key={item.id || `fermentable-${Math.random()}`}
                               value={item.name}
                               onSelect={(value) => {
                                 field.onChange(value);
