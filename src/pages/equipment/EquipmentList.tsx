@@ -1,8 +1,6 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
-import { BackToHome } from "@/components/navigation/BackToHome";
 import { useBrewContext } from "@/contexts/BrewContext";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -30,7 +28,6 @@ const EquipmentList = () => {
 
   return (
     <Layout>
-      <BackToHome />
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>

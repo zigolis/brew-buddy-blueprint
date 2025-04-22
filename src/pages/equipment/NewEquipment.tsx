@@ -1,12 +1,10 @@
 
 import { Layout } from "@/components/layout/Layout";
 import { EquipmentForm } from "@/components/equipment/EquipmentForm";
-import { BackToHome } from "@/components/navigation/BackToHome";
 
 export default function NewEquipment() {
   return (
     <Layout>
-      <BackToHome />
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold">Add New Equipment</h1>

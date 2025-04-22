@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
@@ -76,7 +75,7 @@ const IngredientsList = () => {
           </div>
           {!isAddingIngredient && (
             <Button onClick={handleAddNew}>
-              <Plus className="mr-2" />
+              <Plus className="h-4 w-4 mr-2" />
               Add Ingredient
             </Button>
           )}

@@ -2,7 +2,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { EquipmentForm } from "@/components/equipment/EquipmentForm";
-import { BackToHome } from "@/components/navigation/BackToHome";
 import { useBrewContext } from "@/contexts/BrewContext";
 
 export default function EditEquipment() {
@@ -19,7 +18,6 @@ export default function EditEquipment() {
 
   return (
     <Layout>
-      <BackToHome />
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold">Edit Equipment</h1>
