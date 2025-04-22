@@ -61,7 +61,7 @@ export const YeastSection = ({ form }) => {
           Cost: ${(yeastCost * (yeastAmount / 1000)).toFixed(2)}
         </div>
       </div>
-
+      {/* Top row: Name, Amount, Type */}
       <div className="grid gap-4 md:grid-cols-3">
         <FormField
           control={form.control}
@@ -69,8 +69,8 @@ export const YeastSection = ({ form }) => {
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Name*</FormLabel>
-              <Popover 
-                open={openPopover} 
+              <Popover
+                open={openPopover}
                 onOpenChange={(open) => {
                   setOpenPopover(open);
                   if (open) setSearchQuery(field.value || '');
@@ -78,18 +78,18 @@ export const YeastSection = ({ form }) => {
               >
                 <PopoverTrigger asChild>
                   <FormControl>
-                    <Input 
-                      placeholder="Search yeast..." 
-                      {...field} 
+                    <Input
+                      placeholder="Search yeast..."
+                      {...field}
                       onClick={() => setOpenPopover(true)}
                     />
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="p-0" align="start">
                   <Command>
-                    <CommandInput 
-                      placeholder="Search yeast..." 
-                      value={searchQuery} 
+                    <CommandInput
+                      placeholder="Search yeast..."
+                      value={searchQuery}
                       onValueChange={(value) => setSearchQuery(value || '')}
                     />
                     <CommandList>
@@ -116,7 +116,6 @@ export const YeastSection = ({ form }) => {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="ingredients.yeasts.0.amount"
@@ -124,11 +123,11 @@ export const YeastSection = ({ form }) => {
             <FormItem>
               <FormLabel>Amount (g)*</FormLabel>
               <FormControl>
-                <Input 
-                  type="number" 
-                  step="1" 
+                <Input
+                  type="number"
+                  step="1"
                   placeholder="11.5"
-                  {...field} 
+                  {...field}
                   onChange={(e) => {
                     const value = e.target.value ? Number(e.target.value) : 0;
                     field.onChange(value);
@@ -138,7 +137,6 @@ export const YeastSection = ({ form }) => {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="ingredients.yeasts.0.type"
@@ -162,7 +160,9 @@ export const YeastSection = ({ form }) => {
             </FormItem>
           )}
         />
-
+      </div>
+      {/* Second row: Form, Laboratory, Min Attenuation, Max Attenuation */}
+      <div className="grid gap-4 md:grid-cols-4">
         <FormField
           control={form.control}
           name="ingredients.yeasts.0.form"
@@ -185,7 +185,6 @@ export const YeastSection = ({ form }) => {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="ingredients.yeasts.0.laboratory"
@@ -198,7 +197,6 @@ export const YeastSection = ({ form }) => {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="ingredients.yeasts.0.minAttenuation"
@@ -206,20 +204,19 @@ export const YeastSection = ({ form }) => {
             <FormItem>
               <FormLabel>Min Attenuation (%)</FormLabel>
               <FormControl>
-                <Input 
-                  type="number" 
-                  step="0.1" 
+                <Input
+                  type="number"
+                  step="0.1"
                   {...field}
                   onChange={(e) => {
                     const value = e.target.value ? parseFloat(e.target.value) : 0;
                     field.onChange(isNaN(value) ? 0 : value);
-                  }}  
+                  }}
                 />
               </FormControl>
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="ingredients.yeasts.0.maxAttenuation"
@@ -227,20 +224,19 @@ export const YeastSection = ({ form }) => {
             <FormItem>
               <FormLabel>Max Attenuation (%)</FormLabel>
               <FormControl>
-                <Input 
-                  type="number" 
-                  step="0.1" 
+                <Input
+                  type="number"
+                  step="0.1"
                   {...field}
                   onChange={(e) => {
                     const value = e.target.value ? parseFloat(e.target.value) : 0;
                     field.onChange(isNaN(value) ? 0 : value);
-                  }}  
+                  }}
                 />
               </FormControl>
             </FormItem>
           )}
         />
-
       </div>
     </div>
   );
