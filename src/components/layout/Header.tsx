@@ -1,6 +1,7 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Beer, Menu, Settings } from "lucide-react";
+import { Beer, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Sidebar } from "./Sidebar";
@@ -35,13 +36,6 @@ export function Header() {
         </div>
 
         <div className="flex flex-1 items-center justify-end space-x-2">
-          <Button asChild variant="ghost" size="icon" className="mr-2">
-            <Link to="/settings">
-              <Settings className="h-5 w-5" />
-              <span className="sr-only">Settings</span>
-            </Link>
-          </Button>
-
           <Button asChild variant="secondary" size="sm">
             <Link to="/import">Import Recipe</Link>
           </Button>
