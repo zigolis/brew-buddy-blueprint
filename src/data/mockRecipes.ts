@@ -1,3 +1,4 @@
+
 import { v4 as uuidv4 } from 'uuid';
 import { Recipe } from '@/types';
 
@@ -68,6 +69,7 @@ export const mockRecipes: Recipe[] = [
           id: uuidv4(),
           name: 'Cascade',
           alpha: 5.5,
+          beta: 6.0,
           amount: 0.028,
           use: 'Boil',
           time: 60,
@@ -79,6 +81,7 @@ export const mockRecipes: Recipe[] = [
           id: uuidv4(),
           name: 'Cascade',
           alpha: 5.5,
+          beta: 6.0,
           amount: 0.028,
           use: 'Boil',
           time: 15,
@@ -90,6 +93,7 @@ export const mockRecipes: Recipe[] = [
           id: uuidv4(),
           name: 'Cascade',
           alpha: 5.5,
+          beta: 6.0,
           amount: 0.028,
           use: 'Boil',
           time: 0,
@@ -282,6 +286,7 @@ export const mockRecipes: Recipe[] = [
           id: uuidv4(),
           name: 'East Kent Goldings',
           alpha: 5.0,
+          beta: 3.5,
           amount: 0.05,
           use: 'Boil',
           time: 60,

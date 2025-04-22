@@ -1,3 +1,4 @@
+
 import { DOMParser } from '@xmldom/xmldom';
 import { 
   Recipe, 
@@ -224,6 +225,7 @@ function parseHops(recipeNode: any): Hop[] {
       id: uuidv4(),
       name: getElementText(node, 'NAME'),
       alpha: getElementFloat(node, 'ALPHA'),
+      beta: getElementFloat(node, 'BETA', 0),  // Added beta property with default value 0
       amount: getElementFloat(node, 'AMOUNT'),
       use: getElementText(node, 'USE') as any,
       time: getElementFloat(node, 'TIME'),
