@@ -2,7 +2,6 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { RecipeStatsSection } from "./RecipeStatsSection";
 import { WaterSection } from "./WaterSection";
 
 export const GeneralInfoSection = ({ form }) => {
@@ -69,7 +68,6 @@ export const GeneralInfoSection = ({ form }) => {
         )}
       />
 
-      <RecipeStatsSection form={form} />
       <WaterSection form={form} />
     </div>
   );
