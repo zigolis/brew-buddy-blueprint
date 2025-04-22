@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Beer, Menu } from "lucide-react";
@@ -36,11 +35,8 @@ export function Header() {
         </div>
 
         <div className="flex flex-1 items-center justify-end space-x-2">
-          <Button asChild variant="secondary" size="sm">
-            <Link to="/import">Import Recipe</Link>
-          </Button>
           <Button asChild size="sm">
-            <Link to="/recipes/new">New Recipe</Link>
+            <Link to="/brewing-guide">Start Brewing</Link>
           </Button>
         </div>
       </div>
