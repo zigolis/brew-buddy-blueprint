@@ -69,7 +69,7 @@ export const FermentablesSection = ({ form }) => {
       <Button
         type="button"
         onClick={handleAddFermentable}
-        className="w-full mt-2"
+        className="w-full"
         variant="outline"
       >
         <Plus className="h-4 w-4 mr-2" />
