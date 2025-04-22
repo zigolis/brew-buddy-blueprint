@@ -1,3 +1,4 @@
+
 import { Layout } from "@/components/layout/Layout";
 import { RecipeForm } from "@/components/recipes/RecipeForm";
 import { toast } from "sonner";
@@ -191,7 +192,7 @@ const NewRecipe = () => {
               <TabsContent key={step.id} value={step.id}>
                 <RecipeForm
                   onSubmit={handleCreateRecipe}
-                  visibleSections={step.sections}
+                  visibleSections={[...step.sections]}
                 />
               </TabsContent>
             ))}

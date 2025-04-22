@@ -2,10 +2,10 @@
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface RecipeStepsNavigationProps {
-  steps: {
+  steps: ReadonlyArray<{
     id: string;
     title: string;
-  }[];
+  }>;
   currentStep: number;
 }
 
