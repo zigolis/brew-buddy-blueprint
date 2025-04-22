@@ -22,7 +22,7 @@ export const FermentableRow = ({
 }: FermentableRowProps) => (
   <div
     key={fermentable.id}
-    className="grid gap-4 md:grid-cols-5 items-end border p-4 rounded-lg"
+    className="grid gap-4 md:grid-cols-5 items-end"
   >
     <FormField
       control={form.control}
@@ -47,7 +47,7 @@ export const FermentableRow = ({
       control={form.control}
       name={`ingredients.fermentables.${index}.amount`}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="flex flex-col">
           <FormLabel>Amount (g)*</FormLabel>
           <Input
             type="number"
@@ -65,7 +65,7 @@ export const FermentableRow = ({
       control={form.control}
       name={`ingredients.fermentables.${index}.type`}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="flex flex-col">
           <FormLabel>Type</FormLabel>
           <select
             className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-base md:text-sm"
@@ -87,7 +87,7 @@ export const FermentableRow = ({
       control={form.control}
       name={`ingredients.fermentables.${index}.color`}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="flex flex-col">
           <FormLabel>Color (EBC)</FormLabel>
           <Input
             type="number"
@@ -114,4 +114,3 @@ export const FermentableRow = ({
     </Button>
   </div>
 );
-
