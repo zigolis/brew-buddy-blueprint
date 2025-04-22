@@ -1,4 +1,3 @@
-
 import { Layout } from "@/components/layout/Layout";
 import { RecipeForm } from "@/components/recipes/RecipeForm";
 import { toast } from "sonner";
@@ -7,19 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { Recipe } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useState } from "react";
-
-const recipeSteps = [
-  { id: "general", title: "General Info", sections: ["general", "stats"] },
-  { id: "ingredients", title: "Ingredients", sections: ["fermentables", "hops", "yeast"] },
-  { id: "mashing", title: "Mashing", sections: ["mash"] },
-  { id: "boil", title: "Boil & Clarification", sections: ["boil", "clarification"] },
-  { id: "fermentation", title: "Fermentation", sections: ["fermentation", "coldCrash"] },
-  { id: "finishing", title: "Finishing", sections: ["carbonation", "bottling"] },
-];
+import { recipeSteps } from "@/constants/recipeSteps";
+import { RecipeStepsNavigation } from "@/components/recipes/form/steps/RecipeStepsNavigation";
+import { RecipeStepNavButtons } from "@/components/recipes/form/steps/RecipeStepNavButtons";
 
 const NewRecipe = () => {
   const { addRecipe } = useBrewContext();
@@ -28,7 +19,6 @@ const NewRecipe = () => {
 
   const handleCreateRecipe = (formData: Partial<Recipe>) => {
     try {
-      // Initialize default values for required fields
       const defaultStyle = {
         name: "Generic Ale",
         category: "Other",
@@ -192,18 +182,10 @@ const NewRecipe = () => {
               }
             }}
           >
-            <TabsList className="grid w-full grid-cols-2 lg:grid-cols-6">
-              {recipeSteps.map((step, index) => (
-                <TabsTrigger
-                  key={step.id}
-                  value={step.id}
-                  disabled={index > currentStep}
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-                >
-                  {step.title}
-                </TabsTrigger>
-              ))}
-            </TabsList>
+            <RecipeStepsNavigation
+              steps={recipeSteps}
+              currentStep={currentStep}
+            />
 
             {recipeSteps.map((step) => (
               <TabsContent key={step.id} value={step.id}>
@@ -215,24 +197,12 @@ const NewRecipe = () => {
             ))}
           </Tabs>
 
-          <div className="flex justify-between pt-4">
-            <Button
-              variant="outline"
-              onClick={handlePrevious}
-              disabled={currentStep === 0}
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" /> Previous
-            </Button>
-            {currentStep === recipeSteps.length - 1 ? (
-              <Button type="submit" form="recipe-form">
-                Create Recipe
-              </Button>
-            ) : (
-              <Button onClick={handleNext}>
-                Next <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            )}
-          </div>
+          <RecipeStepNavButtons
+            currentStep={currentStep}
+            totalSteps={recipeSteps.length}
+            onPrevious={handlePrevious}
+            onNext={handleNext}
+          />
         </div>
       </div>
     </Layout>
