@@ -1,5 +1,5 @@
 
-import { Equipment } from '@/types/beer';
+import { Equipment } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
 
 export const mockEquipment: Equipment[] = [

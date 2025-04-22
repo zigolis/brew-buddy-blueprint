@@ -1,6 +1,6 @@
 
 import { useForm } from "react-hook-form";
-import { Recipe } from "@/types/beer";
+import { Recipe } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { GeneralInfoSection } from "./form/GeneralInfoSection";

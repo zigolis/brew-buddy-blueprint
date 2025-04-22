@@ -3,7 +3,7 @@ import { Layout } from "@/components/layout/Layout";
 import { RecipeForm } from "@/components/recipes/RecipeForm";
 import { useBrewContext } from "@/contexts/BrewContext";
 import { useNavigate, useParams } from "react-router-dom";
-import { Recipe } from "@/types/beer";
+import { Recipe } from "@/types";
 import { toast } from "sonner";
 
 const EditRecipe = () => {

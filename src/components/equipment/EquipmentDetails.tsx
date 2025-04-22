@@ -1,5 +1,5 @@
 
-import { Equipment } from "@/types/beer";
+import { Equipment } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface EquipmentDetailsProps {

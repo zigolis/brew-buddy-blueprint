@@ -1,6 +1,5 @@
-
-import { Recipe } from '@/types/beer';
 import { v4 as uuidv4 } from 'uuid';
+import { Recipe } from '@/types';
 
 const now = new Date().toISOString();
 
@@ -103,7 +102,7 @@ export const mockRecipes: Recipe[] = [
           form: 'Liquid',
           laboratory: 'Wyeast',
           productId: '1056',
-          amount: 11.5, // Added the required amount property
+          amount: 11.5,
           minAttenuation: 73,
           maxAttenuation: 77,
           tempRange: {
@@ -291,7 +290,7 @@ export const mockRecipes: Recipe[] = [
           form: 'Liquid',
           laboratory: 'White Labs',
           productId: 'WLP004',
-          amount: 11.5, // Added the required amount property
+          amount: 11.5,
           minAttenuation: 69,
           maxAttenuation: 74,
           tempRange: {

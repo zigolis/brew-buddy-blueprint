@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react';
-import { Recipe } from '@/types/beer';
+import { Recipe } from '@/types';
 import { useIngredients } from '@/hooks/useIngredients';
 import { calculateIngredientCost } from '@/utils/costCalculator';
 

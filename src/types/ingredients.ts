@@ -53,3 +53,17 @@ export interface Misc {
   notes: string;
   costPerUnit: number;
 }
+
+// This is the generic ingredient interface that combines properties from all ingredient types
+export interface Ingredient {
+  id: string;
+  name: string;
+  type: string;
+  amount: number;
+  unit: string;
+  costPerUnit: number;
+  supplier?: string;
+  notes: string;
+  createdAt: string;
+  updatedAt: string;
+}

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
@@ -6,7 +5,7 @@ import { useBrewContext } from "@/contexts/BrewContext";
 import { Button } from "@/components/ui/button";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Equipment } from "@/types/beer";
+import { Equipment } from "@/types";
 import {
   Table,
   TableBody,

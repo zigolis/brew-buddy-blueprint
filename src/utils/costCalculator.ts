@@ -1,5 +1,4 @@
-
-import { Recipe, Equipment } from '@/types/beer';
+import { Recipe, Equipment } from '@/types';
 
 /**
  * Calculate the total cost of a recipe, including ingredients and equipment depreciation

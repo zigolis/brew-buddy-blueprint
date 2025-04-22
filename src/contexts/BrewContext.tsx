@@ -1,183 +1,102 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Recipe, Equipment, BrewingSession } from '@/types/beer';
+import { createContext, useContext, useState, useEffect } from "react";
+import { Recipe, Equipment } from "@/types";
+import { mockRecipes } from "@/data/mockRecipes";
+import { mockEquipment } from "@/data/mockEquipment";
 
-// Default mock data for testing UI
-import { mockRecipes } from '@/data/mockRecipes';
-import { mockEquipment } from '@/data/mockEquipment';
-
-interface BrewContextType {
+interface BrewContextProps {
   recipes: Recipe[];
   equipment: Equipment[];
-  brewingSessions: BrewingSession[];
-  bookmarkedRecipes: Set<string>;
   addRecipe: (recipe: Recipe) => void;
-  updateRecipe: (recipeId: string, updatedRecipe: Recipe) => void;
-  deleteRecipe: (recipeId: string) => void;
-  toggleBookmark: (recipeId: string) => void;
-  isBookmarked: (recipeId: string) => boolean;
+  updateRecipe: (id: string, recipe: Recipe) => void;
+  deleteRecipe: (id: string) => void;
   addEquipment: (equipment: Equipment) => void;
-  updateEquipment: (equipmentId: string, updatedEquipment: Equipment) => void;
-  deleteEquipment: (equipmentId: string) => void;
-  addBrewingSession: (session: BrewingSession) => void;
-  updateBrewingSession: (sessionId: string, updatedSession: BrewingSession) => void;
-  deleteBrewingSession: (sessionId: string) => void;
+  updateEquipment: (id: string, equipment: Equipment) => void;
+  deleteEquipment: (id: string) => void;
 }
 
-// Create context with default values
-const BrewContext = createContext<BrewContextType>({
-  recipes: [],
-  equipment: [],
-  brewingSessions: [],
-  bookmarkedRecipes: new Set(),
-  addRecipe: () => {},
-  updateRecipe: () => {},
-  deleteRecipe: () => {},
-  toggleBookmark: () => {},
-  isBookmarked: () => false,
-  addEquipment: () => {},
-  updateEquipment: () => {},
-  deleteEquipment: () => {},
-  addBrewingSession: () => {},
-  updateBrewingSession: () => {},
-  deleteBrewingSession: () => {},
-});
+const BrewContext = createContext<BrewContextProps | undefined>(undefined);
 
-export function useBrewContext() {
-  return useContext(BrewContext);
-}
-
-interface BrewContextProviderProps {
-  children: ReactNode;
-}
-
-export function BrewContextProvider({ children }: BrewContextProviderProps) {
-  // State for all our data
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [equipment, setEquipment] = useState<Equipment[]>([]);
-  const [brewingSessions, setBrewingSessions] = useState<BrewingSession[]>([]);
-  const [bookmarkedRecipes, setBookmarkedRecipes] = useState<Set<string>>(new Set());
-
-  // Load data from localStorage on initial mount
-  useEffect(() => {
+export const BrewContextProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [recipes, setRecipes] = useState<Recipe[]>(() => {
     try {
-      const storedRecipes = localStorage.getItem('brewMasterRecipes');
-      const storedEquipment = localStorage.getItem('brewMasterEquipment');
-      const storedSessions = localStorage.getItem('brewMasterSessions');
-      const storedBookmarks = localStorage.getItem('brewMasterBookmarks');
-      
-      // Use mock data if nothing stored
-      setRecipes(storedRecipes ? JSON.parse(storedRecipes) : mockRecipes);
-      setEquipment(storedEquipment ? JSON.parse(storedEquipment) : mockEquipment);
-      setBrewingSessions(storedSessions ? JSON.parse(storedSessions) : []);
-      setBookmarkedRecipes(new Set(storedBookmarks ? JSON.parse(storedBookmarks) : []));
+      const storedRecipes = localStorage.getItem("brewMasterRecipes");
+      return storedRecipes ? JSON.parse(storedRecipes) : mockRecipes;
     } catch (error) {
-      console.error('Error loading data from localStorage', error);
-      setRecipes(mockRecipes);
-      setEquipment(mockEquipment);
-      setBrewingSessions([]);
-      setBookmarkedRecipes(new Set());
+      console.error("Error loading recipes from localStorage:", error);
+      return mockRecipes;
     }
-  }, []);
+  });
 
-  // Save data to localStorage whenever it changes
+  const [equipment, setEquipment] = useState<Equipment[]>(() => {
+    try {
+      const storedEquipment = localStorage.getItem("brewMasterEquipment");
+      return storedEquipment ? JSON.parse(storedEquipment) : mockEquipment;
+    } catch (error) {
+      console.error("Error loading equipment from localStorage:", error);
+      return mockEquipment;
+    }
+  });
+
   useEffect(() => {
-    localStorage.setItem('brewMasterRecipes', JSON.stringify(recipes));
+    localStorage.setItem("brewMasterRecipes", JSON.stringify(recipes));
   }, [recipes]);
 
   useEffect(() => {
-    localStorage.setItem('brewMasterEquipment', JSON.stringify(equipment));
+    localStorage.setItem("brewMasterEquipment", JSON.stringify(equipment));
   }, [equipment]);
 
-  useEffect(() => {
-    localStorage.setItem('brewMasterSessions', JSON.stringify(brewingSessions));
-  }, [brewingSessions]);
-
-  useEffect(() => {
-    localStorage.setItem('brewMasterBookmarks', JSON.stringify(Array.from(bookmarkedRecipes)));
-  }, [bookmarkedRecipes]);
-
-  // Recipe methods
   const addRecipe = (recipe: Recipe) => {
-    setRecipes(prev => [...prev, recipe]);
+    setRecipes((prevRecipes) => [...prevRecipes, recipe]);
   };
 
-  const updateRecipe = (recipeId: string, updatedRecipe: Recipe) => {
-    setRecipes(prev => prev.map(recipe => 
-      recipe.id === recipeId ? updatedRecipe : recipe
-    ));
+  const updateRecipe = (id: string, updatedRecipe: Recipe) => {
+    setRecipes((prevRecipes) =>
+      prevRecipes.map((recipe) => (recipe.id === id ? updatedRecipe : recipe))
+    );
   };
 
-  const deleteRecipe = (recipeId: string) => {
-    setRecipes(prev => prev.filter(recipe => recipe.id !== recipeId));
+  const deleteRecipe = (id: string) => {
+    setRecipes((prevRecipes) =>
+      prevRecipes.filter((recipe) => recipe.id !== id)
+    );
   };
 
-  // Equipment methods
   const addEquipment = (equipment: Equipment) => {
-    setEquipment(prev => [...prev, equipment]);
+    setEquipment((prevEquipment) => [...prevEquipment, equipment]);
   };
 
-  const updateEquipment = (equipmentId: string, updatedEquipment: Equipment) => {
-    setEquipment(prev => prev.map(equipment => 
-      equipment.id === equipmentId ? updatedEquipment : equipment
-    ));
+  const updateEquipment = (id: string, updatedEquipment: Equipment) => {
+    setEquipment((prevEquipment) =>
+      prevEquipment.map((item) => (item.id === id ? updatedEquipment : item))
+    );
   };
 
-  const deleteEquipment = (equipmentId: string) => {
-    setEquipment(prev => prev.filter(equipment => equipment.id !== equipmentId));
+  const deleteEquipment = (id: string) => {
+    setEquipment((prevEquipment) =>
+      prevEquipment.filter((item) => item.id !== id)
+    );
   };
 
-  // Brewing session methods
-  const addBrewingSession = (session: BrewingSession) => {
-    setBrewingSessions(prev => [...prev, session]);
-  };
-
-  const updateBrewingSession = (sessionId: string, updatedSession: BrewingSession) => {
-    setBrewingSessions(prev => prev.map(session => 
-      session.id === sessionId ? updatedSession : session
-    ));
-  };
-
-  const deleteBrewingSession = (sessionId: string) => {
-    setBrewingSessions(prev => prev.filter(session => session.id !== sessionId));
-  };
-
-  // Bookmark methods
-  const toggleBookmark = (recipeId: string) => {
-    setBookmarkedRecipes(prev => {
-      const newBookmarks = new Set(prev);
-      if (newBookmarks.has(recipeId)) {
-        newBookmarks.delete(recipeId);
-      } else {
-        newBookmarks.add(recipeId);
-      }
-      return newBookmarks;
-    });
-  };
-
-  const isBookmarked = (recipeId: string) => bookmarkedRecipes.has(recipeId);
-
-  // Context value
-  const value = {
+  const value: BrewContextProps = {
     recipes,
     equipment,
-    brewingSessions,
-    bookmarkedRecipes,
     addRecipe,
     updateRecipe,
     deleteRecipe,
-    toggleBookmark,
-    isBookmarked,
     addEquipment,
     updateEquipment,
     deleteEquipment,
-    addBrewingSession,
-    updateBrewingSession,
-    deleteBrewingSession,
   };
 
-  return (
-    <BrewContext.Provider value={value}>
-      {children}
-    </BrewContext.Provider>
-  );
-}
+  return <BrewContext.Provider value={value}>{children}</BrewContext.Provider>;
+};
+
+export const useBrewContext = () => {
+  const context = useContext(BrewContext);
+  if (!context) {
+    throw new Error("useBrewContext must be used within a BrewContextProvider");
+  }
+  return context;
+};

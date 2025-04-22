@@ -9,7 +9,7 @@ import {
   Misc, 
   MashProfile, 
   MashStep
-} from '@/types/beer';
+} from '@/types';
 import { v4 as uuidv4 } from 'uuid';
 
 // Simple XML parsing helper functions

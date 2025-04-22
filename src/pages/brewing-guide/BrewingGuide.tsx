@@ -1,4 +1,3 @@
-
 import { Layout } from "@/components/layout/Layout";
 import { useBrewContext } from "@/contexts/BrewContext";
 import { useState, useEffect } from "react";
@@ -25,7 +24,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { Recipe, BrewingStep } from "@/types/beer";
+import { Recipe, BrewingStep } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 
 const BrewingGuideDashboard = () => {
@@ -113,7 +112,6 @@ const BrewingGuideSession = () => {
       if (found) {
         setRecipe(found);
         
-        // Generate brewing steps from the recipe
         const steps = generateBrewingSteps(found);
         setBrewingSteps(steps);
       } else {
@@ -131,7 +129,6 @@ const BrewingGuideSession = () => {
       }, 1000);
     } else if (timeRemaining === 0 && timerActive) {
       setTimerActive(false);
-      // Play sound or show notification
     }
     
     return () => {
@@ -142,7 +139,6 @@ const BrewingGuideSession = () => {
   const generateBrewingSteps = (recipe: Recipe): BrewingStep[] => {
     const steps: BrewingStep[] = [];
     
-    // 1. Preparation steps
     steps.push({
       id: uuidv4(),
       type: 'Preparation',
@@ -167,7 +163,6 @@ const BrewingGuideSession = () => {
       completed: false,
     });
     
-    // 2. Mash steps
     recipe.mash.steps.forEach((mashStep, index) => {
       steps.push({
         id: uuidv4(),
@@ -178,7 +173,6 @@ const BrewingGuideSession = () => {
       });
     });
     
-    // 3. Boil steps
     steps.push({
       id: uuidv4(),
       type: 'Boil',
@@ -187,10 +181,9 @@ const BrewingGuideSession = () => {
       completed: false,
     });
     
-    // Add hop additions
     const hopAdditions = recipe.ingredients.hops
       .filter(hop => hop.use === 'Boil')
-      .sort((a, b) => b.time - a.time); // Sort by time descending
+      .sort((a, b) => b.time - a.time);
     
     hopAdditions.forEach(hop => {
       steps.push({
@@ -202,7 +195,6 @@ const BrewingGuideSession = () => {
       });
     });
     
-    // 4. Fermentation steps
     steps.push({
       id: uuidv4(),
       type: 'Fermentation',
@@ -227,7 +219,6 @@ const BrewingGuideSession = () => {
       completed: false,
     });
     
-    // 5. Fermentation schedule
     recipe.fermentation.steps.forEach((fermentationStep, index) => {
       steps.push({
         id: uuidv4(),
@@ -238,7 +229,6 @@ const BrewingGuideSession = () => {
       });
     });
     
-    // 6. Packaging
     steps.push({
       id: uuidv4(),
       type: 'Packaging',
@@ -432,7 +422,6 @@ const BrewingGuideSession = () => {
                           variant="outline" 
                           size="sm"
                           onClick={() => {
-                            // Extract time from instruction if possible
                             const timeMatch = currentStep.instructions.match(/(\d+)\s*minutes/);
                             const minutes = timeMatch ? parseInt(timeMatch[1]) : 60;
                             startTimer(minutes);
@@ -462,7 +451,6 @@ const BrewingGuideSession = () => {
                   </div>
                 )}
                 
-                {/* Show relevant recipe details based on the current step */}
                 <Tabs defaultValue="ingredients">
                   <TabsList>
                     <TabsTrigger value="ingredients">

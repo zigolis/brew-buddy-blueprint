@@ -4,7 +4,7 @@ import { RecipeForm } from "@/components/recipes/RecipeForm";
 import { toast } from "sonner";
 import { useBrewContext } from "@/contexts/BrewContext";
 import { useNavigate } from "react-router-dom";
-import { Recipe } from "@/types/beer";
+import { Recipe } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 
 const NewRecipe = () => {
