@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 import { Recipe } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -15,15 +14,30 @@ import { FermentationSection } from "./form/FermentationSection";
 import { ColdCrashSection } from "./form/ColdCrashSection";
 import { CarbonationSection } from "./form/CarbonationSection";
 import { BottlingSection } from "./form/BottlingSection";
-import { Separator } from "@/components/ui/separator";
 import { useRecipeCost } from "@/hooks/useRecipeCost";
 
 interface RecipeFormProps {
   onSubmit: (data: Partial<Recipe>) => void;
   initialData?: Partial<Recipe>;
+  visibleSections?: string[];
 }
 
-export function RecipeForm({ onSubmit, initialData }: RecipeFormProps) {
+const sectionComponents = {
+  general: GeneralInfoSection,
+  stats: RecipeStatsSection,
+  fermentables: FermentablesSection,
+  hops: HopsSection,
+  yeast: YeastSection,
+  mash: MashScheduleSection,
+  boil: BoilSection,
+  clarification: ClarificationSection,
+  fermentation: FermentationSection,
+  coldCrash: ColdCrashSection,
+  carbonation: CarbonationSection,
+  bottling: BottlingSection,
+};
+
+export function RecipeForm({ onSubmit, initialData, visibleSections = [] }: RecipeFormProps) {
   const form = useForm<Partial<Recipe>>({
     defaultValues: initialData || {
       name: "",
@@ -97,37 +111,19 @@ export function RecipeForm({ onSubmit, initialData }: RecipeFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <GeneralInfoSection form={form} />
-        <Separator />
-        <RecipeStatsSection form={form} />
-        <Separator />
-        <FermentablesSection form={form} />
-        <Separator />
-        <HopsSection form={form} />
-        <Separator />
-        <YeastSection form={form} />
-        <Separator />
-        <MashScheduleSection form={form} />
-        <Separator />
-        <BoilSection form={form} />
-        <Separator />
-        <ClarificationSection form={form} />
-        <Separator />
-        <FermentationSection form={form} />
-        <Separator />
-        <ColdCrashSection form={form} />
-        <Separator />
-        <CarbonationSection form={form} />
-        <Separator />
-        <BottlingSection form={form} />
+      <form id="recipe-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        {Object.entries(sectionComponents).map(([key, Component]) => {
+          if (!visibleSections.includes(key)) return null;
+          return <Component key={key} form={form} />;
+        })}
         
-        <div className="flex justify-between items-center">
-          <div className="text-lg font-semibold">
-            Total Recipe Cost: ${totalCost.toFixed(2)}
+        {visibleSections.includes("bottling") && (
+          <div className="flex justify-between items-center pt-4">
+            <div className="text-lg font-semibold">
+              Total Recipe Cost: ${totalCost.toFixed(2)}
+            </div>
           </div>
-          <Button type="submit">Create Recipe</Button>
-        </div>
+        )}
       </form>
     </Form>
   );
