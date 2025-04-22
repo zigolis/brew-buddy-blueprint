@@ -37,13 +37,15 @@ export const YeastSection = ({ form }) => {
     }
   };
 
+  // Safely get the yeast cost value
+  const yeastCost = parseFloat(form.watch('ingredients.yeasts.0.costPerUnit') || '0') || 0;
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold">Yeast</h2>
         <div className="text-sm text-muted-foreground">
-          Cost: $
-          {parseFloat(form.watch('ingredients.yeasts.0')?.costPerUnit || 0).toFixed(2)}
+          Cost: ${yeastCost.toFixed(2)}
         </div>
       </div>
 

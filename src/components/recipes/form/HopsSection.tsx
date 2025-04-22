@@ -28,7 +28,11 @@ export const HopsSection = ({ form }) => {
   // Safely get suggestions, ensuring we always return an array
   const getSuggestions = (query: string) => {
     try {
+      if (!query || query.trim() === '') {
+        return [];
+      }
       const results = getHopSuggestions(query);
+      console.log('Hop suggestions in component:', query, results);
       return Array.isArray(results) ? results : [];
     } catch (error) {
       console.error('Error getting hop suggestions:', error);
@@ -44,14 +48,17 @@ export const HopsSection = ({ form }) => {
     setHops(hops.filter(h => h.id !== id));
   };
 
+  // Ensure we're initializing form watch with empty arrays when needed
+  const watchedHops = form.watch('ingredients.hops') || [];
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold">Hops</h2>
         <div className="text-sm text-muted-foreground">
           Total Cost: $
-          {(form.watch('ingredients.hops') || []).reduce((acc, h) => 
-            acc + (parseFloat(h?.amount) || 0) * (parseFloat(h?.costPerUnit) || 0), 0
+          {watchedHops.reduce((acc, h) => 
+            acc + (parseFloat(h?.amount || '0') || 0) * (parseFloat(h?.costPerUnit || '0') || 0), 0
           ).toFixed(2)}
         </div>
       </div>
@@ -73,7 +80,11 @@ export const HopsSection = ({ form }) => {
                 >
                   <PopoverTrigger asChild>
                     <FormControl>
-                      <Input placeholder="Search hop..." {...field} />
+                      <Input 
+                        placeholder="Search hop..." 
+                        {...field} 
+                        onClick={() => setOpenPopover(index)}
+                      />
                     </FormControl>
                   </PopoverTrigger>
                   <PopoverContent className="p-0" align="start">

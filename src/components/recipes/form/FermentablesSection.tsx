@@ -54,14 +54,17 @@ export const FermentablesSection = ({ form }) => {
     }
   };
 
+  // Ensure we're initializing form watch with empty arrays when needed
+  const watchedFermentables = form.watch('ingredients.fermentables') || [];
+  
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold">Fermentables</h2>
         <div className="text-sm text-muted-foreground">
           Total Cost: $
-          {(form.watch('ingredients.fermentables') || []).reduce((acc, f) => 
-            acc + (parseFloat(f?.amount) || 0) * (parseFloat(f?.costPerUnit) || 0), 0
+          {watchedFermentables.reduce((acc, f) => 
+            acc + (parseFloat(f?.amount || '0') || 0) * (parseFloat(f?.costPerUnit || '0') || 0), 0
           ).toFixed(2)}
         </div>
       </div>
