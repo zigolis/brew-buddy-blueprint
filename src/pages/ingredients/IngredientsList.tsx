@@ -1,13 +1,13 @@
-
 import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import { IngredientTable } from "@/components/ingredients/IngredientTable";
 import { IngredientForm } from "@/components/ingredients/IngredientForm";
 import { useIngredients } from "@/hooks/useIngredients";
 import { Ingredient } from "@/types/ingredients";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BackToHome } from "@/components/navigation/BackToHome";
 
 const IngredientsList = () => {
   const [editingIngredient, setEditingIngredient] = useState<string | null>(null);
@@ -69,6 +69,7 @@ const IngredientsList = () => {
   return (
     <Layout>
       <div className="space-y-6">
+        <BackToHome />
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">Ingredients</h1>

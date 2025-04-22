@@ -5,6 +5,7 @@ import { useBrewContext } from "@/contexts/BrewContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Beer, Package, FileText } from "lucide-react";
+import { BackToHome } from "@/components/navigation/BackToHome";
 
 const ViewRecipe = () => {
   const { recipeId } = useParams();
@@ -25,6 +26,7 @@ const ViewRecipe = () => {
   return (
     <Layout>
       <div className="space-y-6">
+        <BackToHome />
         <div className="flex flex-col space-y-2">
           <h1 className="text-3xl font-bold">{recipe.name}</h1>
           <div className="flex flex-wrap gap-2">

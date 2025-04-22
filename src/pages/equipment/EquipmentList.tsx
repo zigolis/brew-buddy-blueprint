@@ -1,10 +1,12 @@
 
 import { Layout } from "@/components/layout/Layout";
+import { BackToHome } from "@/components/navigation/BackToHome";
 
 const EquipmentList = () => {
   return (
     <Layout>
       <div className="space-y-6">
+        <BackToHome />
         <div>
           <h1 className="text-3xl font-bold">Equipment</h1>
           <p className="text-muted-foreground">Manage your brewing equipment</p>

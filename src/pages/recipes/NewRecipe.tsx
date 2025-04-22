@@ -6,6 +6,7 @@ import { useBrewContext } from "@/contexts/BrewContext";
 import { useNavigate } from "react-router-dom";
 import { Recipe } from "@/types/beer";
 import { v4 as uuidv4 } from "uuid";
+import { BackToHome } from "@/components/navigation/BackToHome";
 
 const NewRecipe = () => {
   const { addRecipe } = useBrewContext();
@@ -107,6 +108,7 @@ const NewRecipe = () => {
   return (
     <Layout>
       <div className="space-y-6">
+        <BackToHome />
         <div>
           <h1 className="text-3xl font-bold">Create New Recipe</h1>
           <p className="text-muted-foreground">
