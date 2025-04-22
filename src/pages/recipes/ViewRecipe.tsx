@@ -1,4 +1,3 @@
-
 import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { useBrewContext } from "@/contexts/BrewContext";
@@ -120,7 +119,7 @@ const ViewRecipe = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              {recipe.ingredients.fermentables.length > 0 && (
+              {Array.isArray(recipe.ingredients.fermentables) && recipe.ingredients.fermentables.length > 0 && (
                 <div>
                   <div className="font-semibold mb-2">Fermentables</div>
                   <ul className="list-disc pl-4 space-y-1">
@@ -133,7 +132,7 @@ const ViewRecipe = () => {
                 </div>
               )}
 
-              {recipe.ingredients.hops.length > 0 && (
+              {Array.isArray(recipe.ingredients.hops) && recipe.ingredients.hops.length > 0 && (
                 <div>
                   <div className="font-semibold mb-2">Hops</div>
                   <ul className="list-disc pl-4 space-y-1">
@@ -146,20 +145,23 @@ const ViewRecipe = () => {
                 </div>
               )}
 
-              {recipe.ingredients.yeasts.length > 0 && (
+              {Array.isArray(recipe.ingredients.yeasts) && recipe.ingredients.yeasts.length > 0 && (
                 <div>
                   <div className="font-semibold mb-2">Yeast</div>
                   <ul className="list-disc pl-4 space-y-1">
                     {recipe.ingredients.yeasts.map((y) => (
                       <li key={y.id || y.name}>
-                        {y.name} ({y.laboratory} {y.productId}) {y.type ? `- ${y.type}` : ""}, {y.form}
+                        {y.name}
+                        {y.laboratory ? ` (${y.laboratory}${y.productId ? ` ${y.productId}` : ""})` : ""}
+                        {y.type ? ` - ${y.type}` : ""}
+                        {y.form ? `, ${y.form}` : ""}
                       </li>
                     ))}
                   </ul>
                 </div>
               )}
 
-              {recipe.ingredients.miscs && recipe.ingredients.miscs.length > 0 && (
+              {Array.isArray(recipe.ingredients.miscs) && recipe.ingredients.miscs.length > 0 && (
                 <div>
                   <div className="font-semibold mb-2">Miscellaneous</div>
                   <ul className="list-disc pl-4 space-y-1">
@@ -188,7 +190,10 @@ const ViewRecipe = () => {
                   <ul className="list-disc pl-4">
                     {recipe.mash.steps.map((step, i) => (
                       <li key={i}>
-                        <span className="font-medium">{step.name}</span> | {step.type}, {step.temperature}°C, {step.time ? `${step.time} min` : ''} 
+                        <span className="font-medium">{step.name}</span>
+                        {step.type ? ` | ${step.type}` : ""}
+                        {typeof step.temperature !== "undefined" ? `, ${step.temperature}°C` : ""}
+                        {typeof step.time !== "undefined" ? `, ${step.time} min` : ""}
                       </li>
                     ))}
                   </ul>
@@ -198,21 +203,29 @@ const ViewRecipe = () => {
               </div>
               <div>
                 <div className="font-semibold mb-1">Fermentation</div>
-                {recipe.fermentation?.steps?.length ? (
+                {recipe.fermentation?.steps && (recipe.fermentation.steps.length > 0) ? (
                   <ul className="list-disc pl-4">
                     {recipe.fermentation.steps.map((step, i) => (
                       <li key={i}>
-                        <span className="font-medium">{step.name}</span> | {step.temperature}°C, {step.time} days
+                        <span className="font-medium">{step.name}</span>
+                        {step.type ? ` | ${step.type}` : ""}
+                        {typeof step.temperature !== "undefined" ? `, ${step.temperature}°C` : ""}
+                        {typeof step.time !== "undefined" ? `, ${step.time} days` : ""}
+                        {typeof step.period !== "undefined" ? `, period: ${step.period} days` : ""}
                         {step.notes ? ` – ${step.notes}` : ""}
                       </li>
                     ))}
                   </ul>
-                ) : (
+                ) : recipe.fermentation?.name ? (
                   <div>
-                    {recipe.fermentation?.name
-                      ? `${recipe.fermentation.name} | ${recipe.fermentation.type}, ${recipe.fermentation.temperature}°C, ${recipe.fermentation.period} days`
-                      : "No fermentation info."}
+                    {recipe.fermentation.name}
+                    {recipe.fermentation.type ? ` | ${recipe.fermentation.type}` : ""}
+                    {typeof recipe.fermentation.temperature !== "undefined" ? `, ${recipe.fermentation.temperature}°C` : ""}
+                    {typeof recipe.fermentation.period !== "undefined" ? `, ${recipe.fermentation.period} days` : ""}
+                    {recipe.fermentation.notes ? ` – ${recipe.fermentation.notes}` : ""}
                   </div>
+                ) : (
+                  <div>No fermentation info.</div>
                 )}
               </div>
               <div>

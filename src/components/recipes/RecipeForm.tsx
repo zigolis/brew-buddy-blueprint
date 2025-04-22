@@ -112,11 +112,15 @@ export function RecipeForm({ onSubmit, initialData, visibleSections = [] }: Reci
   return (
     <Form {...form}>
       <form id="recipe-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {Object.entries(sectionComponents).map(([key, Component]) => {
-          if (!visibleSections.includes(key)) return null;
-          return <Component key={key} form={form} />;
-        })}
-        
+        {visibleSections.length > 0
+          ? Object.entries(sectionComponents).map(([key, Component]) => {
+              if (!visibleSections.includes(key)) return null;
+              return <Component key={key} form={form} />;
+            })
+          : Object.entries(sectionComponents).map(([key, Component]) => (
+              <Component key={key} form={form} />
+            ))
+        }
         {visibleSections.includes("bottling") && (
           <div className="flex justify-between items-center pt-4">
             <div className="text-lg font-semibold">
