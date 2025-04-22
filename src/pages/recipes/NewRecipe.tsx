@@ -13,9 +13,84 @@ const NewRecipe = () => {
 
   const handleCreateRecipe = (formData: Partial<Recipe>) => {
     try {
+      // Initialize default values for required fields
+      const defaultStyle = {
+        name: "Generic Ale",
+        category: "Other",
+        categoryNumber: "0",
+        styleLetter: "A",
+        styleGuide: "Custom",
+        type: "Ale" as const,
+        minOg: 1.045,
+        maxOg: 1.060,
+        minFg: 1.010,
+        maxFg: 1.015,
+        minIbu: 20,
+        maxIbu: 40,
+        minColor: 5,
+        maxColor: 15,
+        minAbv: 4.5,
+        maxAbv: 6.0,
+        notes: "",
+        profile: "",
+        ingredients: "",
+        examples: ""
+      };
+
+      const defaultIngredients = {
+        fermentables: [],
+        hops: [],
+        yeasts: [],
+        miscs: []
+      };
+
+      const defaultMash = {
+        name: "Single Infusion",
+        grainTemp: 20,
+        mashTemp: 67,
+        spargeTemp: 76,
+        ph: 5.4,
+        steps: [{
+          name: "Mash In",
+          type: "Infusion" as const,
+          temperature: 67,
+          time: 60
+        }],
+        notes: ""
+      };
+
+      const defaultFermentation = {
+        name: "Ale",
+        steps: [{
+          name: "Primary",
+          temperature: 20,
+          time: 14
+        }],
+        notes: ""
+      };
+
+      const defaultWaterProfile = {
+        name: "Default",
+        calcium: 0,
+        magnesium: 0,
+        sodium: 0,
+        chloride: 0,
+        sulfate: 0,
+        bicarbonate: 0,
+        ph: 7.0,
+        notes: ""
+      };
+
       const newRecipe: Recipe = {
         ...formData,
         id: uuidv4(),
+        style: defaultStyle,
+        ingredients: defaultIngredients,
+        mash: defaultMash,
+        fermentation: defaultFermentation,
+        waterProfile: defaultWaterProfile,
+        estimatedCost: 0,
+        tags: formData.tags || [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       } as Recipe;

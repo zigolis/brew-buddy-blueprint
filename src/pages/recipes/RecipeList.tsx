@@ -17,16 +17,22 @@ const RecipeList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [styleFilter, setStyleFilter] = useState<string>("all");
   
-  // Get unique styles for filter
-  const uniqueStyles = Array.from(new Set(recipes.map(recipe => recipe.style.name)));
+  // Get unique styles for filter - add null check to filter out recipes without style
+  const uniqueStyles = Array.from(
+    new Set(
+      recipes
+        .filter(recipe => recipe.style && recipe.style.name)
+        .map(recipe => recipe.style.name)
+    )
+  );
   
   // Filter recipes by search term and style
   const filteredRecipes = recipes.filter(recipe => {
     const matchesSearch = recipe.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           recipe.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          recipe.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+                          recipe.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())) || false;
     
-    const matchesStyle = styleFilter === "all" || recipe.style.name === styleFilter;
+    const matchesStyle = styleFilter === "all" || (recipe.style && recipe.style.name === styleFilter);
     
     return matchesSearch && matchesStyle;
   });
@@ -90,7 +96,7 @@ const RecipeList = () => {
                     <CardHeader className="pb-2">
                       <CardTitle className="text-xl truncate">{recipe.name}</CardTitle>
                       <CardDescription>
-                        <span className="block">{recipe.style.name}</span>
+                        <span className="block">{recipe.style?.name || "No style"}</span>
                         <span className="text-sm">by {recipe.author}</span>
                       </CardDescription>
                     </CardHeader>
@@ -98,20 +104,20 @@ const RecipeList = () => {
                       <div className="flex flex-wrap gap-2 mb-3">
                         <Badge variant="outline">{recipe.type}</Badge>
                         <Badge variant="secondary">{recipe.batchSize}L</Badge>
-                        <Badge variant="secondary">{recipe.ingredients.hops.length} Hops</Badge>
+                        <Badge variant="secondary">{recipe.ingredients?.hops?.length || 0} Hops</Badge>
                       </div>
                       <div className="grid grid-cols-3 gap-2 text-sm">
                         <div>
                           <div className="font-medium">ABV</div>
-                          <div>{((recipe.style.minAbv + recipe.style.maxAbv) / 2).toFixed(1)}%</div>
+                          <div>{recipe.style ? ((recipe.style.minAbv + recipe.style.maxAbv) / 2).toFixed(1) : "N/A"}%</div>
                         </div>
                         <div>
                           <div className="font-medium">IBU</div>
-                          <div>{((recipe.style.minIbu + recipe.style.maxIbu) / 2).toFixed(0)}</div>
+                          <div>{recipe.style ? ((recipe.style.minIbu + recipe.style.maxIbu) / 2).toFixed(0) : "N/A"}</div>
                         </div>
                         <div>
                           <div className="font-medium">Cost</div>
-                          <div>${recipe.estimatedCost.toFixed(2)}</div>
+                          <div>${recipe.estimatedCost?.toFixed(2) || "0.00"}</div>
                         </div>
                       </div>
                     </CardContent>
@@ -165,7 +171,7 @@ const RecipeList = () => {
                           </Link>
                         </div>
                         <div className="flex flex-wrap gap-2 mb-2">
-                          <Badge variant="outline">{recipe.style.name}</Badge>
+                          <Badge variant="outline">{recipe.style?.name || "No style"}</Badge>
                           <Badge variant="outline">{recipe.type}</Badge>
                           <Badge variant="secondary">{recipe.batchSize}L</Badge>
                         </div>
@@ -180,7 +186,7 @@ const RecipeList = () => {
                         </div>
                         <div>
                           <div className="text-sm font-medium">Est. Cost</div>
-                          <div className="text-sm">${recipe.estimatedCost.toFixed(2)}</div>
+                          <div className="text-sm">${recipe.estimatedCost?.toFixed(2) || "0.00"}</div>
                         </div>
                         <div className="flex gap-2 md:mt-4">
                           <Button variant="outline" size="sm" asChild>
