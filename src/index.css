@@ -1,10 +1,11 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 40 33% 98%;
+    --background: 35 30% 98%;
     --foreground: 25 10% 20%;
 
     --card: 0 0% 100%;
@@ -32,7 +33,7 @@
     --input: 30 10% 85%;
     --ring: 36 68% 54%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 
   .dark {
@@ -72,6 +73,15 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
   }
 }
+
+.card-hover {
+  @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-1;
+}
+
+.fade-in {
+  @apply animate-in fade-in duration-500;
+}
+

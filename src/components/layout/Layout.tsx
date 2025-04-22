@@ -10,13 +10,13 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background">
       <Header />
       <div className="flex flex-1">
-        <div className="hidden md:block">
+        <div className="hidden md:block transition-all duration-300 ease-in-out">
           <Sidebar />
         </div>
-        <main className="flex-1 p-4 md:p-6 overflow-y-auto">{children}</main>
+        <main className="flex-1 p-6 md:p-8 overflow-y-auto">{children}</main>
       </div>
       <Footer />
     </div>

@@ -16,25 +16,25 @@ const HomePage = () => {
   
   return (
     <Layout>
-      <div className="space-y-6">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold">Welcome to iBeer Brewing Pro</h1>
-          <p className="text-muted-foreground">
+      <div className="space-y-8 fade-in">
+        <div className="space-y-3">
+          <h1 className="text-4xl font-bold tracking-tight">Welcome to iBeer Brewing Pro</h1>
+          <p className="text-lg text-muted-foreground">
             Your comprehensive brewing companion - manage recipes, track costs, and brew with confidence.
           </p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card>
-            <CardHeader className="pb-2">
+          <Card className="card-hover">
+            <CardHeader className="space-y-1">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-xl">Recipes</CardTitle>
-                <Beer className="h-5 w-5 text-brewing-amber" />
+                <CardTitle className="text-xl font-semibold">Recipes</CardTitle>
+                <Beer className="h-5 w-5 text-primary" />
               </div>
-              <CardDescription>Manage your brewing recipes</CardDescription>
+              <CardDescription>Create and manage your brewing recipes</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{recipeCount}</div>
+              <div className="text-3xl font-bold text-primary">{recipeCount}</div>
               <p className="text-sm text-muted-foreground">saved recipes</p>
             </CardContent>
             <CardFooter>
@@ -44,16 +44,16 @@ const HomePage = () => {
             </CardFooter>
           </Card>
           
-          <Card>
-            <CardHeader className="pb-2">
+          <Card className="card-hover">
+            <CardHeader className="space-y-1">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-xl">Ingredients</CardTitle>
-                <Package className="h-5 w-5 text-brewing-amber" />
+                <CardTitle className="text-xl font-semibold">Ingredients</CardTitle>
+                <Package className="h-5 w-5 text-primary" />
               </div>
-              <CardDescription>Track your brewing ingredients</CardDescription>
+              <CardDescription>{ingredientCount} saved ingredients</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{ingredientCount}</div>
+              <div className="text-3xl font-bold text-primary">{ingredientCount}</div>
               <p className="text-sm text-muted-foreground">saved ingredients</p>
             </CardContent>
             <CardFooter>
@@ -63,16 +63,16 @@ const HomePage = () => {
             </CardFooter>
           </Card>
           
-          <Card>
-            <CardHeader className="pb-2">
+          <Card className="card-hover">
+            <CardHeader className="space-y-1">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-xl">Equipment</CardTitle>
-                <List className="h-5 w-5 text-brewing-amber" />
+                <CardTitle className="text-xl font-semibold">Equipment</CardTitle>
+                <List className="h-5 w-5 text-primary" />
               </div>
-              <CardDescription>Manage your brewing gear</CardDescription>
+              <CardDescription>Track your brewing gear</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{equipmentCount}</div>
+              <div className="text-3xl font-bold text-primary">{equipmentCount}</div>
               <p className="text-sm text-muted-foreground">equipment items</p>
             </CardContent>
             <CardFooter>
@@ -84,11 +84,11 @@ const HomePage = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader className="pb-2">
+          <Card className="card-hover">
+            <CardHeader className="space-y-1">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-xl">Brewing Guide</CardTitle>
-                <FileText className="h-5 w-5 text-brewing-amber" />
+                <CardTitle className="text-xl font-semibold">Brewing Guide</CardTitle>
+                <FileText className="h-5 w-5 text-primary" />
               </div>
               <CardDescription>Step-by-step brewing instructions</CardDescription>
             </CardHeader>
@@ -104,11 +104,11 @@ const HomePage = () => {
             </CardFooter>
           </Card>
           
-          <Card>
-            <CardHeader className="pb-2">
+          <Card className="card-hover">
+            <CardHeader className="space-y-1">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-xl">Cost Calculator</CardTitle>
-                <Calculator className="h-5 w-5 text-brewing-amber" />
+                <CardTitle className="text-xl font-semibold">Cost Calculator</CardTitle>
+                <Calculator className="h-5 w-5 text-primary" />
               </div>
               <CardDescription>Track and analyze brewing costs</CardDescription>
             </CardHeader>
@@ -125,24 +125,22 @@ const HomePage = () => {
           </Card>
         </div>
         
-        <div className="mt-8">
-          <Card className="bg-accent">
-            <CardHeader>
-              <CardTitle>Import BeerXML</CardTitle>
-              <CardDescription>
-                Import your existing recipes from BeerSmith, Brewfather or other brewing software
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
-                BrewMaster Pro supports the industry-standard BeerXML format for importing recipes.
-              </p>
-              <Button asChild>
-                <Link to="/import">Import Recipe</Link>
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+        <Card className="bg-accent mt-8">
+          <CardHeader>
+            <CardTitle className="text-xl font-semibold">Import BeerXML</CardTitle>
+            <CardDescription>
+              Import your existing recipes from BeerSmith, Brewfather or other brewing software
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground mb-4">
+              iBeer Brewing Pro supports the industry-standard BeerXML format for importing recipes.
+            </p>
+            <Button asChild>
+              <Link to="/import">Import Recipe</Link>
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     </Layout>
   );
