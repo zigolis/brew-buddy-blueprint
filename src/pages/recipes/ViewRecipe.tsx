@@ -1,5 +1,4 @@
-
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { useBrewContext } from "@/contexts/BrewContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +8,7 @@ import { Beer, Package, FileText, BookmarkPlus, BookmarkCheck } from "lucide-rea
 
 const ViewRecipe = () => {
   const { recipeId } = useParams();
+  const navigate = useNavigate();
   const { recipes, toggleBookmark, isBookmarked } = useBrewContext();
   const recipe = recipes.find((r) => r.id === recipeId);
 
@@ -29,21 +29,29 @@ const ViewRecipe = () => {
         <div className="flex flex-col space-y-2">
           <div className="flex justify-between items-start">
             <h1 className="text-3xl font-bold">{recipe.name}</h1>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => toggleBookmark(recipe.id)}
-              className="h-10 w-10"
-            >
-              {isBookmarked(recipe.id) ? (
-                <BookmarkCheck className="h-5 w-5" />
-              ) : (
-                <BookmarkPlus className="h-5 w-5" />
-              )}
-              <span className="sr-only">
-                {isBookmarked(recipe.id) ? "Remove bookmark" : "Add bookmark"}
-              </span>
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                onClick={() => navigate(`/recipes/edit/${recipe.id}`)}
+              >
+                Edit Recipe
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => toggleBookmark(recipe.id)}
+                className="h-10 w-10"
+              >
+                {isBookmarked(recipe.id) ? (
+                  <BookmarkCheck className="h-5 w-5" />
+                ) : (
+                  <BookmarkPlus className="h-5 w-5" />
+                )}
+                <span className="sr-only">
+                  {isBookmarked(recipe.id) ? "Remove bookmark" : "Add bookmark"}
+                </span>
+              </Button>
+            </div>
           </div>
         </div>
 
