@@ -1,3 +1,4 @@
+
 import { useForm } from "react-hook-form";
 import { Recipe } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,7 @@ interface RecipeFormProps {
   visibleSections?: string[];
 }
 
+// Logical section structure for easier adjustments
 const sectionComponents = {
   general: GeneralInfoSection,
   stats: RecipeStatsSection,
@@ -124,32 +126,29 @@ export function RecipeForm({ onSubmit, initialData, visibleSections }: RecipeFor
     ? Object.entries(sectionComponents).filter(([key]) => visibleSections.includes(key))
     : Object.entries(sectionComponents);
 
+  // Visual wrapper for a super user friendly, modern UX!
   return (
     <Form {...form}>
-      <form
-        id="recipe-form"
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-12 px-1 md:px-8 py-8 bg-muted/30 rounded-2xl shadow-md max-w-5xl mx-auto"
+      <form 
+        id="recipe-form" 
+        onSubmit={form.handleSubmit(onSubmit)} 
+        className="space-y-10 max-w-3xl mx-auto bg-white md:p-10 p-4 rounded-2xl shadow-md md:mt-8 mt-4 animate-fade-in"
       >
-        {sectionsToRender.map(([key, Component], sectionIdx) => (
-          <div
-            key={key}
-            className={`p-4 md:p-8 bg-background/80 rounded-xl space-y-8 shadow-md ${
-              sectionIdx !== 0 ? "mt-12" : ""
-            }`}
-          >
+        {sectionsToRender.map(([key, Component]) => (
+          // Add vertical margin between sections
+          <div key={key} className="mb-6 last:mb-0">
             <Component form={form} />
           </div>
         ))}
-
         {(visibleSections?.includes('bottling') || !visibleSections) && (
-          <div className="flex flex-col md:flex-row justify-between items-center pt-6 gap-6">
-            <div className="text-lg font-semibold text-center md:text-left">
-              Total Recipe Cost: <span className="text-primary">${totalCost.toFixed(2)}</span>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-6 border-t border-muted">
+            <div className="text-lg font-semibold">
+              Total Recipe Cost: <span className="text-brewing-amber">${totalCost.toFixed(2)}</span>
             </div>
-            <Button
-              type="submit"
-              className="w-full md:w-auto px-10 py-3 rounded-lg text-lg font-bold shadow bg-primary hover:bg-primary/90 mt-2"
+            <Button 
+              type="submit" 
+              size="lg" 
+              className="w-full md:w-auto bg-primary hover:bg-primary/90 mt-2 md:mt-0"
             >
               {visibleSections?.includes('bottling') ? 'Create Recipe' : 'Save and Continue'}
             </Button>

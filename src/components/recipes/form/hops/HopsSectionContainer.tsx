@@ -17,13 +17,13 @@ const HopsSectionContainer = ({ form }) => {
   };
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-xl font-semibold">Hops</h2>
+    <section className="space-y-5">
+      <h2 className="text-2xl font-bold tracking-tight mb-1 text-brewing-amber">Hops</h2>
       <HopsRowsList hops={hops} form={form} removeHop={removeHop} />
-      <Button type="button" onClick={addHop} className="w-full">
+      <Button type="button" onClick={addHop} className="w-full bg-brewing-amber text-white hover:bg-brewing-amber/90 rounded-lg py-3 mt-2 shadow hover:shadow-md transition-all">
         <Plus className="h-4 w-4 mr-2" /> Add Hop
       </Button>
-    </div>
+    </section>
   );
 };
 
