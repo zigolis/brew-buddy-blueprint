@@ -1,4 +1,3 @@
-
 import { v4 as uuidv4 } from 'uuid';
 import { Recipe } from '@/types';
 
@@ -11,6 +10,7 @@ export const mockRecipes: Recipe[] = [
     author: 'BrewMaster',
     type: 'All Grain',
     batchSize: 20,
+    boilSize: 23,
     boilTime: 60,
     efficiency: 75,
     originalGravity: 1.052,
@@ -213,6 +213,7 @@ export const mockRecipes: Recipe[] = [
     author: 'BrewMaster',
     type: 'All Grain',
     batchSize: 19,
+    boilSize: 22,
     boilTime: 60,
     efficiency: 72,
     originalGravity: 1.042,

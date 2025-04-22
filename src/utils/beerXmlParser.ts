@@ -62,6 +62,7 @@ function parseRecipe(recipeNode: any): Recipe {
     author: getElementText(recipeNode, 'BREWER'),
     type: getElementText(recipeNode, 'TYPE') as any,
     batchSize: getElementFloat(recipeNode, 'BATCH_SIZE'),
+    boilSize: getElementFloat(recipeNode, 'BOIL_SIZE', 23),
     boilTime: getElementFloat(recipeNode, 'BOIL_TIME'),
     efficiency: getElementFloat(recipeNode, 'EFFICIENCY'),
     originalGravity: getElementFloat(recipeNode, 'OG', null),
