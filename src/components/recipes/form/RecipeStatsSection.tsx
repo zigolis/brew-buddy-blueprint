@@ -1,4 +1,3 @@
-
 import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useEffect } from "react";
@@ -134,7 +133,10 @@ export const RecipeStatsSection = ({ form }) => {
                   {...field} 
                   disabled 
                   className="bg-muted"
-                  value={field.value ? `${field.value.toFixed(2)}%` : ''}
+                  value={field.value ? field.value.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                  }) + ' %' : ''}
                 />
               </FormControl>
             </FormItem>

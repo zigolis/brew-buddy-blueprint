@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -88,9 +87,17 @@ export const FermentablesSection = ({ form }) => {
       {fermentables.length === 0 ? (
         <div className="text-center py-8 border-2 border-dashed rounded-lg">
           <p className="text-muted-foreground mb-4">No fermentables added yet</p>
-          <Button onClick={addFermentable} variant="outline">
-            <Plus className="h-4 w-4 mr-2" /> Add First Fermentable
-          </Button>
+          <div className="flex flex-col gap-2 items-center">
+            <Button onClick={addFermentable} variant="outline">
+              <Plus className="h-4 w-4 mr-2" /> Add First Fermentable
+            </Button>
+            <Button 
+              variant="ghost" 
+              onClick={() => setShowNewFermentableDialog(true)}
+            >
+              Create New Fermentable
+            </Button>
+          </div>
         </div>
       ) : (
         fermentables.map((fermentable, index) => (
@@ -181,18 +188,20 @@ export const FermentablesSection = ({ form }) => {
         ))
       )}
 
-      <div className="flex gap-2">
-        <Button type="button" onClick={addFermentable} className="w-full">
-          <Plus className="h-4 w-4 mr-2" /> Add Fermentable
-        </Button>
-        <Button 
-          type="button" 
-          variant="outline" 
-          onClick={() => setShowNewFermentableDialog(true)}
-        >
-          <Plus className="h-4 w-4 mr-2" /> Create New
-        </Button>
-      </div>
+      {fermentables.length > 0 && (
+        <div className="flex gap-2">
+          <Button type="button" onClick={addFermentable} className="w-full">
+            <Plus className="h-4 w-4 mr-2" /> Add Fermentable
+          </Button>
+          <Button 
+            type="button" 
+            variant="outline" 
+            onClick={() => setShowNewFermentableDialog(true)}
+          >
+            <Plus className="h-4 w-4 mr-2" /> Create New
+          </Button>
+        </div>
+      )}
 
       <Dialog open={showNewFermentableDialog} onOpenChange={setShowNewFermentableDialog}>
         <DialogContent>
