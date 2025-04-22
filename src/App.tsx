@@ -14,6 +14,8 @@ import EquipmentList from "./pages/equipment/EquipmentList";
 import CostCalculator from "./pages/calculator/CostCalculator";
 import NotFound from "./pages/NotFound";
 import ViewRecipe from "./pages/recipes/ViewRecipe";
+import NewEquipment from "./pages/equipment/NewEquipment";
+import EditEquipment from "./pages/equipment/EditEquipment";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +33,8 @@ const App = () => (
             <Route path="/recipes/:recipeId" element={<ViewRecipe />} />
             <Route path="/ingredients" element={<IngredientsList />} />
             <Route path="/equipment" element={<EquipmentList />} />
+            <Route path="/equipment/new" element={<NewEquipment />} />
+            <Route path="/equipment/edit/:equipmentId" element={<EditEquipment />} />
             <Route path="/calculator" element={<CostCalculator />} />
             <Route path="/import" element={<ImportRecipe />} />
             <Route path="/brewing-guide" element={<BrewingGuide />} />
