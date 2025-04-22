@@ -1,16 +1,18 @@
-
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Beer, Calculator, FileText, List, Package } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useBrewContext } from "@/contexts/BrewContext";
+import { useIngredients } from "@/hooks/useIngredients";
 
 const HomePage = () => {
   const { recipes, equipment } = useBrewContext();
+  const { ingredients } = useIngredients();
   
   const recipeCount = recipes.length;
   const equipmentCount = equipment.length;
+  const ingredientCount = ingredients.length;
   
   return (
     <Layout>
@@ -51,9 +53,8 @@ const HomePage = () => {
               <CardDescription>Track your brewing ingredients</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Manage your malt, hops, yeast and other ingredients. Track usage and costs.
-              </p>
+              <div className="text-2xl font-bold">{ingredientCount}</div>
+              <p className="text-sm text-muted-foreground">saved ingredients</p>
             </CardContent>
             <CardFooter>
               <Button asChild variant="outline" className="w-full">
@@ -148,4 +149,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
