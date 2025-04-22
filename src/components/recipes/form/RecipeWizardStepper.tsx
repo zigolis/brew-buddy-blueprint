@@ -84,15 +84,17 @@ export const RecipeWizardStepper = ({
       }}
     >
       <RecipeStepsNavigation steps={recipeSteps} currentStep={currentStep} />
-      {recipeSteps.map((step, index) => (
-        <TabsContent key={step.id} value={step.id}>
-          <RecipeForm
-            onSubmit={index === recipeSteps.length - 1 ? handleCreateRecipe : handleStepFormSubmit}
-            initialData={recipeFormData}
-            visibleSections={[...step.sections]}
-          />
-        </TabsContent>
-      ))}
+      <div className="mt-6 md:mt-8"> {/* Add margin here */}
+        {recipeSteps.map((step, index) => (
+          <TabsContent key={step.id} value={step.id}>
+            <RecipeForm
+              onSubmit={index === recipeSteps.length - 1 ? handleCreateRecipe : handleStepFormSubmit}
+              initialData={recipeFormData}
+              visibleSections={[...step.sections]}
+            />
+          </TabsContent>
+        ))}
+      </div>
     </Tabs>
   );
 };
