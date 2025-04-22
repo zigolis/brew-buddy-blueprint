@@ -40,27 +40,54 @@ export const useFermentablesForm = (form: any) => {
 
       addIngredient(newFermentable);
 
-      // Add the new fermentable to the form values
-      const currentLength = fermentables.length;
-      form.setValue(
-        `ingredients.fermentables.${currentLength}`,
-        {
-          name,
-          type,
-          color,
-          amount: 0,
-          unit: "g",
-          costPerUnit,
-          notes,
-        },
-        { shouldDirty: true, shouldTouch: true }
-      );
-
-      // Update the fermentables list
-      setFermentables((prev) => [...prev, { id: prev.length }]);
+      // Add the new fermentable to the form values without creating an empty row after
+      // Get current fermentables from form
+      const currentFermentables = form.getValues('ingredients.fermentables') || [];
+      
+      // Update the last fermentable in the list if it's empty, otherwise add a new one
+      const lastIndex = currentFermentables.length - 1;
+      const lastFermentable = currentFermentables[lastIndex];
+      
+      if (lastFermentable && (!lastFermentable.name || lastFermentable.name === '')) {
+        // Update the empty fermentable with new values
+        form.setValue(
+          `ingredients.fermentables.${lastIndex}`,
+          {
+            name,
+            type,
+            color,
+            amount: 0,
+            unit: "g",
+            costPerUnit,
+            notes,
+          },
+          { shouldDirty: true, shouldTouch: true }
+        );
+      } else {
+        // Add a new fermentable to the end
+        form.setValue(
+          `ingredients.fermentables.${currentFermentables.length}`,
+          {
+            name,
+            type,
+            color,
+            amount: 0,
+            unit: "g",
+            costPerUnit,
+            notes,
+          },
+          { shouldDirty: true, shouldTouch: true }
+        );
+        
+        // Update the fermentables list but don't add another blank row
+        const newId = fermentables.length > 0 ? 
+          Math.max(...fermentables.map(f => f.id)) + 1 : 0;
+        setFermentables(prev => [...prev.filter(f => f.id !== -1), { id: newId }]);
+      }
+      
       setShowNewFermentableDialog(false);
     },
-    [addIngredient, fermentables.length, form]
+    [addIngredient, fermentables, form]
   );
 
   useEffect(() => {

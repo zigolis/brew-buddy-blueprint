@@ -4,8 +4,6 @@ import { FermentablesList } from "./FermentablesList";
 import { FermentableDialogForm } from "./FermentableDialogForm";
 import { useFermentablesForm } from "./useFermentablesForm";
 import { calculateFermentablesTotalCost } from "./fermentablesCost";
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 export const FermentablesSection = ({ form }) => {
   const {
@@ -21,19 +19,25 @@ export const FermentablesSection = ({ form }) => {
   const totalCost = calculateFermentablesTotalCost(fermentablesData);
 
   const handleAddFermentable = () => {
+    // Check if there's already an empty row before adding another
     const currentFermentables = form.getValues('ingredients.fermentables') || [];
-    form.setValue(`ingredients.fermentables.${currentFermentables.length}`, { 
-      name: '', 
-      amount: 0, 
-      costPerUnit: 0 
-    }, { 
-      shouldDirty: true,
-      shouldTouch: true
-    });
-    const newId = fermentables.length > 0 ? 
-      Math.max(...fermentables.map(f => f.id)) + 1 : 0;
-    const newFermentable = { id: newId };
-    useFermentablesForm(form).setFermentables([...fermentables, newFermentable]);
+    const hasEmptyRow = currentFermentables.some(f => !f.name || f.name === '');
+    
+    if (!hasEmptyRow) {
+      // Only add a new row if there's no empty one
+      form.setValue(`ingredients.fermentables.${currentFermentables.length}`, { 
+        name: '', 
+        amount: 0, 
+        costPerUnit: 0 
+      }, { 
+        shouldDirty: true,
+        shouldTouch: true
+      });
+      
+      const newId = fermentables.length > 0 ? 
+        Math.max(...fermentables.map(f => f.id)) + 1 : 0;
+      useFermentablesForm(form).setFermentables([...fermentables, { id: newId }]);
+    }
   };
 
   const handleCreateFermentable = () => {
