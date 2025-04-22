@@ -7,11 +7,15 @@ export const useIngredientSuggestions = () => {
 
   // Ensure ingredients is always an array, even if undefined or null
   const safeIngredients = Array.isArray(ingredients) ? ingredients : [];
+  
+  // Add console log to debug
+  console.log('Available ingredients:', safeIngredients);
 
   const getFermentableSuggestions = (query: string): Ingredient[] => {
     if (!query || typeof query !== 'string') return []; // Return empty array for empty or invalid queries
     
-    return safeIngredients
+    // Filter for fermentable ingredients
+    const filteredIngredients = safeIngredients
       .filter(ing => 
         ing && (
           ing.type === 'Grain' || 
@@ -24,26 +28,35 @@ export const useIngredientSuggestions = () => {
       .filter(ing => 
         ing && ing.name && ing.name.toLowerCase().includes(query.toLowerCase())
       );
+    
+    console.log('Fermentable suggestions for query:', query, filteredIngredients);
+    return filteredIngredients || [];
   };
 
   const getHopSuggestions = (query: string): Ingredient[] => {
     if (!query || typeof query !== 'string') return []; // Return empty array for empty or invalid queries
     
-    return safeIngredients
+    const filteredIngredients = safeIngredients
       .filter(ing => ing && ing.type === 'Hop')
       .filter(ing => 
         ing && ing.name && ing.name.toLowerCase().includes(query.toLowerCase())
       );
+    
+    console.log('Hop suggestions for query:', query, filteredIngredients);
+    return filteredIngredients || [];
   };
 
   const getYeastSuggestions = (query: string): Ingredient[] => {
     if (!query || typeof query !== 'string') return []; // Return empty array for empty or invalid queries
     
-    return safeIngredients
+    const filteredIngredients = safeIngredients
       .filter(ing => ing && ing.type === 'Yeast')
       .filter(ing => 
         ing && ing.name && ing.name.toLowerCase().includes(query.toLowerCase())
       );
+    
+    console.log('Yeast suggestions for query:', query, filteredIngredients);
+    return filteredIngredients || [];
   };
 
   return {

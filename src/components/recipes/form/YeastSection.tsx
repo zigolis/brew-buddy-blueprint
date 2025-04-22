@@ -25,7 +25,11 @@ export const YeastSection = ({ form }) => {
   // Safely get suggestions, ensuring we always return an array
   const getSuggestions = (query: string) => {
     try {
+      if (!query || query.trim() === '') {
+        return [];
+      }
       const results = getYeastSuggestions(query);
+      console.log('Yeast suggestions in component:', query, results);
       return Array.isArray(results) ? results : [];
     } catch (error) {
       console.error('Error getting yeast suggestions:', error);
@@ -59,7 +63,11 @@ export const YeastSection = ({ form }) => {
               >
                 <PopoverTrigger asChild>
                   <FormControl>
-                    <Input placeholder="Search yeast..." {...field} />
+                    <Input 
+                      placeholder="Search yeast..." 
+                      {...field} 
+                      onClick={() => setOpenPopover(true)}
+                    />
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="p-0" align="start">

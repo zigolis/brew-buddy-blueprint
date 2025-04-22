@@ -42,7 +42,11 @@ export const FermentablesSection = ({ form }) => {
   // Safely get suggestions, ensuring we always return an array
   const getSuggestions = (query: string) => {
     try {
+      if (!query || query.trim() === '') {
+        return [];
+      }
       const results = getFermentableSuggestions(query);
+      console.log('Fermentable suggestions in component:', query, results);
       return Array.isArray(results) ? results : [];
     } catch (error) {
       console.error('Error getting fermentable suggestions:', error);
@@ -79,7 +83,11 @@ export const FermentablesSection = ({ form }) => {
                 >
                   <PopoverTrigger asChild>
                     <FormControl>
-                      <Input placeholder="Search fermentable..." {...field} />
+                      <Input 
+                        placeholder="Search fermentable..." 
+                        {...field} 
+                        onClick={() => setOpenPopover(index)}
+                      />
                     </FormControl>
                   </PopoverTrigger>
                   <PopoverContent className="p-0" align="start">
