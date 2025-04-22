@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,16 +15,17 @@ export const FermentablesSection = ({ form }) => {
   const [currentFermentableIndex, setCurrentFermentableIndex] = useState<number | null>(null);
   const { addIngredient } = useIngredients();
 
-  const addFermentable = () => {
+  // Use useCallback to prevent recreating functions unnecessarily
+  const addFermentable = useCallback(() => {
     setFermentables(prev => [...prev, { id: prev.length }]);
-  };
+  }, []);
 
-  const removeFermentable = (id: number) => {
+  const removeFermentable = useCallback((id: number) => {
     if (fermentables.length <= 1) return;
-    setFermentables(fermentables.filter(f => f.id !== id));
-  };
+    setFermentables(prev => prev.filter(f => f.id !== id));
+  }, [fermentables.length]);
 
-  const handleAddNewFermentable = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleAddNewFermentable = useCallback((event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     
@@ -48,25 +49,22 @@ export const FermentablesSection = ({ form }) => {
     
     setShowNewFermentableDialog(false);
     setCurrentFermentableIndex(null);
-  };
+  }, [addIngredient, currentFermentableIndex, form]);
 
-  const handleCreateNewClick = (index: number) => {
+  const handleCreateNewClick = useCallback((index: number) => {
     setCurrentFermentableIndex(index);
     setShowNewFermentableDialog(true);
-  };
+  }, []);
 
-  // Initialize form values if they don't exist
-  const ensureFermentablesExist = () => {
+  // Initialize form values only once when fermentables change
+  useEffect(() => {
     const currentFermentables = form.getValues('ingredients.fermentables') || [];
     fermentables.forEach((_, index) => {
       if (!currentFermentables[index]) {
         form.setValue(`ingredients.fermentables.${index}`, { name: '', amount: 0, costPerUnit: 0 });
       }
     });
-  };
-  
-  // Make sure we have form values for all our fermentables
-  ensureFermentablesExist();
+  }, [fermentables, form]);
 
   const watchedFermentables = form.watch('ingredients.fermentables') || [];
 

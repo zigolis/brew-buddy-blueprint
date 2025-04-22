@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -37,6 +37,13 @@ export const FermentableSearch = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { getFermentableSuggestions } = useIngredientSuggestions();
   
+  // Use useEffect to set initial search query when popover opens
+  useEffect(() => {
+    if (open) {
+      setSearchQuery(value || '');
+    }
+  }, [open, value]);
+  
   // Safely get suggestions, ensuring we always return an array
   const getSuggestions = (query: string) => {
     try {
@@ -54,10 +61,7 @@ export const FermentableSearch = ({
   const suggestions = getSuggestions(searchQuery);
 
   return (
-    <Popover open={open} onOpenChange={(isOpen) => {
-      setOpen(isOpen);
-      if (isOpen) setSearchQuery(value || '');
-    }}>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <FormControl>
           <Input 
@@ -73,23 +77,24 @@ export const FermentableSearch = ({
           <CommandInput 
             placeholder="Search fermentable..." 
             value={searchQuery} 
-            onValueChange={(value) => setSearchQuery(value || '')}
+            onValueChange={setSearchQuery}
           />
           <CommandList>
-            <CommandEmpty>
-              <CommandItem
-                value="create-new-empty"
-                className="text-primary"
-                onSelect={() => {
-                  onCreateNew();
-                  setOpen(false);
-                }}
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                Create "{searchQuery}"
-              </CommandItem>
-            </CommandEmpty>
-            {suggestions.length > 0 && (
+            {suggestions.length === 0 ? (
+              <CommandEmpty>
+                <CommandItem
+                  value="create-new-empty"
+                  className="text-primary"
+                  onSelect={() => {
+                    onCreateNew();
+                    setOpen(false);
+                  }}
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create "{searchQuery}"
+                </CommandItem>
+              </CommandEmpty>
+            ) : (
               <CommandGroup>
                 {suggestions.map((item) => (
                   <CommandItem
