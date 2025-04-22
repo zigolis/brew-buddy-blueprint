@@ -1,5 +1,5 @@
 
-import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -11,12 +11,14 @@ export const GeneralInfoSection = ({ form }) => {
         <FormField
           control={form.control}
           name="name"
+          rules={{ required: "Recipe name is required" }}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Recipe Name*</FormLabel>
               <FormControl>
                 <Input placeholder="Enter recipe name" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />

@@ -20,8 +20,15 @@ const NewRecipe = () => {
 
   const handleCreateRecipe = (formData: Partial<Recipe>) => {
     try {
+      // Make sure we have a valid name or use a default
+      const recipeName = formData.name?.trim() ? formData.name : "New Recipe";
+      const recipeAuthor = formData.author?.trim() ? formData.author : "Anonymous";
+      
+      // Create style with provided name or use default
+      const styleName = formData.style?.name?.trim() ? formData.style.name : "Generic Ale";
+      
       const defaultStyle = {
-        name: "Generic Ale",
+        name: styleName,
         category: "Other",
         categoryNumber: "0",
         styleLetter: "A",
@@ -90,10 +97,21 @@ const NewRecipe = () => {
         notes: ""
       };
 
+      // Merge form data with default values, ensuring required fields have values
       const newRecipe: Recipe = {
-        ...formData,
         id: uuidv4(),
-        style: formData.style || defaultStyle,
+        name: recipeName,
+        author: recipeAuthor,
+        type: formData.type || "All Grain",
+        batchSize: formData.batchSize || 20,
+        boilSize: formData.boilSize || 23,
+        boilTime: formData.boilTime || 60,
+        efficiency: formData.efficiency || 75,
+        originalGravity: formData.originalGravity || null,
+        finalGravity: formData.finalGravity || null,
+        abv: formData.abv || null,
+        notes: formData.notes || "",
+        style: formData.style ? { ...defaultStyle, ...formData.style } : defaultStyle,
         ingredients: formData.ingredients || defaultIngredients,
         mash: formData.mash || defaultMash,
         fermentation: formData.fermentation || defaultFermentation,
@@ -139,7 +157,7 @@ const NewRecipe = () => {
       } as Recipe;
 
       addRecipe(newRecipe);
-      toast.success("Recipe created successfully!");
+      toast.success(`Recipe "${recipeName}" created successfully!`);
       navigate("/recipes");
     } catch (error) {
       console.error("Error creating recipe:", error);
