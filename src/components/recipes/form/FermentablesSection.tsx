@@ -39,6 +39,17 @@ export const FermentablesSection = ({ form }) => {
     setFermentables(fermentables.filter(f => f.id !== id));
   };
 
+  // Safely get suggestions, ensuring we always return an array
+  const getSuggestions = (query: string) => {
+    try {
+      const results = getFermentableSuggestions(query);
+      return Array.isArray(results) ? results : [];
+    } catch (error) {
+      console.error('Error getting fermentable suggestions:', error);
+      return [];
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -46,7 +57,7 @@ export const FermentablesSection = ({ form }) => {
         <div className="text-sm text-muted-foreground">
           Total Cost: $
           {(form.watch('ingredients.fermentables') || []).reduce((acc, f) => 
-            acc + (f?.amount || 0) * (f?.costPerUnit || 0), 0
+            acc + (parseFloat(f?.amount) || 0) * (parseFloat(f?.costPerUnit) || 0), 0
           ).toFixed(2)}
         </div>
       </div>
@@ -76,11 +87,11 @@ export const FermentablesSection = ({ form }) => {
                       <CommandInput 
                         placeholder="Search fermentable..." 
                         value={searchQuery} 
-                        onValueChange={setSearchQuery}
+                        onValueChange={(value) => setSearchQuery(value || '')}
                       />
                       <CommandEmpty>No fermentable found.</CommandEmpty>
                       <CommandGroup>
-                        {getFermentableSuggestions(searchQuery).map((item) => (
+                        {getSuggestions(searchQuery).map((item) => (
                           <CommandItem
                             key={item.id}
                             value={item.name}
@@ -113,7 +124,8 @@ export const FermentablesSection = ({ form }) => {
                     step="0.001" 
                     {...field} 
                     onChange={(e) => {
-                      field.onChange(parseFloat(e.target.value) || 0);
+                      const value = e.target.value ? parseFloat(e.target.value) : 0;
+                      field.onChange(isNaN(value) ? 0 : value);
                     }}
                   />
                 </FormControl>

@@ -22,13 +22,24 @@ export const YeastSection = ({ form }) => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { getYeastSuggestions } = useIngredientSuggestions();
 
+  // Safely get suggestions, ensuring we always return an array
+  const getSuggestions = (query: string) => {
+    try {
+      const results = getYeastSuggestions(query);
+      return Array.isArray(results) ? results : [];
+    } catch (error) {
+      console.error('Error getting yeast suggestions:', error);
+      return [];
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold">Yeast</h2>
         <div className="text-sm text-muted-foreground">
           Cost: $
-          {form.watch('ingredients.yeasts.0')?.costPerUnit || 0}
+          {parseFloat(form.watch('ingredients.yeasts.0')?.costPerUnit || 0).toFixed(2)}
         </div>
       </div>
 
@@ -56,11 +67,11 @@ export const YeastSection = ({ form }) => {
                     <CommandInput 
                       placeholder="Search yeast..." 
                       value={searchQuery} 
-                      onValueChange={setSearchQuery}
+                      onValueChange={(value) => setSearchQuery(value || '')}
                     />
                     <CommandEmpty>No yeast found.</CommandEmpty>
                     <CommandGroup>
-                      {getYeastSuggestions(searchQuery).map((item) => (
+                      {getSuggestions(searchQuery).map((item) => (
                         <CommandItem
                           key={item.id}
                           value={item.name}
@@ -153,7 +164,8 @@ export const YeastSection = ({ form }) => {
                   step="0.1" 
                   {...field}
                   onChange={(e) => {
-                    field.onChange(parseFloat(e.target.value) || 0);
+                    const value = e.target.value ? parseFloat(e.target.value) : 0;
+                    field.onChange(isNaN(value) ? 0 : value);
                   }}  
                 />
               </FormControl>

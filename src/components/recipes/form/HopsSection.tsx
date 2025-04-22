@@ -25,6 +25,17 @@ export const HopsSection = ({ form }) => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { getHopSuggestions } = useIngredientSuggestions();
 
+  // Safely get suggestions, ensuring we always return an array
+  const getSuggestions = (query: string) => {
+    try {
+      const results = getHopSuggestions(query);
+      return Array.isArray(results) ? results : [];
+    } catch (error) {
+      console.error('Error getting hop suggestions:', error);
+      return [];
+    }
+  };
+
   const addHop = () => {
     setHops([...hops, { id: hops.length }]);
   };
@@ -40,7 +51,7 @@ export const HopsSection = ({ form }) => {
         <div className="text-sm text-muted-foreground">
           Total Cost: $
           {(form.watch('ingredients.hops') || []).reduce((acc, h) => 
-            acc + (h?.amount || 0) * (h?.costPerUnit || 0), 0
+            acc + (parseFloat(h?.amount) || 0) * (parseFloat(h?.costPerUnit) || 0), 0
           ).toFixed(2)}
         </div>
       </div>
@@ -70,11 +81,11 @@ export const HopsSection = ({ form }) => {
                       <CommandInput 
                         placeholder="Search hop..." 
                         value={searchQuery} 
-                        onValueChange={setSearchQuery}
+                        onValueChange={(value) => setSearchQuery(value || '')}
                       />
                       <CommandEmpty>No hop found.</CommandEmpty>
                       <CommandGroup>
-                        {getHopSuggestions(searchQuery).map((item) => (
+                        {getSuggestions(searchQuery).map((item) => (
                           <CommandItem
                             key={item.id}
                             value={item.name}
@@ -107,7 +118,8 @@ export const HopsSection = ({ form }) => {
                     step="0.1" 
                     {...field}
                     onChange={(e) => {
-                      field.onChange(parseFloat(e.target.value) || 0);
+                      const value = e.target.value ? parseFloat(e.target.value) : 0;
+                      field.onChange(isNaN(value) ? 0 : value);
                     }}
                   />
                 </FormControl>
@@ -126,7 +138,8 @@ export const HopsSection = ({ form }) => {
                     type="number" 
                     {...field}
                     onChange={(e) => {
-                      field.onChange(parseInt(e.target.value) || 0);
+                      const value = e.target.value ? parseInt(e.target.value) : 0;
+                      field.onChange(isNaN(value) ? 0 : value);
                     }}
                   />
                 </FormControl>
