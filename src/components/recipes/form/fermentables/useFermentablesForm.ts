@@ -75,6 +75,7 @@ export const useFermentablesForm = (form: any) => {
 
   return {
     fermentables,
+    setFermentables,
     removeFermentable,
     showNewFermentableDialog,
     setShowNewFermentableDialog,
