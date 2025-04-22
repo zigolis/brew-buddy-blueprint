@@ -1,10 +1,11 @@
 
-import { Beer, Calculator, FileText, List, Package, Settings } from "lucide-react";
+import { Beer, Calculator, FileText, List, Package, Settings, LayoutDashboard } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
+  { name: "Dashboard", icon: LayoutDashboard, path: "/" },
   { name: "Recipes", icon: Beer, path: "/recipes" },
   { name: "Ingredients", icon: Package, path: "/ingredients" },
   { name: "Equipment", icon: List, path: "/equipment" },
@@ -20,7 +21,9 @@ export function Sidebar() {
     <aside className="h-full w-64 flex-col bg-card/50 backdrop-blur-sm border-r border-border/50 px-3 py-6">
       <nav className="space-y-2 flex-1">
         {navItems.map((item) => {
-          const isActive = location.pathname.startsWith(item.path);
+          const isActive = item.path === "/" 
+            ? location.pathname === "/" 
+            : location.pathname.startsWith(item.path);
           return (
             <Link key={item.name} to={item.path}>
               <Button 
