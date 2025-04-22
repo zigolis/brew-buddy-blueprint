@@ -1,16 +1,14 @@
-
 import { DOMParser } from '@xmldom/xmldom';
 import { 
   Recipe, 
   Style, 
-  Fermentable, 
-  Hop, 
-  Yeast, 
-  Misc, 
-  MashProfile, 
-  MashStep
-} from '@/types';
+  HopUse, 
+  HopForm, 
+  YeastForm,
+  MiscForm 
+} from '@/types/recipe';
 import { v4 as uuidv4 } from 'uuid';
+import { Fermentable, Hop, Yeast, Misc } from '@/types/ingredients';
 
 // Simple XML parsing helper functions
 function getElementText(node: any, tagName: string): string {
@@ -68,6 +66,8 @@ function parseRecipe(recipeNode: any): Recipe {
     efficiency: getElementFloat(recipeNode, 'EFFICIENCY'),
     originalGravity: getElementFloat(recipeNode, 'OG', null),
     finalGravity: getElementFloat(recipeNode, 'FG', null),
+    color: getElementFloat(recipeNode, 'COLOR', null),
+    ibu: getElementFloat(recipeNode, 'IBU', null),
     abv: getElementFloat(recipeNode, 'ABV', null),
     style: parseStyle(styleNode),
     ingredients: {
@@ -207,7 +207,7 @@ function parseFermentables(recipeNode: any): Fermentable[] {
       yield: getElementFloat(node, 'YIELD'),
       color: getElementFloat(node, 'COLOR'),
       supplier: getElementText(node, 'SUPPLIER'),
-      notes: getElementText(node, 'NOTES'),
+      notes: getElementText(node, 'NOTES') || '',
       costPerUnit: getElementFloat(node, 'COST'),
     });
   }
@@ -225,12 +225,12 @@ function parseHops(recipeNode: any): Hop[] {
       id: uuidv4(),
       name: getElementText(node, 'NAME'),
       alpha: getElementFloat(node, 'ALPHA'),
-      beta: getElementFloat(node, 'BETA', 0),  // Added beta property with default value 0
+      beta: getElementFloat(node, 'BETA', 0),
       amount: getElementFloat(node, 'AMOUNT'),
-      use: getElementText(node, 'USE') as any,
+      use: getElementText(node, 'USE') as HopUse || 'Boil',
       time: getElementFloat(node, 'TIME'),
-      form: getElementText(node, 'FORM') as any,
-      notes: getElementText(node, 'NOTES'),
+      form: getElementText(node, 'FORM') as HopForm || 'Pellet',
+      notes: getElementText(node, 'NOTES') || '',
       costPerUnit: getElementFloat(node, 'COST'),
     });
   }
@@ -246,11 +246,16 @@ function parseYeasts(recipeNode: any): Yeast[] {
     const node = yeastNodes[i];
     const attenuation = getElementFloat(node, 'ATTENUATION');
     
+    let yeastType = getElementText(node, 'TYPE');
+    if (!['Ale', 'Lager', 'Wheat', 'Wine', 'Champagne'].includes(yeastType)) {
+      yeastType = 'Ale';
+    }
+    
     yeasts.push({
       id: uuidv4(),
       name: getElementText(node, 'NAME'),
-      type: getElementText(node, 'TYPE') as any,
-      form: getElementText(node, 'FORM') as any,
+      type: yeastType as 'Ale' | 'Lager' | 'Wheat' | 'Wine' | 'Champagne',
+      form: getElementText(node, 'FORM') as YeastForm || 'Liquid',
       laboratory: getElementText(node, 'LABORATORY'),
       productId: getElementText(node, 'PRODUCT_ID'),
       amount: getElementFloat(node, 'AMOUNT', 11.5),
@@ -260,8 +265,8 @@ function parseYeasts(recipeNode: any): Yeast[] {
         min: getElementFloat(node, 'MIN_TEMPERATURE'),
         max: getElementFloat(node, 'MAX_TEMPERATURE'),
       },
-      flocculation: getElementText(node, 'FLOCCULATION') as any,
-      notes: getElementText(node, 'NOTES'),
+      flocculation: getElementText(node, 'FLOCCULATION') as 'Low' | 'Medium' | 'High' | 'Very High' || 'Medium',
+      notes: getElementText(node, 'NOTES') || '',
       costPerUnit: getElementFloat(node, 'COST'),
     });
   }
@@ -281,7 +286,8 @@ function parseMiscs(recipeNode: any): Misc[] {
       use: getElementText(node, 'USE'),
       time: getElementFloat(node, 'TIME'),
       amount: getElementFloat(node, 'AMOUNT'),
-      notes: getElementText(node, 'NOTES'),
+      form: 'Other',
+      notes: getElementText(node, 'NOTES') || '',
       costPerUnit: getElementFloat(node, 'COST'),
     });
   }
@@ -330,22 +336,22 @@ function calculateIngredientCost(recipe: Recipe): number {
   let totalCost = 0;
   
   // Add fermentable costs
-  recipe.ingredients.fermentables.forEach(fermentable => {
+  recipe.ingredients?.fermentables.forEach(fermentable => {
     totalCost += fermentable.amount * fermentable.costPerUnit;
   });
   
   // Add hop costs
-  recipe.ingredients.hops.forEach(hop => {
+  recipe.ingredients?.hops.forEach(hop => {
     totalCost += hop.amount * hop.costPerUnit;
   });
   
   // Add yeast costs
-  recipe.ingredients.yeasts.forEach(yeast => {
+  recipe.ingredients?.yeasts.forEach(yeast => {
     totalCost += yeast.costPerUnit;
   });
   
   // Add misc costs
-  recipe.ingredients.miscs.forEach(misc => {
+  recipe.ingredients?.miscs.forEach(misc => {
     totalCost += misc.amount * misc.costPerUnit;
   });
   

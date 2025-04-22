@@ -1,4 +1,3 @@
-
 import { v4 as uuidv4 } from 'uuid';
 import { Recipe } from '@/types';
 
@@ -16,6 +15,8 @@ export const mockRecipes: Recipe[] = [
     efficiency: 75,
     originalGravity: 1.052,
     finalGravity: 1.012,
+    color: 7,
+    ibu: 38,
     abv: 5.2,
     style: {
       name: 'American Pale Ale',
@@ -222,6 +223,8 @@ export const mockRecipes: Recipe[] = [
     efficiency: 72,
     originalGravity: 1.042,
     finalGravity: 1.010,
+    color: 35,
+    ibu: 35,
     abv: 4.2,
     style: {
       name: 'Irish Stout',

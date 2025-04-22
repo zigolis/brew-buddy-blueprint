@@ -1,4 +1,3 @@
-
 import { useBrewContext } from "@/contexts/BrewContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -63,6 +62,8 @@ export const useCreateRecipe = (recipeFormData, setRecipeFormData) => {
         efficiency: completeFormData.efficiency || 75,
         originalGravity: completeFormData.originalGravity || null,
         finalGravity: completeFormData.finalGravity || null,
+        color: completeFormData.color || null,
+        ibu: completeFormData.ibu || null,
         abv: completeFormData.abv || null,
         notes: completeFormData.notes || "",
         style: completeFormData.style

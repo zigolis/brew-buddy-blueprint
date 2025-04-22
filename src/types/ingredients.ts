@@ -11,6 +11,7 @@ export interface Fermentable {
   notes: string;
   costPerUnit: number;
   unit?: string;
+  origin?: string;
 }
 
 export interface Hop {
@@ -25,6 +26,8 @@ export interface Hop {
   notes: string;
   costPerUnit: number;
   unit?: string;
+  origin?: string;
+  supplier?: string;
 }
 
 export interface Yeast {
@@ -32,16 +35,16 @@ export interface Yeast {
   name: string;
   type: 'Ale' | 'Lager' | 'Wheat' | 'Wine' | 'Champagne';
   form: 'Liquid' | 'Dry' | 'Slant' | 'Culture';
-  laboratory: string;
-  productId: string;
+  laboratory?: string;
+  productId?: string;
   amount: number;
-  minAttenuation: number;
-  maxAttenuation: number;
-  tempRange: {
+  minAttenuation?: number;
+  maxAttenuation?: number;
+  tempRange?: {
     min: number;
     max: number;
   };
-  flocculation: 'Low' | 'Medium' | 'High' | 'Very High';
+  flocculation?: 'Low' | 'Medium' | 'High' | 'Very High';
   notes: string;
   costPerUnit: number;
   inInventory?: number;
@@ -54,6 +57,7 @@ export interface Misc {
   unit?: string;
   time: number;
   use: string;
+  form: string;
   notes: string;
   costPerUnit: number;
 }
