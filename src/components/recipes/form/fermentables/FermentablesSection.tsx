@@ -28,7 +28,7 @@ export const FermentablesSection = ({ form }) => {
   const handleAddNewFermentable = useCallback((event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    
+
     const name = formData.get('name') as string;
     const costPerUnit = parseFloat(formData.get('costPerUnit') as string) || 0;
     const notes = (formData.get('notes') as string) || '';
@@ -42,18 +42,44 @@ export const FermentablesSection = ({ form }) => {
       notes,
     };
 
-    // Add to ingredients list
+    // 1. Add to ingredients list for future auto-suggestion.
     addIngredient(newFermentable);
-    // Add to current recipe instantly at the given index:
+
+    // 2. Add to current recipe at the selected index:
     if (currentFermentableIndex !== null) {
-      form.setValue(`ingredients.fermentables.${currentFermentableIndex}.name`, name);
-      form.setValue(`ingredients.fermentables.${currentFermentableIndex}.costPerUnit`, costPerUnit);
-      // Optionally reset amount as well (remove below line to not touch amount)
-      // form.setValue(`ingredients.fermentables.${currentFermentableIndex}.amount`, 0);
+      // Set all available data for the new fermentable here
+      form.setValue(
+        `ingredients.fermentables.${currentFermentableIndex}`,
+        { 
+          name,
+          type: 'Grain',
+          amount: 0,
+          costPerUnit,
+          unit: 'g',
+          notes,
+        },
+        { shouldDirty: true, shouldTouch: true }
+      );
     }
-    // Ensure modal is closed and state reset
+
+    // 3. Ensure fermentables state array has enough rows
+    setFermentables(prev => {
+      // Add a new row if index refers to the last one
+      const exists = prev.some((f, idx) => idx === currentFermentableIndex);
+      if (!exists && currentFermentableIndex !== null) {
+        const newLength = currentFermentableIndex + 1;
+        const filled = Array.from({ length: newLength }, (_, i) => prev[i] || { id: i });
+        return filled;
+      }
+      return prev;
+    });
+
+    // 4. Close modal and reset
     setShowNewFermentableDialog(false);
     setCurrentFermentableIndex(null);
+
+    // 5. Optionally focus the new input (not strictly required; user stays at same step/page automatically)
+    // setTimeout could be used here to focus, but not strictly required as UI is already updated.
   }, [addIngredient, currentFermentableIndex, form]);
 
   const handleCreateNewClick = useCallback((index: number) => {
@@ -97,6 +123,7 @@ export const FermentablesSection = ({ form }) => {
         </div>
       </div>
 
+      {/* Always show all rows as per fermentables array */}
       {fermentables.length === 0 ? (
         <EmptyFermentables 
           onAdd={addFermentable}
@@ -117,7 +144,7 @@ export const FermentablesSection = ({ form }) => {
                     onChange={field.onChange}
                     onSelect={(value) => {
                       field.onChange(value);
-                      // Cost per unit will be handled in FermentableSearch component
+                      // Cost per unit handled in FermentableSearch if needed
                     }}
                     onCreateNew={() => handleCreateNewClick(index)}
                   />
