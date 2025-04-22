@@ -64,7 +64,7 @@ export const YeastSection = ({ form }) => {
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Yeast</h2>
       
-      <div className="grid gap-4 md:grid-cols-3 border p-4 rounded-lg">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border p-4 rounded-lg">
         <FormField
           control={form.control}
           name="ingredients.yeasts.0.name"
