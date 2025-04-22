@@ -31,7 +31,7 @@ export function Header() {
         <div className="flex items-center">
           <Link to="/" className="flex items-center space-x-2">
             <Beer className="h-6 w-6 text-brewing-amber" />
-            <span className="hidden md:inline-block font-bold text-xl">BrewMaster Pro</span>
+            <span className="hidden md:inline-block font-bold text-xl">iBeer Brewing Pro</span>
           </Link>
         </div>
 
@@ -47,3 +47,4 @@ export function Header() {
     </header>
   );
 }
+

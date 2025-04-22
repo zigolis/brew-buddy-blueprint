@@ -19,7 +19,7 @@ export function Sidebar() {
   return (
     <aside className="hidden md:flex h-screen w-64 flex-col bg-card border-r px-3 py-4">
       <div className="mb-8 flex items-center px-2">
-        <span className="text-2xl font-bold text-brewing-amber">BrewMaster Pro</span>
+        <span className="text-2xl font-bold text-brewing-amber">iBeer Brewing Pro</span>
       </div>
       <nav className="space-y-1 flex-1">
         {navItems.map((item) => {
@@ -52,3 +52,4 @@ export function Sidebar() {
     </aside>
   );
 }
+

@@ -16,7 +16,7 @@ const HomePage = () => {
     <Layout>
       <div className="space-y-6">
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold">Welcome to BrewMaster Pro</h1>
+          <h1 className="text-3xl font-bold">Welcome to iBeer Brewing Pro</h1>
           <p className="text-muted-foreground">
             Your comprehensive brewing companion - manage recipes, track costs, and brew with confidence.
           </p>
@@ -148,3 +148,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
