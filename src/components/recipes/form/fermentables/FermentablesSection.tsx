@@ -11,6 +11,7 @@ import { FermentableDialogForm } from "./FermentableDialogForm";
 export const FermentablesSection = ({ form }) => {
   const [fermentables, setFermentables] = useState([{ id: 0 }]);
   const [showNewFermentableDialog, setShowNewFermentableDialog] = useState(false);
+  const [currentFermentableIndex, setCurrentFermentableIndex] = useState<number | null>(null);
   const { addIngredient } = useIngredients();
 
   const addFermentable = () => {
@@ -35,8 +36,22 @@ export const FermentablesSection = ({ form }) => {
       notes: formData.get('notes') as string || '',
     };
 
+    // Add to ingredients list
     addIngredient(newFermentable);
+    
+    // Add to current recipe if we have an index
+    if (currentFermentableIndex !== null) {
+      form.setValue(`ingredients.fermentables.${currentFermentableIndex}.name`, newFermentable.name);
+      form.setValue(`ingredients.fermentables.${currentFermentableIndex}.costPerUnit`, newFermentable.costPerUnit);
+    }
+    
     setShowNewFermentableDialog(false);
+    setCurrentFermentableIndex(null);
+  };
+
+  const handleCreateNewClick = (index: number) => {
+    setCurrentFermentableIndex(index);
+    setShowNewFermentableDialog(true);
   };
 
   const watchedFermentables = form.watch('ingredients.fermentables') || [];
@@ -78,6 +93,7 @@ export const FermentablesSection = ({ form }) => {
                         form.setValue(`ingredients.fermentables.${index}.costPerUnit`, matchingFermentable.costPerUnit || 0);
                       }
                     }}
+                    onCreateNew={() => handleCreateNewClick(index)}
                   />
                 </FormItem>
               )}
@@ -100,6 +116,7 @@ export const FermentablesSection = ({ form }) => {
                       const numValue = Number(value) || 0;
                       field.onChange(numValue);
                     }}
+                    onCreateNew={() => {}}
                   />
                 </FormItem>
               )}
@@ -117,20 +134,9 @@ export const FermentablesSection = ({ form }) => {
         ))
       )}
 
-      {fermentables.length > 0 && (
-        <div className="flex gap-2">
-          <Button type="button" onClick={addFermentable} className="w-full">
-            <Plus className="h-4 w-4 mr-2" /> Add Fermentable
-          </Button>
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={() => setShowNewFermentableDialog(true)}
-          >
-            <Plus className="h-4 w-4 mr-2" /> Create New
-          </Button>
-        </div>
-      )}
+      <Button type="button" onClick={addFermentable} className="w-full">
+        <Plus className="h-4 w-4 mr-2" /> Add Fermentable
+      </Button>
 
       <FermentableDialogForm
         open={showNewFermentableDialog}

@@ -15,12 +15,14 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { useIngredientSuggestions } from "@/hooks/useIngredientSuggestions";
+import { Plus } from "lucide-react";
 
 interface FermentableSearchProps {
   index: number;
   value: string;
   onChange: (value: string) => void;
   onSelect: (value: string) => void;
+  onCreateNew: () => void;
 }
 
 export const FermentableSearch = ({
@@ -28,10 +30,12 @@ export const FermentableSearch = ({
   value,
   onChange,
   onSelect,
+  onCreateNew,
 }: FermentableSearchProps) => {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { getFermentableSuggestions } = useIngredientSuggestions();
+  const suggestions = getFermentableSuggestions(searchQuery);
 
   return (
     <Popover open={open} onOpenChange={(isOpen) => {
@@ -55,20 +59,33 @@ export const FermentableSearch = ({
             value={searchQuery} 
             onValueChange={(value) => setSearchQuery(value || '')}
           />
-          <CommandEmpty>No fermentable found.</CommandEmpty>
           <CommandGroup>
-            {getFermentableSuggestions(searchQuery).map((item) => (
+            {suggestions.length > 0 ? (
+              suggestions.map((item) => (
+                <CommandItem
+                  key={item.id || `fermentable-${Math.random()}`}
+                  value={item.name}
+                  onSelect={(value) => {
+                    onSelect(value);
+                    setOpen(false);
+                  }}
+                >
+                  {item.name}
+                </CommandItem>
+              ))
+            ) : (
               <CommandItem
-                key={item.id || `fermentable-${Math.random()}`}
-                value={item.name}
-                onSelect={(value) => {
-                  onSelect(value);
+                value="create-new"
+                className="text-primary"
+                onSelect={() => {
+                  onCreateNew();
                   setOpen(false);
                 }}
               >
-                {item.name}
+                <Plus className="mr-2 h-4 w-4" />
+                Create "{searchQuery}"
               </CommandItem>
-            ))}
+            )}
           </CommandGroup>
         </Command>
       </PopoverContent>
