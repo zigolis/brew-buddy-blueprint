@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 export const WaterSection = ({ form }) => (
-  <div className="space-y-4 mt-6">
+  <div className="space-y-4 mt-8">
     <h2 className="text-xl font-semibold">Water Profile</h2>
     <div className="grid gap-4 md:grid-cols-4">
       <FormField

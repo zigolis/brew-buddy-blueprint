@@ -20,10 +20,11 @@ import EditEquipment from "@/pages/equipment/EditEquipment";
 import ViewEquipment from "@/pages/equipment/ViewEquipment";
 import CostCalculator from "@/pages/calculator/CostCalculator";
 import ImportRecipe from "@/pages/import/ImportRecipe";
-import BrewingGuide from "@/pages/brewing-guide/BrewingGuide";
+import EnhancedBrewingGuide from "@/pages/brewing-guide/EnhancedBrewingGuide";
 import Settings from "@/pages/settings/Settings";
 import NotFound from "@/pages/NotFound";
 import EditRecipe from "@/pages/recipes/EditRecipe";
+import MyAccount from "@/pages/my-account/MyAccount";
 
 const queryClient = new QueryClient();
 
@@ -55,9 +56,10 @@ const App = () => {
                 <Route path="/equipment/view/:equipmentId" element={<ViewEquipment />} />
                 <Route path="/calculator" element={<CostCalculator />} />
                 <Route path="/import" element={<ImportRecipe />} />
-                <Route path="/brewing-guide" element={<BrewingGuide />} />
-                <Route path="/brewing-guide/:recipeId" element={<BrewingGuide />} />
+                <Route path="/brewing-guide" element={<EnhancedBrewingGuide />} />
+                <Route path="/brewing-guide/:recipeId" element={<EnhancedBrewingGuide />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/my-account" element={<MyAccount />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
