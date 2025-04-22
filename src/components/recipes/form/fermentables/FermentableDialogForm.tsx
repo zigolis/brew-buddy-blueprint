@@ -9,7 +9,6 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Select } from "@/components/ui/select";
 import * as React from "react";
 
 interface FermentableDialogFormProps {
@@ -23,6 +22,11 @@ export const FermentableDialogForm = ({
   onOpenChange,
   onSubmit,
 }: FermentableDialogFormProps) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault(); // Prevent form submission from triggering navigation
+    onSubmit(event);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -33,7 +37,7 @@ export const FermentableDialogForm = ({
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={onSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <FormField
             name="name"
             render={() => (

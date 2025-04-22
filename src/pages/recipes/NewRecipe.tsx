@@ -56,6 +56,7 @@ const NewRecipe = () => {
 
   const progress = ((currentStep + 1) / recipeSteps.length) * 100;
 
+  // Modified to save form data without automatically changing step
   const handleNext = () => {
     // Get form data, then move to next
     const formElement = document.getElementById('recipe-form') as HTMLFormElement;
@@ -72,13 +73,17 @@ const NewRecipe = () => {
           currentFormData[key] = value;
         }
       });
+      
+      // Update form data without changing step
       setRecipeFormData(prev => ({
         ...prev,
         ...currentFormData
       }));
-    }
-    if (currentStep < recipeSteps.length - 1) {
-      setCurrentStep(currentStep + 1);
+      
+      // Only change step if it's a manual navigation
+      if (currentStep < recipeSteps.length - 1) {
+        setCurrentStep(currentStep + 1);
+      }
     }
   };
 

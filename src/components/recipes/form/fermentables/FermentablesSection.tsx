@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useEffect } from "react";
 import { FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
@@ -25,7 +26,6 @@ export const FermentablesSection = ({ form }) => {
 
   const handleAddNewFermentable = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
       const formData = new FormData(event.currentTarget);
 
       const name = formData.get("name") as string;
