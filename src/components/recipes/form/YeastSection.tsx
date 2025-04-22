@@ -17,6 +17,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 export const YeastSection = ({ form }) => {
   const [openPopover, setOpenPopover] = useState(false);
@@ -238,6 +240,18 @@ export const YeastSection = ({ form }) => {
           )}
         />
       </div>
+      {/* Add Yeast Button */}
+      <Button
+        type="button"
+        className="w-full"
+        variant="outline"
+        // No onClick for now, as there's only one yeast input supported
+        disabled
+      >
+        <Plus className="h-4 w-4 mr-2" />
+        Add Yeast
+      </Button>
     </div>
   );
 };
+
