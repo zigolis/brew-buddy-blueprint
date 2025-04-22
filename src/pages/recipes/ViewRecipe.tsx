@@ -4,11 +4,12 @@ import { Layout } from "@/components/layout/Layout";
 import { useBrewContext } from "@/contexts/BrewContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Beer, Package, FileText } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Beer, Package, FileText, BookmarkPlus, BookmarkCheck } from "lucide-react";
 
 const ViewRecipe = () => {
   const { recipeId } = useParams();
-  const { recipes } = useBrewContext();
+  const { recipes, toggleBookmark, isBookmarked } = useBrewContext();
   const recipe = recipes.find((r) => r.id === recipeId);
 
   if (!recipe) {
@@ -26,11 +27,23 @@ const ViewRecipe = () => {
     <Layout>
       <div className="space-y-6">
         <div className="flex flex-col space-y-2">
-          <h1 className="text-3xl font-bold">{recipe.name}</h1>
-          <div className="flex flex-wrap gap-2">
-            <Badge variant="outline">{recipe.type}</Badge>
-            <Badge variant="secondary">{recipe.style?.name || "No style"}</Badge>
-            <Badge variant="secondary">{recipe.batchSize}L</Badge>
+          <div className="flex justify-between items-start">
+            <h1 className="text-3xl font-bold">{recipe.name}</h1>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => toggleBookmark(recipe.id)}
+              className="h-10 w-10"
+            >
+              {isBookmarked(recipe.id) ? (
+                <BookmarkCheck className="h-5 w-5" />
+              ) : (
+                <BookmarkPlus className="h-5 w-5" />
+              )}
+              <span className="sr-only">
+                {isBookmarked(recipe.id) ? "Remove bookmark" : "Add bookmark"}
+              </span>
+            </Button>
           </div>
         </div>
 

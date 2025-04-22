@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Recipe, Equipment, BrewingSession } from '@/types/beer';
 
@@ -10,9 +9,12 @@ interface BrewContextType {
   recipes: Recipe[];
   equipment: Equipment[];
   brewingSessions: BrewingSession[];
+  bookmarkedRecipes: Set<string>;
   addRecipe: (recipe: Recipe) => void;
   updateRecipe: (recipeId: string, updatedRecipe: Recipe) => void;
   deleteRecipe: (recipeId: string) => void;
+  toggleBookmark: (recipeId: string) => void;
+  isBookmarked: (recipeId: string) => boolean;
   addEquipment: (equipment: Equipment) => void;
   updateEquipment: (equipmentId: string, updatedEquipment: Equipment) => void;
   deleteEquipment: (equipmentId: string) => void;
@@ -26,9 +28,12 @@ const BrewContext = createContext<BrewContextType>({
   recipes: [],
   equipment: [],
   brewingSessions: [],
+  bookmarkedRecipes: new Set(),
   addRecipe: () => {},
   updateRecipe: () => {},
   deleteRecipe: () => {},
+  toggleBookmark: () => {},
+  isBookmarked: () => false,
   addEquipment: () => {},
   updateEquipment: () => {},
   deleteEquipment: () => {},
@@ -50,6 +55,7 @@ export function BrewContextProvider({ children }: BrewContextProviderProps) {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [brewingSessions, setBrewingSessions] = useState<BrewingSession[]>([]);
+  const [bookmarkedRecipes, setBookmarkedRecipes] = useState<Set<string>>(new Set());
 
   // Load data from localStorage on initial mount
   useEffect(() => {
@@ -57,16 +63,19 @@ export function BrewContextProvider({ children }: BrewContextProviderProps) {
       const storedRecipes = localStorage.getItem('brewMasterRecipes');
       const storedEquipment = localStorage.getItem('brewMasterEquipment');
       const storedSessions = localStorage.getItem('brewMasterSessions');
+      const storedBookmarks = localStorage.getItem('brewMasterBookmarks');
       
       // Use mock data if nothing stored
       setRecipes(storedRecipes ? JSON.parse(storedRecipes) : mockRecipes);
       setEquipment(storedEquipment ? JSON.parse(storedEquipment) : mockEquipment);
       setBrewingSessions(storedSessions ? JSON.parse(storedSessions) : []);
+      setBookmarkedRecipes(new Set(storedBookmarks ? JSON.parse(storedBookmarks) : []));
     } catch (error) {
       console.error('Error loading data from localStorage', error);
       setRecipes(mockRecipes);
       setEquipment(mockEquipment);
       setBrewingSessions([]);
+      setBookmarkedRecipes(new Set());
     }
   }, []);
 
@@ -82,6 +91,10 @@ export function BrewContextProvider({ children }: BrewContextProviderProps) {
   useEffect(() => {
     localStorage.setItem('brewMasterSessions', JSON.stringify(brewingSessions));
   }, [brewingSessions]);
+
+  useEffect(() => {
+    localStorage.setItem('brewMasterBookmarks', JSON.stringify(Array.from(bookmarkedRecipes)));
+  }, [bookmarkedRecipes]);
 
   // Recipe methods
   const addRecipe = (recipe: Recipe) => {
@@ -128,14 +141,32 @@ export function BrewContextProvider({ children }: BrewContextProviderProps) {
     setBrewingSessions(prev => prev.filter(session => session.id !== sessionId));
   };
 
+  // Bookmark methods
+  const toggleBookmark = (recipeId: string) => {
+    setBookmarkedRecipes(prev => {
+      const newBookmarks = new Set(prev);
+      if (newBookmarks.has(recipeId)) {
+        newBookmarks.delete(recipeId);
+      } else {
+        newBookmarks.add(recipeId);
+      }
+      return newBookmarks;
+    });
+  };
+
+  const isBookmarked = (recipeId: string) => bookmarkedRecipes.has(recipeId);
+
   // Context value
   const value = {
     recipes,
     equipment,
     brewingSessions,
+    bookmarkedRecipes,
     addRecipe,
     updateRecipe,
     deleteRecipe,
+    toggleBookmark,
+    isBookmarked,
     addEquipment,
     updateEquipment,
     deleteEquipment,

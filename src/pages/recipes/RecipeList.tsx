@@ -5,14 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Beer, Edit, FileText, Trash2 } from "lucide-react";
+import { Beer, Edit, FileText, Trash2, BookmarkPlus, BookmarkCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const RecipeList = () => {
-  const { recipes, deleteRecipe } = useBrewContext();
+  const { recipes, deleteRecipe, toggleBookmark, isBookmarked } = useBrewContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [styleFilter, setStyleFilter] = useState<string>("all");
   
@@ -91,7 +91,24 @@ const RecipeList = () => {
                 {filteredRecipes.map(recipe => (
                   <Card key={recipe.id}>
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-xl truncate">{recipe.name}</CardTitle>
+                      <div className="flex justify-between items-start">
+                        <CardTitle className="text-xl truncate">{recipe.name}</CardTitle>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => toggleBookmark(recipe.id)}
+                          className="h-8 w-8"
+                        >
+                          {isBookmarked(recipe.id) ? (
+                            <BookmarkCheck className="h-4 w-4" />
+                          ) : (
+                            <BookmarkPlus className="h-4 w-4" />
+                          )}
+                          <span className="sr-only">
+                            {isBookmarked(recipe.id) ? "Remove bookmark" : "Add bookmark"}
+                          </span>
+                        </Button>
+                      </div>
                       <CardDescription>
                         <span className="block">{recipe.style?.name || "No style"}</span>
                         <span className="text-sm">by {recipe.author}</span>
@@ -162,10 +179,25 @@ const RecipeList = () => {
                   <Card key={recipe.id}>
                     <div className="flex flex-col md:flex-row">
                       <div className="p-4 md:w-2/3">
-                        <div className="mb-1">
+                        <div className="flex justify-between items-start mb-1">
                           <Link to={`/recipes/${recipe.id}`} className="text-lg font-medium hover:underline">
                             {recipe.name}
                           </Link>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => toggleBookmark(recipe.id)}
+                            className="h-8 w-8"
+                          >
+                            {isBookmarked(recipe.id) ? (
+                              <BookmarkCheck className="h-4 w-4" />
+                            ) : (
+                              <BookmarkPlus className="h-4 w-4" />
+                            )}
+                            <span className="sr-only">
+                              {isBookmarked(recipe.id) ? "Remove bookmark" : "Add bookmark"}
+                            </span>
+                          </Button>
                         </div>
                         <div className="flex flex-wrap gap-2 mb-2">
                           <Badge variant="outline">{recipe.style?.name || "No style"}</Badge>
