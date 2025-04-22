@@ -29,24 +29,29 @@ export const FermentablesSection = ({ form }) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     
+    const name = formData.get('name') as string;
+    const costPerUnit = parseFloat(formData.get('costPerUnit') as string) || 0;
+    const notes = (formData.get('notes') as string) || '';
+
     const newFermentable = {
-      name: formData.get('name') as string,
+      name,
       type: 'Grain',
       amount: 0,
       unit: 'g',
-      costPerUnit: parseFloat(formData.get('costPerUnit') as string) || 0,
-      notes: formData.get('notes') as string || '',
+      costPerUnit,
+      notes,
     };
 
     // Add to ingredients list
     addIngredient(newFermentable);
-    
-    // Add to current recipe if we have an index
+    // Add to current recipe instantly at the given index:
     if (currentFermentableIndex !== null) {
-      form.setValue(`ingredients.fermentables.${currentFermentableIndex}.name`, newFermentable.name);
-      form.setValue(`ingredients.fermentables.${currentFermentableIndex}.costPerUnit`, newFermentable.costPerUnit);
+      form.setValue(`ingredients.fermentables.${currentFermentableIndex}.name`, name);
+      form.setValue(`ingredients.fermentables.${currentFermentableIndex}.costPerUnit`, costPerUnit);
+      // Optionally reset amount as well (remove below line to not touch amount)
+      // form.setValue(`ingredients.fermentables.${currentFermentableIndex}.amount`, 0);
     }
-    
+    // Ensure modal is closed and state reset
     setShowNewFermentableDialog(false);
     setCurrentFermentableIndex(null);
   }, [addIngredient, currentFermentableIndex, form]);
