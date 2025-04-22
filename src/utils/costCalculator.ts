@@ -1,3 +1,4 @@
+
 import { Recipe, Equipment } from '@/types';
 
 /**
@@ -22,28 +23,49 @@ export function calculateCostPerServing(totalCost: number, servings: number): nu
 /**
  * Calculate the cost of ingredients in a recipe
  */
-export function calculateIngredientCost(recipe: Recipe): number {
+export function calculateIngredientCost(recipe: Partial<Recipe>): number {
   let total = 0;
   
+  // Check if recipe and ingredients exist before accessing properties
+  if (!recipe || !recipe.ingredients) {
+    return total;
+  }
+  
   // Calculate fermentable costs
-  recipe.ingredients.fermentables.forEach(fermentable => {
-    total += fermentable.amount * fermentable.costPerUnit;
-  });
+  if (Array.isArray(recipe.ingredients.fermentables)) {
+    recipe.ingredients.fermentables.forEach(fermentable => {
+      if (fermentable && typeof fermentable.amount === 'number' && typeof fermentable.costPerUnit === 'number') {
+        total += fermentable.amount * fermentable.costPerUnit;
+      }
+    });
+  }
   
   // Calculate hop costs
-  recipe.ingredients.hops.forEach(hop => {
-    total += hop.amount * hop.costPerUnit;
-  });
+  if (Array.isArray(recipe.ingredients.hops)) {
+    recipe.ingredients.hops.forEach(hop => {
+      if (hop && typeof hop.amount === 'number' && typeof hop.costPerUnit === 'number') {
+        total += hop.amount * hop.costPerUnit;
+      }
+    });
+  }
   
   // Calculate yeast costs
-  recipe.ingredients.yeasts.forEach(yeast => {
-    total += yeast.costPerUnit;
-  });
+  if (Array.isArray(recipe.ingredients.yeasts)) {
+    recipe.ingredients.yeasts.forEach(yeast => {
+      if (yeast && typeof yeast.costPerUnit === 'number') {
+        total += yeast.costPerUnit;
+      }
+    });
+  }
   
   // Calculate misc ingredient costs
-  recipe.ingredients.miscs.forEach(misc => {
-    total += misc.amount * misc.costPerUnit;
-  });
+  if (Array.isArray(recipe.ingredients.miscs)) {
+    recipe.ingredients.miscs.forEach(misc => {
+      if (misc && typeof misc.amount === 'number' && typeof misc.costPerUnit === 'number') {
+        total += misc.amount * misc.costPerUnit;
+      }
+    });
+  }
   
   return total;
 }
