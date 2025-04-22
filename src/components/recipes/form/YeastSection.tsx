@@ -122,7 +122,7 @@ export const YeastSection = ({ form }) => {
           control={form.control}
           name="ingredients.yeasts.0.amount"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex flex-col">
               <FormLabel>Amount (g)*</FormLabel>
               <FormControl>
                 <Input
