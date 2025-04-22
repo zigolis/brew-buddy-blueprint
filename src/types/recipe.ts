@@ -1,4 +1,3 @@
-
 import { Style } from './style';
 import { 
   MashProfile, 
@@ -19,7 +18,7 @@ import {
   Misc as IngredientMisc 
 } from './ingredients';
 
-export { Style };
+export type { Style };
 
 export interface Recipe {
   id: string;
