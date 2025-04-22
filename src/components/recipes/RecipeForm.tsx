@@ -45,6 +45,7 @@ export function RecipeForm({ onSubmit, initialData, visibleSections }: RecipeFor
       author: "",
       type: "All Grain",
       batchSize: 20,
+      boilSize: 23,
       boilTime: 60,
       efficiency: 75,
       originalGravity: null,

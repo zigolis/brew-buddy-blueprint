@@ -24,7 +24,7 @@ export const RecipeStatsSection = ({ form }) => {
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Recipe Statistics</h2>
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-4">
         <FormField
           control={form.control}
           name="batchSize"
@@ -37,7 +37,18 @@ export const RecipeStatsSection = ({ form }) => {
             </FormItem>
           )}
         />
-
+        <FormField
+          control={form.control}
+          name="boilSize"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Boil Size (L)*</FormLabel>
+              <FormControl>
+                <Input type="number" step="0.1" {...field} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="boilTime"
