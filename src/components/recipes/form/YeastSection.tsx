@@ -64,7 +64,7 @@ export const YeastSection = ({ form }) => {
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Yeast</h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border p-4 rounded-lg">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <FormField
           control={form.control}
           name="ingredients.yeasts.0.name"
@@ -143,7 +143,7 @@ export const YeastSection = ({ form }) => {
           control={form.control}
           name="ingredients.yeasts.0.type"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex flex-col">
               <FormLabel>Type</FormLabel>
               <Select onValueChange={field.onChange} value={field.value || "Ale"}>
                 <FormControl>
@@ -164,12 +164,12 @@ export const YeastSection = ({ form }) => {
         />
       </div>
       
-      <div className="grid gap-4 md:grid-cols-4 border p-4 rounded-lg">
+      <div className="grid gap-4 md:grid-cols-4">
         <FormField
           control={form.control}
           name="ingredients.yeasts.0.form"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex flex-col">
               <FormLabel>Form</FormLabel>
               <Select onValueChange={field.onChange} value={field.value || "Dry"}>
                 <FormControl>
@@ -191,7 +191,7 @@ export const YeastSection = ({ form }) => {
           control={form.control}
           name="ingredients.yeasts.0.laboratory"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex flex-col">
               <FormLabel>Laboratory</FormLabel>
               <FormControl>
                 <Input placeholder="Enter laboratory" {...field} />
@@ -203,7 +203,7 @@ export const YeastSection = ({ form }) => {
           control={form.control}
           name="ingredients.yeasts.0.minAttenuation"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex flex-col">
               <FormLabel>Min Attenuation (%)</FormLabel>
               <FormControl>
                 <Input
@@ -223,7 +223,7 @@ export const YeastSection = ({ form }) => {
           control={form.control}
           name="ingredients.yeasts.0.maxAttenuation"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex flex-col">
               <FormLabel>Max Attenuation (%)</FormLabel>
               <FormControl>
                 <Input

@@ -18,7 +18,7 @@ export default function HopRow({ form, control, index, hop, onRemove }: HopRowPr
   const watchedHop = form.watch(`ingredients.hops.${index}`) || {};
 
   return (
-    <div className="grid gap-4 md:grid-cols-8 items-end border p-4 rounded-lg">
+    <div className="grid gap-4 md:grid-cols-8 items-end">
       <HopNameField control={control} form={form} index={index} value={watchedHop.name || ""} />
 
       <FormField
