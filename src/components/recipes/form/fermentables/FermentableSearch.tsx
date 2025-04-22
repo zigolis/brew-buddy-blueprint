@@ -37,7 +37,7 @@ export const FermentableSearch = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { getFermentableSuggestions } = useIngredientSuggestions();
   
-  // Use useEffect to set initial search query when popover opens
+  // Safely update search query when popover opens or value changes
   useEffect(() => {
     if (open) {
       setSearchQuery(value || '');
@@ -58,6 +58,7 @@ export const FermentableSearch = ({
     }
   };
 
+  // Get suggestions based on the current search query
   const suggestions = getSuggestions(searchQuery);
 
   return (

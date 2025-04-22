@@ -66,6 +66,7 @@ export const FermentablesSection = ({ form }) => {
     });
   }, [fermentables, form]);
 
+  // Use a memoized value for watched fermentables to prevent unnecessary re-renders
   const watchedFermentables = form.watch('ingredients.fermentables') || [];
 
   return (
@@ -100,10 +101,7 @@ export const FermentablesSection = ({ form }) => {
                     onChange={field.onChange}
                     onSelect={(value) => {
                       field.onChange(value);
-                      const matchingFermentable = form.getValues(`ingredients.fermentables.${index}`);
-                      if (matchingFermentable) {
-                        form.setValue(`ingredients.fermentables.${index}.costPerUnit`, matchingFermentable.costPerUnit || 0);
-                      }
+                      // Don't update costPerUnit here, it will be done in the search component
                     }}
                     onCreateNew={() => handleCreateNewClick(index)}
                   />
