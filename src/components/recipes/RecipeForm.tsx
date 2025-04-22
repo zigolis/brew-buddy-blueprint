@@ -16,6 +16,7 @@ import { ColdCrashSection } from "./form/ColdCrashSection";
 import { CarbonationSection } from "./form/CarbonationSection";
 import { BottlingSection } from "./form/BottlingSection";
 import { useRecipeCost } from "@/hooks/useRecipeCost";
+import { useEffect } from "react";
 
 interface RecipeFormProps {
   onSubmit: (data: Partial<Recipe>) => void;
@@ -52,6 +53,7 @@ export function RecipeForm({ onSubmit, initialData, visibleSections }: RecipeFor
       finalGravity: null,
       abv: null,
       notes: "",
+      style: { name: "" },
       tags: [],
       ingredients: {
         fermentables: [],
@@ -108,6 +110,16 @@ export function RecipeForm({ onSubmit, initialData, visibleSections }: RecipeFor
     },
   });
 
+  // Update form when initialData changes
+  useEffect(() => {
+    if (initialData) {
+      // Reset form with initialData whenever it changes
+      Object.keys(initialData).forEach(key => {
+        form.setValue(key as any, initialData[key as keyof typeof initialData]);
+      });
+    }
+  }, [initialData, form]);
+
   const formValues = form.watch();
   const { totalCost } = useRecipeCost(formValues);
 
@@ -128,6 +140,9 @@ export function RecipeForm({ onSubmit, initialData, visibleSections }: RecipeFor
             <div className="text-lg font-semibold">
               Total Recipe Cost: ${totalCost.toFixed(2)}
             </div>
+            <Button type="submit">
+              {visibleSections?.includes('bottling') ? 'Create Recipe' : 'Save and Continue'}
+            </Button>
           </div>
         )}
       </form>
