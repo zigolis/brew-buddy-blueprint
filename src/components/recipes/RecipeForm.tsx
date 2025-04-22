@@ -9,6 +9,12 @@ import { FermentablesSection } from "./form/FermentablesSection";
 import { HopsSection } from "./form/HopsSection";
 import { YeastSection } from "./form/YeastSection";
 import { MashScheduleSection } from "./form/MashScheduleSection";
+import { BoilSection } from "./form/BoilSection";
+import { ClarificationSection } from "./form/ClarificationSection";
+import { FermentationSection } from "./form/FermentationSection";
+import { ColdCrashSection } from "./form/ColdCrashSection";
+import { CarbonationSection } from "./form/CarbonationSection";
+import { BottlingSection } from "./form/BottlingSection";
 import { Separator } from "@/components/ui/separator";
 import { useRecipeCost } from "@/hooks/useRecipeCost";
 
@@ -41,6 +47,47 @@ export function RecipeForm({ onSubmit, initialData }: RecipeFormProps) {
         name: "Single Infusion",
         steps: [],
         notes: ""
+      },
+      boil: {
+        name: "Standard Boil",
+        time: 60,
+        temperature: 100
+      },
+      clarification: {
+        name: "Standard Clarification",
+        type: "Whirlpool",
+        amount: 0,
+        temperature: 20,
+        notes: ""
+      },
+      fermentation: {
+        name: "Primary Fermentation",
+        type: "Primary",
+        temperature: 20,
+        period: 14,
+        notes: ""
+      },
+      coldCrash: {
+        name: "Standard Cold Crash",
+        type: "Standard",
+        temperature: 2,
+        period: 48,
+        notes: ""
+      },
+      carbonation: {
+        name: "Standard Carbonation",
+        type: "Natural",
+        volumeCo2: 2.4,
+        temperature: 20,
+        period: 14,
+        notes: ""
+      },
+      bottling: {
+        name: "Standard Bottling",
+        type: "Bottle",
+        temperature: 20,
+        period: 14,
+        notes: ""
       }
     },
   });
@@ -62,6 +109,18 @@ export function RecipeForm({ onSubmit, initialData }: RecipeFormProps) {
         <YeastSection form={form} />
         <Separator />
         <MashScheduleSection form={form} />
+        <Separator />
+        <BoilSection form={form} />
+        <Separator />
+        <ClarificationSection form={form} />
+        <Separator />
+        <FermentationSection form={form} />
+        <Separator />
+        <ColdCrashSection form={form} />
+        <Separator />
+        <CarbonationSection form={form} />
+        <Separator />
+        <BottlingSection form={form} />
         
         <div className="flex justify-between items-center">
           <div className="text-lg font-semibold">
