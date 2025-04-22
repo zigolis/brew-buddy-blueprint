@@ -35,7 +35,22 @@ export const FermentableSearch = ({
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { getFermentableSuggestions } = useIngredientSuggestions();
-  const suggestions = getFermentableSuggestions(searchQuery);
+  
+  // Safely get suggestions, ensuring we always return an array
+  const getSuggestions = (query: string) => {
+    try {
+      if (!query || query.trim() === '') {
+        return [];
+      }
+      const results = getFermentableSuggestions(query);
+      return Array.isArray(results) ? results : [];
+    } catch (error) {
+      console.error('Error getting fermentable suggestions:', error);
+      return [];
+    }
+  };
+
+  const suggestions = getSuggestions(searchQuery);
 
   return (
     <Popover open={open} onOpenChange={(isOpen) => {
@@ -87,6 +102,19 @@ export const FermentableSearch = ({
               </CommandItem>
             )}
           </CommandGroup>
+          <CommandEmpty>
+            <CommandItem
+              value="create-new-empty"
+              className="text-primary"
+              onSelect={() => {
+                onCreateNew();
+                setOpen(false);
+              }}
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Create "{searchQuery}"
+            </CommandItem>
+          </CommandEmpty>
         </Command>
       </PopoverContent>
     </Popover>
