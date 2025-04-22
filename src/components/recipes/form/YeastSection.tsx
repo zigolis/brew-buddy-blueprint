@@ -49,14 +49,14 @@ export const YeastSection = ({ form }) => {
                     <CommandInput placeholder="Search yeast..." />
                     <CommandEmpty>No yeast found.</CommandEmpty>
                     <CommandGroup>
-                      {/* Ensure suggestions array is always valid */}
+                      {/* Use an empty array as fallback */}
                       {(getYeastSuggestions(field.value || '') || []).map((item) => (
                         <CommandItem
                           key={item.id}
                           value={item.name}
                           onSelect={(value) => {
                             field.onChange(value);
-                            form.setValue('ingredients.yeasts.0.costPerUnit', item.costPerUnit);
+                            form.setValue('ingredients.yeasts.0.costPerUnit', item.costPerUnit || 0);
                             setOpenPopover(false);
                           }}
                         >
@@ -138,7 +138,14 @@ export const YeastSection = ({ form }) => {
             <FormItem>
               <FormLabel>Attenuation (%)</FormLabel>
               <FormControl>
-                <Input type="number" step="0.1" {...field} />
+                <Input 
+                  type="number" 
+                  step="0.1" 
+                  {...field}
+                  onChange={(e) => {
+                    field.onChange(parseFloat(e.target.value) || 0);
+                  }}  
+                />
               </FormControl>
             </FormItem>
           )}

@@ -5,9 +5,9 @@ import { Ingredient } from '@/types/ingredients';
 export const useIngredientSuggestions = () => {
   const { ingredients } = useIngredients();
 
-  const getFermentableSuggestions = (query: string) => {
-    // Ensure ingredients exists before filtering
-    if (!ingredients || ingredients.length === 0) return [];
+  const getFermentableSuggestions = (query: string): Ingredient[] => {
+    // Ensure ingredients exists and is an array before filtering
+    if (!ingredients || !Array.isArray(ingredients) || ingredients.length === 0) return [];
 
     return ingredients
       .filter(ing => 
@@ -22,9 +22,9 @@ export const useIngredientSuggestions = () => {
       );
   };
 
-  const getHopSuggestions = (query: string) => {
-    // Ensure ingredients exists before filtering
-    if (!ingredients || ingredients.length === 0) return [];
+  const getHopSuggestions = (query: string): Ingredient[] => {
+    // Ensure ingredients exists and is an array before filtering
+    if (!ingredients || !Array.isArray(ingredients) || ingredients.length === 0) return [];
 
     return ingredients
       .filter(ing => ing.type === 'Hop')
@@ -33,9 +33,9 @@ export const useIngredientSuggestions = () => {
       );
   };
 
-  const getYeastSuggestions = (query: string) => {
-    // Ensure ingredients exists before filtering
-    if (!ingredients || ingredients.length === 0) return [];
+  const getYeastSuggestions = (query: string): Ingredient[] => {
+    // Ensure ingredients exists and is an array before filtering
+    if (!ingredients || !Array.isArray(ingredients) || ingredients.length === 0) return [];
 
     return ingredients
       .filter(ing => ing.type === 'Yeast')

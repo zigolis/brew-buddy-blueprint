@@ -38,8 +38,8 @@ export const HopsSection = ({ form }) => {
         <h2 className="text-xl font-semibold">Hops</h2>
         <div className="text-sm text-muted-foreground">
           Total Cost: $
-          {form.watch('ingredients.hops')?.reduce((acc, h) => 
-            acc + (h.amount || 0) * (h.costPerUnit || 0), 0
+          {(form.watch('ingredients.hops') || []).reduce((acc, h) => 
+            acc + (h?.amount || 0) * (h?.costPerUnit || 0), 0
           ).toFixed(2)}
         </div>
       </div>
@@ -66,14 +66,14 @@ export const HopsSection = ({ form }) => {
                       <CommandInput placeholder="Search hop..." />
                       <CommandEmpty>No hop found.</CommandEmpty>
                       <CommandGroup>
-                        {/* Ensure suggestions array is always valid */}
+                        {/* Use an empty array as fallback */}
                         {(getHopSuggestions(field.value || '') || []).map((item) => (
                           <CommandItem
                             key={item.id}
                             value={item.name}
                             onSelect={(value) => {
                               field.onChange(value);
-                              form.setValue(`ingredients.hops.${index}.costPerUnit`, item.costPerUnit);
+                              form.setValue(`ingredients.hops.${index}.costPerUnit`, item.costPerUnit || 0);
                               setOpenPopover(null);
                             }}
                           >
@@ -95,7 +95,14 @@ export const HopsSection = ({ form }) => {
               <FormItem>
                 <FormLabel>Amount (g)*</FormLabel>
                 <FormControl>
-                  <Input type="number" step="0.1" {...field} />
+                  <Input 
+                    type="number" 
+                    step="0.1" 
+                    {...field}
+                    onChange={(e) => {
+                      field.onChange(parseFloat(e.target.value) || 0);
+                    }}
+                  />
                 </FormControl>
               </FormItem>
             )}
@@ -108,7 +115,13 @@ export const HopsSection = ({ form }) => {
               <FormItem>
                 <FormLabel>Time (min)*</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} />
+                  <Input 
+                    type="number" 
+                    {...field}
+                    onChange={(e) => {
+                      field.onChange(parseInt(e.target.value) || 0);
+                    }}
+                  />
                 </FormControl>
               </FormItem>
             )}

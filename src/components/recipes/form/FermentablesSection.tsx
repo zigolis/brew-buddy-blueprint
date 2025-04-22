@@ -44,8 +44,8 @@ export const FermentablesSection = ({ form }) => {
         <h2 className="text-xl font-semibold">Fermentables</h2>
         <div className="text-sm text-muted-foreground">
           Total Cost: $
-          {form.watch('ingredients.fermentables')?.reduce((acc, f) => 
-            acc + (f.amount || 0) * (f.costPerUnit || 0), 0
+          {(form.watch('ingredients.fermentables') || []).reduce((acc, f) => 
+            acc + (f?.amount || 0) * (f?.costPerUnit || 0), 0
           ).toFixed(2)}
         </div>
       </div>
@@ -72,14 +72,14 @@ export const FermentablesSection = ({ form }) => {
                       <CommandInput placeholder="Search fermentable..." />
                       <CommandEmpty>No fermentable found.</CommandEmpty>
                       <CommandGroup>
-                        {/* Ensure suggestions array is always valid */}
+                        {/* Use an empty array as fallback */}
                         {(getFermentableSuggestions(field.value || '') || []).map((item) => (
                           <CommandItem
                             key={item.id}
                             value={item.name}
                             onSelect={(value) => {
                               field.onChange(value);
-                              form.setValue(`ingredients.fermentables.${index}.costPerUnit`, item.costPerUnit);
+                              form.setValue(`ingredients.fermentables.${index}.costPerUnit`, item.costPerUnit || 0);
                               setOpenPopover(null);
                             }}
                           >
@@ -106,7 +106,7 @@ export const FermentablesSection = ({ form }) => {
                     step="0.001" 
                     {...field} 
                     onChange={(e) => {
-                      field.onChange(parseFloat(e.target.value));
+                      field.onChange(parseFloat(e.target.value) || 0);
                     }}
                   />
                 </FormControl>

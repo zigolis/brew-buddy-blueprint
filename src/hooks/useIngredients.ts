@@ -33,7 +33,7 @@ export const useIngredients = () => {
         type: ingredient.type,
         amount: ingredient.amount,
         unit: ingredient.unit,
-        costPerUnit: ingredient.costPerUnit,
+        costPerUnit: ingredient.costPerUnit || 0,
         supplier: ingredient.supplier || "",
         notes: ingredient.notes || "",
         createdAt: new Date().toISOString(),
