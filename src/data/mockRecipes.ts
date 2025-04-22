@@ -1,3 +1,4 @@
+
 import { v4 as uuidv4 } from 'uuid';
 import { Recipe } from '@/types';
 
@@ -12,6 +13,9 @@ export const mockRecipes: Recipe[] = [
     batchSize: 20,
     boilTime: 60,
     efficiency: 75,
+    originalGravity: 1.052,
+    finalGravity: 1.012,
+    abv: 5.2,
     style: {
       name: 'American Pale Ale',
       category: 'Pale American Ale',
@@ -211,6 +215,9 @@ export const mockRecipes: Recipe[] = [
     batchSize: 19,
     boilTime: 60,
     efficiency: 72,
+    originalGravity: 1.042,
+    finalGravity: 1.010,
+    abv: 4.2,
     style: {
       name: 'Irish Stout',
       category: 'Dark British Beer',

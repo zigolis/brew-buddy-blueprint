@@ -145,6 +145,9 @@ const BrewingGuideSession = () => {
       name: 'Gather Equipment',
       instructions: 'Ensure you have all necessary equipment clean and ready.',
       completed: false,
+      description: 'First step in brewing process',
+      duration: 30,
+      temperature: 20
     });
     
     steps.push({
@@ -153,6 +156,9 @@ const BrewingGuideSession = () => {
       name: 'Measure Ingredients',
       instructions: 'Measure and prepare all ingredients according to the recipe.',
       completed: false,
+      description: 'Get your ingredients ready',
+      duration: 20,
+      temperature: 20
     });
     
     steps.push({
@@ -161,6 +167,9 @@ const BrewingGuideSession = () => {
       name: 'Heat Strike Water',
       instructions: `Heat ${(recipe.batchSize * 1.25).toFixed(1)}L of water to ${(recipe.mash.mashTemp + 2).toFixed(1)}°C for mashing.`,
       completed: false,
+      description: 'Prepare water for mashing',
+      duration: 20,
+      temperature: recipe.mash.mashTemp + 2
     });
     
     recipe.mash.steps.forEach((mashStep, index) => {
@@ -170,6 +179,9 @@ const BrewingGuideSession = () => {
         name: `Mash Step ${index + 1}: ${mashStep.name}`,
         instructions: `Hold mash at ${mashStep.temperature}°C for ${mashStep.time} minutes.`,
         completed: false,
+        description: `Step ${index + 1} of the mash process`,
+        duration: mashStep.time,
+        temperature: mashStep.temperature
       });
     });
     
@@ -179,6 +191,9 @@ const BrewingGuideSession = () => {
       name: 'Start Boil',
       instructions: `Bring wort to a boil. Total boil time: ${recipe.boilTime} minutes.`,
       completed: false,
+      description: 'Begin the boil',
+      duration: recipe.boilTime,
+      temperature: 100
     });
     
     const hopAdditions = recipe.ingredients.hops
@@ -192,6 +207,9 @@ const BrewingGuideSession = () => {
         name: `Add Hops: ${hop.name}`,
         instructions: `Add ${(hop.amount * 1000).toFixed(0)}g of ${hop.name} hops. ${hop.time} minutes remaining in the boil.`,
         completed: false,
+        description: 'Hop addition',
+        duration: 1,
+        temperature: 100
       });
     });
     
@@ -199,8 +217,11 @@ const BrewingGuideSession = () => {
       id: uuidv4(),
       type: 'Fermentation',
       name: 'Cool Wort',
-      instructions: `Cool wort to ${recipe.fermentation.steps[0]?.temperature || 20}°C.`,
+      instructions: `Cool wort to ${recipe.fermentation.temperature}°C.`,
       completed: false,
+      description: 'Cooling before fermentation',
+      duration: 30,
+      temperature: recipe.fermentation.temperature
     });
     
     steps.push({
@@ -209,6 +230,9 @@ const BrewingGuideSession = () => {
       name: 'Transfer to Fermenter',
       instructions: 'Transfer the cooled wort to your fermenter, leaving trub behind.',
       completed: false,
+      description: 'Move to fermenter',
+      duration: 15,
+      temperature: recipe.fermentation.temperature
     });
     
     steps.push({
@@ -217,17 +241,36 @@ const BrewingGuideSession = () => {
       name: 'Pitch Yeast',
       instructions: `Pitch yeast (${recipe.ingredients.yeasts.map(y => y.name).join(', ')}) and seal fermenter with airlock.`,
       completed: false,
+      description: 'Add yeast',
+      duration: 5,
+      temperature: recipe.fermentation.temperature
     });
     
-    recipe.fermentation.steps.forEach((fermentationStep, index) => {
+    if (recipe.fermentation.steps) {
+      recipe.fermentation.steps.forEach((fermentationStep) => {
+        steps.push({
+          id: uuidv4(),
+          type: 'Fermentation',
+          name: `Fermentation: ${fermentationStep.name}`,
+          instructions: `Ferment at ${fermentationStep.temperature}°C for ${fermentationStep.time} days.`,
+          completed: false,
+          description: 'Main fermentation',
+          duration: fermentationStep.time * 24 * 60, // Convert days to minutes
+          temperature: fermentationStep.temperature
+        });
+      });
+    } else {
       steps.push({
         id: uuidv4(),
         type: 'Fermentation',
-        name: `Fermentation: ${fermentationStep.name}`,
-        instructions: `Ferment at ${fermentationStep.temperature}°C for ${fermentationStep.time} days.`,
+        name: `Primary Fermentation`,
+        instructions: `Ferment at ${recipe.fermentation.temperature}°C for ${recipe.fermentation.period} days.`,
         completed: false,
+        description: 'Main fermentation',
+        duration: recipe.fermentation.period * 24 * 60, // Convert days to minutes
+        temperature: recipe.fermentation.temperature
       });
-    });
+    }
     
     steps.push({
       id: uuidv4(),
@@ -235,6 +278,9 @@ const BrewingGuideSession = () => {
       name: 'Package Beer',
       instructions: 'Transfer the beer to bottles or keg for carbonation and conditioning.',
       completed: false,
+      description: 'Final packaging',
+      duration: 60,
+      temperature: 20
     });
     
     return steps;

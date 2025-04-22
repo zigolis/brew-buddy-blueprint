@@ -1,4 +1,3 @@
-
 import { DOMParser } from '@xmldom/xmldom';
 import { 
   Recipe, 
@@ -65,6 +64,9 @@ function parseRecipe(recipeNode: any): Recipe {
     batchSize: getElementFloat(recipeNode, 'BATCH_SIZE'),
     boilTime: getElementFloat(recipeNode, 'BOIL_TIME'),
     efficiency: getElementFloat(recipeNode, 'EFFICIENCY'),
+    originalGravity: getElementFloat(recipeNode, 'OG', null),
+    finalGravity: getElementFloat(recipeNode, 'FG', null),
+    abv: getElementFloat(recipeNode, 'ABV', null),
     style: parseStyle(styleNode),
     ingredients: {
       fermentables: parseFermentables(recipeNode),
@@ -75,6 +77,9 @@ function parseRecipe(recipeNode: any): Recipe {
     mash: parseMash(mashNode),
     fermentation: {
       name: 'Default Fermentation',
+      type: 'Primary',
+      temperature: 20,
+      period: 14,
       steps: [],
       notes: '',
     },
@@ -89,6 +94,40 @@ function parseRecipe(recipeNode: any): Recipe {
       ph: 7.0,
       notes: '',
     },
+    clarification: {
+      name: 'Default Clarification',
+      type: 'Whirlpool',
+      amount: 0,
+      temperature: 20,
+      notes: '',
+    },
+    coldCrash: {
+      name: 'Default Cold Crash',
+      type: 'Standard',
+      temperature: 2,
+      period: 48,
+      notes: '',
+    },
+    carbonation: {
+      name: 'Default Carbonation',
+      type: 'Natural',
+      volumeCo2: 2.4,
+      temperature: 20,
+      period: 14,
+      notes: '',
+    },
+    bottling: {
+      name: 'Default Bottling',
+      type: 'Bottle',
+      temperature: 20,
+      period: 14,
+      notes: '',
+    },
+    boil: {
+      name: 'Default Boil',
+      time: getElementFloat(recipeNode, 'BOIL_TIME'),
+      temperature: 100,
+    },
     notes: getElementText(recipeNode, 'NOTES'),
     estimatedCost: 0, // Will be calculated later
     tags: [],
@@ -97,7 +136,7 @@ function parseRecipe(recipeNode: any): Recipe {
   };
   
   // Calculate estimated cost based on ingredients
-  recipe.estimatedCost = calculateRecipeCost(recipe);
+  recipe.estimatedCost = calculateIngredientCost(recipe);
   
   return recipe;
 }
@@ -110,7 +149,7 @@ function parseStyle(styleNode: any): Style {
       categoryNumber: '0',
       styleLetter: '',
       styleGuide: 'Unknown',
-      type: 'Other',
+      type: 'Ale',
       minOg: 1.000,
       maxOg: 1.100,
       minFg: 1.000,
@@ -161,7 +200,7 @@ function parseFermentables(recipeNode: any): Fermentable[] {
     fermentables.push({
       id: uuidv4(),
       name: getElementText(node, 'NAME'),
-      type: getElementText(node, 'TYPE') as any,
+      type: getElementText(node, 'TYPE'),
       amount: getElementFloat(node, 'AMOUNT'),
       yield: getElementFloat(node, 'YIELD'),
       color: getElementFloat(node, 'COLOR'),
@@ -211,8 +250,9 @@ function parseYeasts(recipeNode: any): Yeast[] {
       form: getElementText(node, 'FORM') as any,
       laboratory: getElementText(node, 'LABORATORY'),
       productId: getElementText(node, 'PRODUCT_ID'),
+      amount: getElementFloat(node, 'AMOUNT', 11.5),
       minAttenuation: attenuation,
-      maxAttenuation: attenuation + 5, // Estimate
+      maxAttenuation: attenuation + 5,
       tempRange: {
         min: getElementFloat(node, 'MIN_TEMPERATURE'),
         max: getElementFloat(node, 'MAX_TEMPERATURE'),
@@ -235,11 +275,9 @@ function parseMiscs(recipeNode: any): Misc[] {
     miscs.push({
       id: uuidv4(),
       name: getElementText(node, 'NAME'),
-      type: getElementText(node, 'TYPE') as any,
-      use: getElementText(node, 'USE') as any,
+      use: getElementText(node, 'USE'),
       time: getElementFloat(node, 'TIME'),
       amount: getElementFloat(node, 'AMOUNT'),
-      amountIsWeight: getElementText(node, 'AMOUNT_IS_WEIGHT') === 'TRUE',
       notes: getElementText(node, 'NOTES'),
       costPerUnit: getElementFloat(node, 'COST'),
     });
@@ -285,7 +323,7 @@ function parseMash(mashNode: any): MashProfile {
   };
 }
 
-function calculateRecipeCost(recipe: Recipe): number {
+function calculateIngredientCost(recipe: Recipe): number {
   let totalCost = 0;
   
   // Add fermentable costs

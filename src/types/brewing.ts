@@ -22,9 +22,9 @@ export interface BrewingStep {
   id: string;
   name: string;
   type: string;
-  description: string;
-  duration: number;
-  temperature: number;
-  completed: boolean;
   instructions: string;
+  completed: boolean;
+  description?: string;
+  duration?: number;
+  temperature?: number;
 }
