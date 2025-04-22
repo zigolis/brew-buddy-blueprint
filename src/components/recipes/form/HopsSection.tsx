@@ -55,15 +55,26 @@ export const HopsSection = ({ form }) => {
   // Ensure we're initializing form watch with empty arrays when needed
   const watchedHops = form.watch('ingredients.hops') || [];
 
+  // Calculate total cost, ensuring watchedHops is always an array
+  const calculateTotalCost = () => {
+    if (!Array.isArray(watchedHops)) {
+      return 0; // Return 0 if watchedHops is not an array
+    }
+    
+    return watchedHops.reduce((acc, hop) => {
+      const amount = parseFloat(hop?.amount || '0') || 0;
+      const cost = parseFloat(hop?.costPerUnit || '0') || 0;
+      return acc + (amount * cost);
+    }, 0).toFixed(2);
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold">Hops</h2>
         <div className="text-sm text-muted-foreground">
           Total Cost: $
-          {watchedHops.reduce((acc, h) => 
-            acc + (parseFloat(h?.amount || '0') || 0) * (parseFloat(h?.costPerUnit || '0') || 0), 0
-          ).toFixed(2)}
+          {calculateTotalCost()}
         </div>
       </div>
 
@@ -277,4 +288,3 @@ export const HopsSection = ({ form }) => {
     </div>
   );
 };
-
