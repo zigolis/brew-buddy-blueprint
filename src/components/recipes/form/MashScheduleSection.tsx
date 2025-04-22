@@ -21,12 +21,12 @@ export const MashScheduleSection = ({ form }) => {
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Mash Schedule</h2>
       {steps.map((step, index) => (
-        <div key={step.id} className="grid gap-4 md:grid-cols-5 items-end border p-4 rounded-lg">
+        <div key={step.id} className="grid gap-4 md:grid-cols-5 items-end">
           <FormField
             control={form.control}
             name={`mash.steps.${index}.name`}
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex flex-col">
                 <FormLabel>Name*</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter step name" {...field} />
@@ -39,7 +39,7 @@ export const MashScheduleSection = ({ form }) => {
             control={form.control}
             name={`mash.steps.${index}.type`}
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex flex-col">
                 <FormLabel>Type</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
@@ -61,7 +61,7 @@ export const MashScheduleSection = ({ form }) => {
             control={form.control}
             name={`mash.steps.${index}.temperature`}
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex flex-col">
                 <FormLabel>Temperature (°C)*</FormLabel>
                 <FormControl>
                   <Input type="number" step="0.1" {...field} />
@@ -74,7 +74,7 @@ export const MashScheduleSection = ({ form }) => {
             control={form.control}
             name={`mash.steps.${index}.time`}
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex flex-col">
                 <FormLabel>Time (min)*</FormLabel>
                 <FormControl>
                   <Input type="number" step="1" placeholder="60" {...field} />

@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
 
 export const FermentationSection = ({ form }) => {
-  // We'll allow dynamic fermentation steps (multiple)
   const [steps, setSteps] = useState([{ id: 0 }]);
 
   const addStep = () => {
@@ -16,7 +15,7 @@ export const FermentationSection = ({ form }) => {
   };
 
   const removeStep = (id: number) => {
-    if (steps.length <= 1) return; // Keep at least one
+    if (steps.length <= 1) return; 
     setSteps((prev) => prev.filter((s) => s.id !== id));
   };
 
@@ -24,12 +23,12 @@ export const FermentationSection = ({ form }) => {
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Fermentation</h2>
       {steps.map((step, index) => (
-        <div key={step.id} className="grid gap-4 md:grid-cols-6 items-end border p-4 rounded-lg">
+        <div key={step.id} className="grid gap-4 md:grid-cols-6 items-end">
           <FormField
             control={form.control}
             name={`fermentation.steps.${index}.name`}
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex flex-col">
                 <FormLabel>Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Stage name (e.g. Primary, Secondary)" {...field} />
@@ -42,7 +41,7 @@ export const FermentationSection = ({ form }) => {
             control={form.control}
             name={`fermentation.steps.${index}.type`}
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex flex-col">
                 <FormLabel>Type</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value || "Primary"}>
                   <FormControl>
@@ -64,7 +63,7 @@ export const FermentationSection = ({ form }) => {
             control={form.control}
             name={`fermentation.steps.${index}.temperature`}
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex flex-col">
                 <FormLabel>Temperature (°C)</FormLabel>
                 <FormControl>
                   <Input 
@@ -82,7 +81,7 @@ export const FermentationSection = ({ form }) => {
             control={form.control}
             name={`fermentation.steps.${index}.period`}
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex flex-col">
                 <FormLabel>Period (days)</FormLabel>
                 <FormControl>
                   <Input 
@@ -100,7 +99,7 @@ export const FermentationSection = ({ form }) => {
             control={form.control}
             name={`fermentation.steps.${index}.notes`}
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex flex-col">
                 <FormLabel>Notes</FormLabel>
                 <FormControl>
                   <Textarea 
