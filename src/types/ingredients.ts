@@ -16,7 +16,8 @@ export interface Hop {
   id: string;
   name: string;
   amount: number;
-  alpha: number;
+  alpha: number; // alpha acids (%)
+  beta: number;  // beta acids (%)
   time: number;
   use: 'Boil' | 'Dry Hop' | 'Mash' | 'First Wort' | 'Aroma';
   form: 'Pellet' | 'Plug' | 'Leaf';

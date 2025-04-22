@@ -68,7 +68,7 @@ export const HopsSection = ({ form }) => {
       </div>
 
       {hops.map((hop, index) => (
-        <div key={hop.id} className="grid gap-4 md:grid-cols-5 items-end border p-4 rounded-lg">
+        <div key={hop.id} className="grid gap-4 md:grid-cols-8 items-end border p-4 rounded-lg">
           <FormField
             control={form.control}
             name={`ingredients.hops.${index}.name`}
@@ -150,6 +150,52 @@ export const HopsSection = ({ form }) => {
 
           <FormField
             control={form.control}
+            name={`ingredients.hops.${index}.alpha`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Alpha (%)</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    {...field}
+                    onChange={(e) => {
+                      const value = e.target.value ? parseFloat(e.target.value) : 0;
+                      field.onChange(isNaN(value) ? 0 : value);
+                    }}
+                    placeholder="e.g. 5.5"
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name={`ingredients.hops.${index}.beta`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Beta (%)</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    {...field}
+                    onChange={(e) => {
+                      const value = e.target.value ? parseFloat(e.target.value) : 0;
+                      field.onChange(isNaN(value) ? 0 : value);
+                    }}
+                    placeholder="e.g. 4.2"
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name={`ingredients.hops.${index}.time`}
             render={({ field }) => (
               <FormItem>
@@ -192,6 +238,28 @@ export const HopsSection = ({ form }) => {
             )}
           />
 
+          <FormField
+            control={form.control}
+            name={`ingredients.hops.${index}.form`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Form</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value || "Pellet"}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select form" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="Pellet">Pellet</SelectItem>
+                    <SelectItem value="Plug">Plug</SelectItem>
+                    <SelectItem value="Leaf">Leaf</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+          />
+
           <Button
             type="button"
             variant="outline"
@@ -209,3 +277,4 @@ export const HopsSection = ({ form }) => {
     </div>
   );
 };
+
