@@ -1,13 +1,11 @@
 
+// FermentablesSection refactored to use smaller, focused subcomponents
+
 import { useState, useCallback, useEffect } from "react";
-import { FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Plus, Trash2 } from "lucide-react";
 import { useIngredients } from "@/hooks/useIngredients";
-import { EmptyFermentables } from "./EmptyFermentables";
-import { FermentableSearch } from "./FermentableSearch";
 import { FermentableDialogForm } from "./FermentableDialogForm";
+import { FermentablesToolbar } from "./FermentablesToolbar";
+import { FermentablesList } from "./FermentablesList";
 
 export const FermentablesSection = ({ form }) => {
   const [fermentables, setFermentables] = useState([{ id: 0 }]);
@@ -85,7 +83,6 @@ export const FermentablesSection = ({ form }) => {
 
   useEffect(() => {
     const currentFermentables = form.getValues('ingredients.fermentables') || [];
-    
     fermentables.forEach((_, index) => {
       if (!currentFermentables[index]) {
         form.setValue(`ingredients.fermentables.${index}`, { 
@@ -102,126 +99,30 @@ export const FermentablesSection = ({ form }) => {
 
   const formValues = form.getValues();
   const fermentablesData = formValues?.ingredients?.fermentables || [];
+  const totalCost = fermentablesData
+    .reduce(
+      (acc, f) =>
+        acc + ((parseFloat(f?.amount || "0") / 1000) || 0) * (parseFloat(f?.costPerUnit || "0") || 0),
+      0
+    )
+    .toFixed(2);
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Fermentables</h2>
-        <div className="text-sm text-muted-foreground">
-          Total Cost: $
-          {fermentablesData
-            .reduce(
-              (acc, f) =>
-                acc + ((parseFloat(f?.amount || "0") / 1000) || 0) * (parseFloat(f?.costPerUnit || "0") || 0),
-              0
-            )
-            .toFixed(2)}
-        </div>
-      </div>
+      <FermentablesToolbar
+        totalCost={totalCost}
+        onAdd={addFermentable}
+        onCreate={() => handleCreateNewClick(fermentables.length)}
+      />
 
-      {fermentables.length === 0 ? (
-        <EmptyFermentables onAdd={addFermentable} onCreate={() => setShowNewFermentableDialog(true)} />
-      ) : (
-        fermentables.map((fermentable, index) => (
-          <div
-            key={fermentable.id}
-            className="grid gap-4 md:grid-cols-5 items-end border p-4 rounded-lg"
-          >
-            <FormField
-              control={form.control}
-              name={`ingredients.fermentables.${index}.name`}
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Name*</FormLabel>
-                  <FermentableSearch
-                    index={index}
-                    value={field.value || ""}
-                    onChange={field.onChange}
-                    onSelect={(value) => {
-                      field.onChange(value);
-                    }}
-                    onCreateNew={() => handleCreateNewClick(index)}
-                  />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name={`ingredients.fermentables.${index}.amount`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Amount (g)*</FormLabel>
-                  <Input
-                    type="number"
-                    value={field.value?.toString() || ""}
-                    onChange={(e) => {
-                      const numValue = e.target.value ? Number(e.target.value) : 0;
-                      field.onChange(numValue);
-                    }}
-                  />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name={`ingredients.fermentables.${index}.type`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Type</FormLabel>
-                  <select
-                    className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-base md:text-sm"
-                    value={field.value || "Grain"}
-                    onChange={e => field.onChange(e.target.value)}
-                  >
-                    <option value="Grain">Grain</option>
-                    <option value="Adjunct">Adjunct</option>
-                    <option value="Sugar">Sugar</option>
-                    <option value="Extract">Extract</option>
-                    <option value="Dry Extract">Dry Extract</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name={`ingredients.fermentables.${index}.color`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Color (EBC)</FormLabel>
-                  <Input
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    value={field.value?.toString() || ""}
-                    onChange={(e) => {
-                      const val = e.target.value ? parseFloat(e.target.value) : undefined;
-                      field.onChange(val);
-                    }}
-                    placeholder="e.g. 5"
-                  />
-                </FormItem>
-              )}
-            />
-
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={() => removeFermentable(fermentable.id)}
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </div>
-        ))
-      )}
-
-      <Button type="button" onClick={addFermentable} className="w-full">
-        <Plus className="h-4 w-4 mr-2" /> Add Fermentable
-      </Button>
+      <FermentablesList
+        fermentables={fermentables}
+        form={form}
+        onRemove={removeFermentable}
+        onAdd={addFermentable}
+        onCreateNew={handleCreateNewClick}
+        setShowNewFermentableDialog={setShowNewFermentableDialog}
+      />
 
       <FermentableDialogForm
         open={showNewFermentableDialog}
@@ -231,3 +132,4 @@ export const FermentablesSection = ({ form }) => {
     </div>
   );
 };
+
