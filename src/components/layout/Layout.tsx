@@ -2,7 +2,6 @@
 import { ReactNode } from "react";
 import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
-import { Footer } from "./Footer";
 
 interface LayoutProps {
   children: ReactNode;
@@ -18,7 +17,6 @@ export function Layout({ children }: LayoutProps) {
         </div>
         <main className="flex-1 p-4 md:p-6">{children}</main>
       </div>
-      <Footer />
     </div>
   );
 }
