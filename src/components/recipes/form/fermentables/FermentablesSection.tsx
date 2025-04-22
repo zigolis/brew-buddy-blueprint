@@ -1,4 +1,3 @@
-
 import { FermentablesToolbar } from "./FermentablesToolbar";
 import { FermentablesList } from "./FermentablesList";
 import { FermentableDialogForm } from "./FermentableDialogForm";
@@ -21,17 +20,13 @@ export const FermentablesSection = ({ form }) => {
   const fermentablesData = formValues?.ingredients?.fermentables || [];
   const totalCost = calculateFermentablesTotalCost(fermentablesData);
 
-  // When user presses "+ Add Fermentable", add a new row for input (with unique id)
   const handleAddFermentable = () => {
     const currentFermentables = form.getValues('ingredients.fermentables') || [];
-    // Always add a new row (do not auto-add blanks from dialog actions)
     const newId = fermentables.length > 0
       ? Math.max(...fermentables.map(f => f.id)) + 1
       : 0;
 
-    // Add fermentable entry to fermentables rows
     setFermentables([...fermentables, { id: newId }]);
-    // Also ensure the corresponding field exists in form state
     form.setValue(
       `ingredients.fermentables.${currentFermentables.length}`,
       {
@@ -69,8 +64,7 @@ export const FermentablesSection = ({ form }) => {
       <Button
         type="button"
         onClick={handleAddFermentable}
-        className="w-full"
-        variant="outline"
+        className="w-full bg-brewing-amber text-white hover:bg-brewing-amber/90"
       >
         <Plus className="h-4 w-4 mr-2" />
         Add Fermentable
