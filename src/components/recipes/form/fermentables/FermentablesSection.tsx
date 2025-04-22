@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useEffect } from "react";
 import { FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
@@ -15,7 +14,6 @@ export const FermentablesSection = ({ form }) => {
   const [currentFermentableIndex, setCurrentFermentableIndex] = useState<number | null>(null);
   const { addIngredient } = useIngredients();
 
-  // Use useCallback to prevent recreating functions unnecessarily
   const addFermentable = useCallback(() => {
     setFermentables(prev => [...prev, { id: prev.length }]);
   }, []);
@@ -25,74 +23,69 @@ export const FermentablesSection = ({ form }) => {
     setFermentables(prev => prev.filter(f => f.id !== id));
   }, [fermentables.length]);
 
-  const handleAddNewFermentable = useCallback((event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+  const handleAddNewFermentable = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget);
 
-    const name = formData.get('name') as string;
-    const costPerUnit = parseFloat(formData.get('costPerUnit') as string) || 0;
-    const notes = (formData.get('notes') as string) || '';
+      const name = formData.get("name") as string;
+      const type = (formData.get("type") as string) || "Grain";
+      const color = formData.get("color") ? parseFloat(formData.get("color") as string) : undefined;
+      const costPerUnit = parseFloat(formData.get("costPerUnit") as string) || 0;
+      const notes = (formData.get("notes") as string) || "";
 
-    const newFermentable = {
-      name,
-      type: 'Grain',
-      amount: 0,
-      unit: 'g',
-      costPerUnit,
-      notes,
-    };
+      const newFermentable = {
+        name,
+        type,
+        color,
+        amount: 0,
+        unit: "g",
+        costPerUnit,
+        notes,
+      };
 
-    // 1. Add to ingredients list for future auto-suggestion.
-    addIngredient(newFermentable);
+      addIngredient(newFermentable);
 
-    // 2. Add to current recipe at the selected index:
-    if (currentFermentableIndex !== null) {
-      // Set all available data for the new fermentable here
-      form.setValue(
-        `ingredients.fermentables.${currentFermentableIndex}`,
-        { 
-          name,
-          type: 'Grain',
-          amount: 0,
-          costPerUnit,
-          unit: 'g',
-          notes,
-        },
-        { shouldDirty: true, shouldTouch: true }
-      );
-    }
-
-    // 3. Ensure fermentables state array has enough rows
-    setFermentables(prev => {
-      // Add a new row if index refers to the last one
-      const exists = prev.some((f, idx) => idx === currentFermentableIndex);
-      if (!exists && currentFermentableIndex !== null) {
-        const newLength = currentFermentableIndex + 1;
-        const filled = Array.from({ length: newLength }, (_, i) => prev[i] || { id: i });
-        return filled;
+      if (currentFermentableIndex !== null) {
+        form.setValue(
+          `ingredients.fermentables.${currentFermentableIndex}`,
+          {
+            name,
+            type,
+            color,
+            amount: 0,
+            unit: "g",
+            costPerUnit,
+            notes,
+          },
+          { shouldDirty: true, shouldTouch: true }
+        );
       }
-      return prev;
-    });
 
-    // 4. Close modal and reset
-    setShowNewFermentableDialog(false);
-    setCurrentFermentableIndex(null);
+      setFermentables((prev) => {
+        const exists = prev.some((f, idx) => idx === currentFermentableIndex);
+        if (!exists && currentFermentableIndex !== null) {
+          const newLength = currentFermentableIndex + 1;
+          const filled = Array.from({ length: newLength }, (_, i) => prev[i] || { id: i });
+          return filled;
+        }
+        return prev;
+      });
 
-    // 5. Optionally focus the new input (not strictly required; user stays at same step/page automatically)
-    // setTimeout could be used here to focus, but not strictly required as UI is already updated.
-  }, [addIngredient, currentFermentableIndex, form]);
+      setShowNewFermentableDialog(false);
+      setCurrentFermentableIndex(null);
+    },
+    [addIngredient, currentFermentableIndex, form]
+  );
 
   const handleCreateNewClick = useCallback((index: number) => {
     setCurrentFermentableIndex(index);
     setShowNewFermentableDialog(true);
   }, []);
 
-  // Initialize form values only once when fermentables change
   useEffect(() => {
-    // Get existing values
     const currentFermentables = form.getValues('ingredients.fermentables') || [];
     
-    // Initialize any missing entries
     fermentables.forEach((_, index) => {
       if (!currentFermentables[index]) {
         form.setValue(`ingredients.fermentables.${index}`, { 
@@ -107,7 +100,6 @@ export const FermentablesSection = ({ form }) => {
     });
   }, [fermentables, form]);
 
-  // Get fermentables data from form without triggering re-renders
   const formValues = form.getValues();
   const fermentablesData = formValues?.ingredients?.fermentables || [];
 
@@ -117,21 +109,24 @@ export const FermentablesSection = ({ form }) => {
         <h2 className="text-xl font-semibold">Fermentables</h2>
         <div className="text-sm text-muted-foreground">
           Total Cost: $
-          {fermentablesData.reduce((acc, f) => 
-            acc + ((parseFloat(f?.amount || '0') / 1000) || 0) * (parseFloat(f?.costPerUnit || '0') || 0), 0
-          ).toFixed(2)}
+          {fermentablesData
+            .reduce(
+              (acc, f) =>
+                acc + ((parseFloat(f?.amount || "0") / 1000) || 0) * (parseFloat(f?.costPerUnit || "0") || 0),
+              0
+            )
+            .toFixed(2)}
         </div>
       </div>
 
-      {/* Always show all rows as per fermentables array */}
       {fermentables.length === 0 ? (
-        <EmptyFermentables 
-          onAdd={addFermentable}
-          onCreate={() => setShowNewFermentableDialog(true)}
-        />
+        <EmptyFermentables onAdd={addFermentable} onCreate={() => setShowNewFermentableDialog(true)} />
       ) : (
         fermentables.map((fermentable, index) => (
-          <div key={fermentable.id} className="grid gap-4 md:grid-cols-3 items-end border p-4 rounded-lg">
+          <div
+            key={fermentable.id}
+            className="grid gap-4 md:grid-cols-5 items-end border p-4 rounded-lg"
+          >
             <FormField
               control={form.control}
               name={`ingredients.fermentables.${index}.name`}
@@ -140,11 +135,10 @@ export const FermentablesSection = ({ form }) => {
                   <FormLabel>Name*</FormLabel>
                   <FermentableSearch
                     index={index}
-                    value={field.value || ''}
+                    value={field.value || ""}
                     onChange={field.onChange}
                     onSelect={(value) => {
                       field.onChange(value);
-                      // Cost per unit handled in FermentableSearch if needed
                     }}
                     onCreateNew={() => handleCreateNewClick(index)}
                   />
@@ -158,13 +152,56 @@ export const FermentablesSection = ({ form }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Amount (g)*</FormLabel>
-                  <Input 
+                  <Input
                     type="number"
-                    value={field.value?.toString() || ''}
+                    value={field.value?.toString() || ""}
                     onChange={(e) => {
                       const numValue = e.target.value ? Number(e.target.value) : 0;
                       field.onChange(numValue);
                     }}
+                  />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name={`ingredients.fermentables.${index}.type`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Type</FormLabel>
+                  <select
+                    className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-base md:text-sm"
+                    value={field.value || "Grain"}
+                    onChange={e => field.onChange(e.target.value)}
+                  >
+                    <option value="Grain">Grain</option>
+                    <option value="Adjunct">Adjunct</option>
+                    <option value="Sugar">Sugar</option>
+                    <option value="Extract">Extract</option>
+                    <option value="Dry Extract">Dry Extract</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name={`ingredients.fermentables.${index}.color`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Color (EBC)</FormLabel>
+                  <Input
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    value={field.value?.toString() || ""}
+                    onChange={(e) => {
+                      const val = e.target.value ? parseFloat(e.target.value) : undefined;
+                      field.onChange(val);
+                    }}
+                    placeholder="e.g. 5"
                   />
                 </FormItem>
               )}
