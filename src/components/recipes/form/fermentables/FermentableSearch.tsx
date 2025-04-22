@@ -13,6 +13,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from "@/components/ui/command";
 import { useIngredientSuggestions } from "@/hooks/useIngredientSuggestions";
 import { Plus } from "lucide-react";
@@ -74,23 +75,10 @@ export const FermentableSearch = ({
             value={searchQuery} 
             onValueChange={(value) => setSearchQuery(value || '')}
           />
-          <CommandGroup>
-            {suggestions.length > 0 ? (
-              suggestions.map((item) => (
-                <CommandItem
-                  key={item.id || `fermentable-${Math.random()}`}
-                  value={item.name}
-                  onSelect={(value) => {
-                    onSelect(value);
-                    setOpen(false);
-                  }}
-                >
-                  {item.name}
-                </CommandItem>
-              ))
-            ) : (
+          <CommandList>
+            <CommandEmpty>
               <CommandItem
-                value="create-new"
+                value="create-new-empty"
                 className="text-primary"
                 onSelect={() => {
                   onCreateNew();
@@ -100,21 +88,37 @@ export const FermentableSearch = ({
                 <Plus className="mr-2 h-4 w-4" />
                 Create "{searchQuery}"
               </CommandItem>
+            </CommandEmpty>
+            {suggestions.length > 0 && (
+              <CommandGroup>
+                {suggestions.map((item) => (
+                  <CommandItem
+                    key={item.id || `fermentable-${Math.random()}`}
+                    value={item.name}
+                    onSelect={(value) => {
+                      onSelect(value);
+                      setOpen(false);
+                    }}
+                  >
+                    {item.name}
+                  </CommandItem>
+                ))}
+                {suggestions.length > 0 && (
+                  <CommandItem
+                    value="create-new"
+                    className="text-primary"
+                    onSelect={() => {
+                      onCreateNew();
+                      setOpen(false);
+                    }}
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Create "{searchQuery}"
+                  </CommandItem>
+                )}
+              </CommandGroup>
             )}
-          </CommandGroup>
-          <CommandEmpty>
-            <CommandItem
-              value="create-new-empty"
-              className="text-primary"
-              onSelect={() => {
-                onCreateNew();
-                setOpen(false);
-              }}
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              Create "{searchQuery}"
-            </CommandItem>
-          </CommandEmpty>
+          </CommandList>
         </Command>
       </PopoverContent>
     </Popover>
