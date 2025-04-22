@@ -6,7 +6,7 @@ import { Form } from "@/components/ui/form";
 import { GeneralInfoSection } from "./form/GeneralInfoSection";
 import { RecipeStatsSection } from "./form/RecipeStatsSection";
 import { FermentablesSection } from "./form/fermentables/FermentablesSection";
-import { HopsSection } from "./form/HopsSection";
+import HopsSection from "./form/HopsSection"; // Changed from named import to default import
 import { YeastSection } from "./form/YeastSection";
 import { MashScheduleSection } from "./form/MashScheduleSection";
 import { BoilSection } from "./form/BoilSection";
