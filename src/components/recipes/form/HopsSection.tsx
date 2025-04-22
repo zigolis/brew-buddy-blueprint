@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -51,7 +52,10 @@ export const HopsSection = ({ form }) => {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Name*</FormLabel>
-                <Popover open={openPopover === index} onOpenChange={(open) => setOpenPopover(open ? index : null)}>
+                <Popover 
+                  open={openPopover === index} 
+                  onOpenChange={(open) => setOpenPopover(open ? index : null)}
+                >
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Input placeholder="Search hop..." {...field} />
@@ -62,7 +66,8 @@ export const HopsSection = ({ form }) => {
                       <CommandInput placeholder="Search hop..." />
                       <CommandEmpty>No hop found.</CommandEmpty>
                       <CommandGroup>
-                        {getHopSuggestions(field.value || '').map((item) => (
+                        {/* Ensure suggestions array is always valid */}
+                        {(getHopSuggestions(field.value || '') || []).map((item) => (
                           <CommandItem
                             key={item.id}
                             value={item.name}

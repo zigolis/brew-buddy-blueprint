@@ -8,7 +8,9 @@ export const useIngredients = () => {
   const [ingredients, setIngredients] = useState<Ingredient[]>(() => {
     try {
       const saved = localStorage.getItem('brewMasterIngredients');
-      return saved ? JSON.parse(saved) : [];
+      // Ensure we always return an array, even if localStorage has invalid data
+      const parsedData = saved ? JSON.parse(saved) : [];
+      return Array.isArray(parsedData) ? parsedData : [];
     } catch (error) {
       console.error('Error loading ingredients from localStorage', error);
       return [];

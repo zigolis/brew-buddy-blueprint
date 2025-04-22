@@ -6,6 +6,9 @@ export const useIngredientSuggestions = () => {
   const { ingredients } = useIngredients();
 
   const getFermentableSuggestions = (query: string) => {
+    // Ensure ingredients exists before filtering
+    if (!ingredients || ingredients.length === 0) return [];
+
     return ingredients
       .filter(ing => 
         ing.type === 'Grain' || 
@@ -20,6 +23,9 @@ export const useIngredientSuggestions = () => {
   };
 
   const getHopSuggestions = (query: string) => {
+    // Ensure ingredients exists before filtering
+    if (!ingredients || ingredients.length === 0) return [];
+
     return ingredients
       .filter(ing => ing.type === 'Hop')
       .filter(ing => 
@@ -28,6 +34,9 @@ export const useIngredientSuggestions = () => {
   };
 
   const getYeastSuggestions = (query: string) => {
+    // Ensure ingredients exists before filtering
+    if (!ingredients || ingredients.length === 0) return [];
+
     return ingredients
       .filter(ing => ing.type === 'Yeast')
       .filter(ing => 

@@ -1,3 +1,4 @@
+
 import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -48,7 +49,8 @@ export const YeastSection = ({ form }) => {
                     <CommandInput placeholder="Search yeast..." />
                     <CommandEmpty>No yeast found.</CommandEmpty>
                     <CommandGroup>
-                      {getYeastSuggestions(field.value || '').map((item) => (
+                      {/* Ensure suggestions array is always valid */}
+                      {(getYeastSuggestions(field.value || '') || []).map((item) => (
                         <CommandItem
                           key={item.id}
                           value={item.name}

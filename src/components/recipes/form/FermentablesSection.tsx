@@ -58,7 +58,10 @@ export const FermentablesSection = ({ form }) => {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Name*</FormLabel>
-                <Popover open={openPopover === index} onOpenChange={(open) => setOpenPopover(open ? index : null)}>
+                <Popover 
+                  open={openPopover === index} 
+                  onOpenChange={(open) => setOpenPopover(open ? index : null)}
+                >
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Input placeholder="Search fermentable..." {...field} />
@@ -69,7 +72,8 @@ export const FermentablesSection = ({ form }) => {
                       <CommandInput placeholder="Search fermentable..." />
                       <CommandEmpty>No fermentable found.</CommandEmpty>
                       <CommandGroup>
-                        {getFermentableSuggestions(field.value || '').map((item) => (
+                        {/* Ensure suggestions array is always valid */}
+                        {(getFermentableSuggestions(field.value || '') || []).map((item) => (
                           <CommandItem
                             key={item.id}
                             value={item.name}
