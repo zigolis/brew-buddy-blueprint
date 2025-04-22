@@ -13,7 +13,7 @@ export const RecipeStatsSection = ({ form }) => {
   useEffect(() => {
     if (originalGravity && finalGravity) {
       const calculatedABV = calculateABV(originalGravity, finalGravity);
-      setValue("abv", Number(calculatedABV.toFixed(1)));
+      setValue("abv", Number(calculatedABV.toFixed(2)));
     }
   }, [originalGravity, finalGravity, setValue]);
 
@@ -129,11 +129,11 @@ export const RecipeStatsSection = ({ form }) => {
               <FormLabel>ABV (%)</FormLabel>
               <FormControl>
                 <Input 
-                  type="number" 
-                  step="0.1" 
+                  type="text" 
                   {...field} 
                   disabled 
                   className="bg-muted"
+                  value={field.value ? `${field.value.toFixed(2)}%` : ''}
                 />
               </FormControl>
             </FormItem>
