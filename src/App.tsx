@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,6 +7,22 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { BrewContextProvider } from "@/contexts/BrewContext";
 import { SettingsProvider } from "@/contexts/SettingsContext";
 import { useEffect } from "react";
+
+// Import all page components
+import HomePage from "@/pages/Index";
+import RecipeList from "@/pages/recipes/RecipeList";
+import NewRecipe from "@/pages/recipes/NewRecipe";
+import ViewRecipe from "@/pages/recipes/ViewRecipe";
+import IngredientsList from "@/pages/ingredients/IngredientsList";
+import EquipmentList from "@/pages/equipment/EquipmentList";
+import NewEquipment from "@/pages/equipment/NewEquipment";
+import EditEquipment from "@/pages/equipment/EditEquipment";
+import ViewEquipment from "@/pages/equipment/ViewEquipment";
+import CostCalculator from "@/pages/calculator/CostCalculator";
+import ImportRecipe from "@/pages/import/ImportRecipe";
+import BrewingGuide from "@/pages/brewing-guide/BrewingGuide";
+import Settings from "@/pages/settings/Settings";
+import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -25,7 +42,7 @@ const App = () => {
             <Sonner />
             <BrowserRouter>
               <Routes>
-                <Route path="/" element={<Index />} />
+                <Route path="/" element={<HomePage />} />
                 <Route path="/recipes" element={<RecipeList />} />
                 <Route path="/recipes/new" element={<NewRecipe />} />
                 <Route path="/recipes/:recipeId" element={<ViewRecipe />} />
