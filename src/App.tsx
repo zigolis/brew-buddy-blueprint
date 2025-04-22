@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,6 +13,7 @@ import IngredientsList from "./pages/ingredients/IngredientsList";
 import EquipmentList from "./pages/equipment/EquipmentList";
 import CostCalculator from "./pages/calculator/CostCalculator";
 import NotFound from "./pages/NotFound";
+import ViewRecipe from "./pages/recipes/ViewRecipe";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +28,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/recipes" element={<RecipeList />} />
             <Route path="/recipes/new" element={<NewRecipe />} />
+            <Route path="/recipes/:recipeId" element={<ViewRecipe />} />
             <Route path="/ingredients" element={<IngredientsList />} />
             <Route path="/equipment" element={<EquipmentList />} />
             <Route path="/calculator" element={<CostCalculator />} />

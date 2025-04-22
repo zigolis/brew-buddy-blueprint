@@ -1,4 +1,3 @@
-
 import { Layout } from "@/components/layout/Layout";
 import { useBrewContext } from "@/contexts/BrewContext";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,7 +16,6 @@ const RecipeList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [styleFilter, setStyleFilter] = useState<string>("all");
   
-  // Get unique styles for filter - add null check to filter out recipes without style
   const uniqueStyles = Array.from(
     new Set(
       recipes
@@ -26,7 +24,6 @@ const RecipeList = () => {
     )
   );
   
-  // Filter recipes by search term and style
   const filteredRecipes = recipes.filter(recipe => {
     const matchesSearch = recipe.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           recipe.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
