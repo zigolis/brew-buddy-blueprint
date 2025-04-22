@@ -24,6 +24,7 @@ const RecipeList = () => {
   const [styleFilter, setStyleFilter] = useState<string>("all");
   const [showBookmarkedOnly, setShowBookmarkedOnly] = useState(false);
   
+  // Create array of unique styles from recipes with valid style names
   const uniqueStyles = Array.from(
     new Set(
       recipes
@@ -32,9 +33,10 @@ const RecipeList = () => {
     )
   );
   
+  // Filter recipes based on search, style, and bookmark criteria
   const filteredRecipes = recipes.filter(recipe => {
-    const matchesSearch = recipe.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          recipe.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch = recipe.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          recipe.author?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           recipe.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())) || false;
     
     const matchesStyle = styleFilter === "all" || (recipe.style && recipe.style.name === styleFilter);
@@ -119,7 +121,7 @@ const RecipeList = () => {
                   <Card key={recipe.id}>
                     <CardHeader className="pb-2">
                       <div className="flex justify-between items-start">
-                        <CardTitle className="text-xl truncate">{recipe.name}</CardTitle>
+                        <CardTitle className="text-xl truncate">{recipe.name || "Unnamed Recipe"}</CardTitle>
                         <Button
                           variant="ghost"
                           size="icon"
@@ -138,19 +140,19 @@ const RecipeList = () => {
                       </div>
                       <CardDescription>
                         <span className="block">{recipe.style?.name || "No style"}</span>
-                        <span className="text-sm">by {recipe.author}</span>
+                        <span className="text-sm">by {recipe.author || "Unknown"}</span>
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="flex flex-wrap gap-2 mb-3">
-                        <Badge variant="outline">{recipe.type}</Badge>
-                        <Badge variant="secondary">{recipe.batchSize}L</Badge>
+                        <Badge variant="outline">{recipe.type || "Unknown"}</Badge>
+                        <Badge variant="secondary">{recipe.batchSize || 0}L</Badge>
                         <Badge variant="secondary">{recipe.ingredients?.hops?.length || 0} Hops</Badge>
                       </div>
                       <div className="grid grid-cols-3 gap-2 text-sm">
                         <div>
                           <div className="font-medium">ABV</div>
-                          <div>{recipe.style ? ((recipe.style.minAbv + recipe.style.maxAbv) / 2).toFixed(1) : "N/A"}%</div>
+                          <div>{recipe.abv ? recipe.abv.toFixed(1) : (recipe.style ? ((recipe.style.minAbv + recipe.style.maxAbv) / 2).toFixed(1) : "N/A")}%</div>
                         </div>
                         <div>
                           <div className="font-medium">IBU</div>
@@ -208,7 +210,7 @@ const RecipeList = () => {
                       <div className="p-4 md:w-2/3">
                         <div className="flex justify-between items-start mb-1">
                           <Link to={`/recipes/${recipe.id}`} className="text-lg font-medium hover:underline">
-                            {recipe.name}
+                            {recipe.name || "Unnamed Recipe"}
                           </Link>
                           <Button
                             variant="ghost"
@@ -228,8 +230,8 @@ const RecipeList = () => {
                         </div>
                         <div className="flex flex-wrap gap-2 mb-2">
                           <Badge variant="outline">{recipe.style?.name || "No style"}</Badge>
-                          <Badge variant="outline">{recipe.type}</Badge>
-                          <Badge variant="secondary">{recipe.batchSize}L</Badge>
+                          <Badge variant="outline">{recipe.type || "Unknown"}</Badge>
+                          <Badge variant="secondary">{recipe.batchSize || 0}L</Badge>
                         </div>
                         <p className="text-sm text-muted-foreground line-clamp-2">
                           {recipe.notes || "No recipe notes available."}
@@ -238,7 +240,7 @@ const RecipeList = () => {
                       <div className="p-4 bg-muted/50 md:w-1/3 flex flex-row md:flex-col justify-between">
                         <div>
                           <div className="text-sm font-medium">Author</div>
-                          <div className="text-sm">{recipe.author}</div>
+                          <div className="text-sm">{recipe.author || "Unknown"}</div>
                         </div>
                         <div>
                           <div className="text-sm font-medium">Est. Cost</div>
