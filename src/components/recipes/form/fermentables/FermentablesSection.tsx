@@ -8,12 +8,10 @@ import { calculateFermentablesTotalCost } from "./fermentablesCost";
 export const FermentablesSection = ({ form }) => {
   const {
     fermentables,
-    addFermentable,
     removeFermentable,
     showNewFermentableDialog,
     setShowNewFermentableDialog,
     handleAddNewFermentable,
-    handleCreateNewClick,
   } = useFermentablesForm(form);
 
   const formValues = form.getValues();
@@ -22,18 +20,11 @@ export const FermentablesSection = ({ form }) => {
 
   return (
     <div className="space-y-4">
-      <FermentablesToolbar
-        totalCost={totalCost}
-        onAdd={addFermentable}
-        onCreate={() => handleCreateNewClick(fermentables.length)}
-      />
+      <FermentablesToolbar totalCost={totalCost} />
       <FermentablesList
         fermentables={fermentables}
         form={form}
         onRemove={removeFermentable}
-        onAdd={addFermentable}
-        onCreateNew={handleCreateNewClick}
-        setShowNewFermentableDialog={setShowNewFermentableDialog}
       />
       <FermentableDialogForm
         open={showNewFermentableDialog}

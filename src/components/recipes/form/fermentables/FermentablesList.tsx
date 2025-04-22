@@ -6,24 +6,15 @@ interface FermentablesListProps {
   fermentables: { id: number }[];
   form: any;
   onRemove: (id: number) => void;
-  onAdd: () => void;
-  onCreateNew: (index: number) => void;
-  setShowNewFermentableDialog: (val: boolean) => void;
 }
 
 export const FermentablesList = ({
   fermentables,
   form,
-  onRemove,
-  onAdd,
-  onCreateNew
+  onRemove
 }: FermentablesListProps) => {
   if (fermentables.length === 0) {
-    // The EmptyFermentables no longer shows the ghost button because
-    // it's now in the toolbar
-    return (
-      <EmptyFermentables onAdd={onAdd} onCreate={() => onCreateNew(0)} />
-    );
+    return <EmptyFermentables />;
   }
 
   return (
@@ -35,10 +26,8 @@ export const FermentablesList = ({
           fermentable={fermentable}
           form={form}
           onRemove={onRemove}
-          onCreateNew={onCreateNew}
         />
       ))}
     </>
   );
 };
-

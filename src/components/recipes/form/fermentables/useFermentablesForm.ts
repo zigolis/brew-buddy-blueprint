@@ -5,12 +5,7 @@ import { useIngredients } from "@/hooks/useIngredients";
 export const useFermentablesForm = (form: any) => {
   const [fermentables, setFermentables] = useState([{ id: 0 }]);
   const [showNewFermentableDialog, setShowNewFermentableDialog] = useState(false);
-  const [currentFermentableIndex, setCurrentFermentableIndex] = useState<number | null>(null);
   const { addIngredient } = useIngredients();
-
-  const addFermentable = useCallback(() => {
-    setFermentables(prev => [...prev, { id: prev.length }]);
-  }, []);
 
   const removeFermentable = useCallback((id: number) => {
     setFermentables(prev => {
@@ -42,42 +37,25 @@ export const useFermentablesForm = (form: any) => {
 
       addIngredient(newFermentable);
 
-      if (currentFermentableIndex !== null) {
-        form.setValue(
-          `ingredients.fermentables.${currentFermentableIndex}`,
-          {
-            name,
-            type,
-            color,
-            amount: 0,
-            unit: "g",
-            costPerUnit,
-            notes,
-          },
-          { shouldDirty: true, shouldTouch: true }
-        );
-      }
+      form.setValue(
+        `ingredients.fermentables.${fermentables.length}`,
+        {
+          name,
+          type,
+          color,
+          amount: 0,
+          unit: "g",
+          costPerUnit,
+          notes,
+        },
+        { shouldDirty: true, shouldTouch: true }
+      );
 
-      setFermentables((prev) => {
-        const exists = prev.some((_, idx) => idx === currentFermentableIndex);
-        if (!exists && currentFermentableIndex !== null) {
-          const newLength = currentFermentableIndex + 1;
-          const filled = Array.from({ length: newLength }, (_, i) => prev[i] || { id: i });
-          return filled;
-        }
-        return prev;
-      });
-
+      setFermentables((prev) => [...prev, { id: prev.length }]);
       setShowNewFermentableDialog(false);
-      setCurrentFermentableIndex(null);
     },
-    [addIngredient, currentFermentableIndex, form]
+    [addIngredient, fermentables.length, form]
   );
-
-  const handleCreateNewClick = useCallback((index: number) => {
-    setCurrentFermentableIndex(index);
-    setShowNewFermentableDialog(true);
-  }, []);
 
   useEffect(() => {
     const currentFermentables = form.getValues('ingredients.fermentables') || [];
@@ -97,12 +75,9 @@ export const useFermentablesForm = (form: any) => {
 
   return {
     fermentables,
-    addFermentable,
     removeFermentable,
     showNewFermentableDialog,
     setShowNewFermentableDialog,
-    currentFermentableIndex,
-    handleAddNewFermentable,
-    handleCreateNewClick
+    handleAddNewFermentable
   };
 };
