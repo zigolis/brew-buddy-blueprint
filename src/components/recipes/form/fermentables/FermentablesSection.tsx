@@ -58,16 +58,27 @@ export const FermentablesSection = ({ form }) => {
 
   // Initialize form values only once when fermentables change
   useEffect(() => {
+    // Get existing values
     const currentFermentables = form.getValues('ingredients.fermentables') || [];
+    
+    // Initialize any missing entries
     fermentables.forEach((_, index) => {
       if (!currentFermentables[index]) {
-        form.setValue(`ingredients.fermentables.${index}`, { name: '', amount: 0, costPerUnit: 0 });
+        form.setValue(`ingredients.fermentables.${index}`, { 
+          name: '', 
+          amount: 0, 
+          costPerUnit: 0 
+        }, { 
+          shouldDirty: false,
+          shouldTouch: false
+        });
       }
     });
   }, [fermentables, form]);
 
-  // Use a memoized value for watched fermentables to prevent unnecessary re-renders
-  const watchedFermentables = form.watch('ingredients.fermentables') || [];
+  // Get fermentables data from form without triggering re-renders
+  const formValues = form.getValues();
+  const fermentablesData = formValues?.ingredients?.fermentables || [];
 
   return (
     <div className="space-y-4">
@@ -75,7 +86,7 @@ export const FermentablesSection = ({ form }) => {
         <h2 className="text-xl font-semibold">Fermentables</h2>
         <div className="text-sm text-muted-foreground">
           Total Cost: $
-          {watchedFermentables.reduce((acc, f) => 
+          {fermentablesData.reduce((acc, f) => 
             acc + ((parseFloat(f?.amount || '0') / 1000) || 0) * (parseFloat(f?.costPerUnit || '0') || 0), 0
           ).toFixed(2)}
         </div>
@@ -101,7 +112,7 @@ export const FermentablesSection = ({ form }) => {
                     onChange={field.onChange}
                     onSelect={(value) => {
                       field.onChange(value);
-                      // Don't update costPerUnit here, it will be done in the search component
+                      // Cost per unit will be handled in FermentableSearch component
                     }}
                     onCreateNew={() => handleCreateNewClick(index)}
                   />

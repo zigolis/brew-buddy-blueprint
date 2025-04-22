@@ -1,3 +1,4 @@
+
 import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useEffect } from "react";
@@ -13,7 +14,10 @@ export const RecipeStatsSection = ({ form }) => {
   useEffect(() => {
     if (originalGravity && finalGravity) {
       const calculatedABV = calculateABV(originalGravity, finalGravity);
-      setValue("abv", Number(calculatedABV.toFixed(2)));
+      setValue("abv", Number(calculatedABV.toFixed(2)), {
+        shouldDirty: false,
+        shouldTouch: false
+      });
     }
   }, [originalGravity, finalGravity, setValue]);
 

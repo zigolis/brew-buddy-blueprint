@@ -37,7 +37,7 @@ export const FermentableSearch = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { getFermentableSuggestions } = useIngredientSuggestions();
   
-  // Safely update search query when popover opens or value changes
+  // Only update the search query when the popover opens or value changes
   useEffect(() => {
     if (open) {
       setSearchQuery(value || '');
@@ -78,22 +78,24 @@ export const FermentableSearch = ({
           <CommandInput 
             placeholder="Search fermentable..." 
             value={searchQuery} 
-            onValueChange={setSearchQuery}
+            onValueChange={(newValue) => setSearchQuery(newValue)}
           />
           <CommandList>
             {suggestions.length === 0 ? (
               <CommandEmpty>
-                <CommandItem
-                  value="create-new-empty"
-                  className="text-primary"
-                  onSelect={() => {
-                    onCreateNew();
-                    setOpen(false);
-                  }}
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Create "{searchQuery}"
-                </CommandItem>
+                {searchQuery.trim() !== '' && (
+                  <CommandItem
+                    value="create-new-empty"
+                    className="text-primary"
+                    onSelect={() => {
+                      onCreateNew();
+                      setOpen(false);
+                    }}
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Create "{searchQuery}"
+                  </CommandItem>
+                )}
               </CommandEmpty>
             ) : (
               <CommandGroup>
@@ -101,8 +103,8 @@ export const FermentableSearch = ({
                   <CommandItem
                     key={item.id || `fermentable-${Math.random()}`}
                     value={item.name}
-                    onSelect={(value) => {
-                      onSelect(value);
+                    onSelect={(selectedValue) => {
+                      onSelect(selectedValue);
                       setOpen(false);
                     }}
                   >
