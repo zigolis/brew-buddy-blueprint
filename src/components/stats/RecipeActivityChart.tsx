@@ -26,6 +26,14 @@ export function RecipeActivityChart() {
     };
   });
 
+  // Chart configuration for data series
+  const chartConfig = {
+    recipes: {
+      label: "Recipes",
+      color: "hsl(var(--primary))"
+    }
+  };
+
   return (
     <Card className="h-full">
       <CardHeader>
@@ -33,7 +41,7 @@ export function RecipeActivityChart() {
       </CardHeader>
       <CardContent className="p-0 pb-4">
         <div className="h-[200px] w-full px-2">
-          <ResponsiveContainer width="100%" height="100%">
+          <ChartContainer config={chartConfig}>
             <AreaChart
               data={monthlyData}
               margin={{ top: 5, right: 10, left: 0, bottom: 0 }}
@@ -71,7 +79,7 @@ export function RecipeActivityChart() {
                 fill="url(#gradient)"
               />
             </AreaChart>
-          </ResponsiveContainer>
+          </ChartContainer>
         </div>
       </CardContent>
     </Card>

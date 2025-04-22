@@ -1,8 +1,16 @@
 
 import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+import { Control } from "react-hook-form";
+import { Recipe } from "@/types/recipe";
 
-export const RecipeStatsNotesField = ({ form }) => {
+interface RecipeStatsNotesFieldProps {
+  form: {
+    control: Control<any>;
+  };
+}
+
+export const RecipeStatsNotesField = ({ form }: RecipeStatsNotesFieldProps) => {
   return (
     <FormField
       control={form.control}
@@ -21,4 +29,4 @@ export const RecipeStatsNotesField = ({ form }) => {
       )}
     />
   );
-}
+};
