@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -54,6 +53,17 @@ export const YeastSection = ({ form }) => {
 
   const yeastCost = parseFloat(form.watch('ingredients.yeasts.0.costPerUnit') || '0') || 0;
   const yeastAmount = parseFloat(form.watch('ingredients.yeasts.0.amount') || '0') || 0;
+
+  const [hops, setHops] = useState([{ id: 0 }]);
+
+  const addYeast = () => {
+    setHops([...hops, { id: hops.length }]);
+  };
+
+  const removeYeast = (id: number) => {
+    if (hops.length <= 1) return;
+    setHops(hops.filter((h) => h.id !== id));
+  };
 
   return (
     <div className="space-y-4">
@@ -240,13 +250,12 @@ export const YeastSection = ({ form }) => {
           )}
         />
       </div>
+      
       {/* Add Yeast Button */}
       <Button
         type="button"
-        className="w-full"
-        variant="outline"
-        // No onClick for now, as there's only one yeast input supported
-        disabled
+        onClick={addYeast}
+        className="w-full bg-amber-500 text-white hover:bg-amber-600"
       >
         <Plus className="h-4 w-4 mr-2" />
         Add Yeast
@@ -254,4 +263,3 @@ export const YeastSection = ({ form }) => {
     </div>
   );
 };
-
