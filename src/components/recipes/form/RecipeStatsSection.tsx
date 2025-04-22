@@ -22,15 +22,15 @@ export const RecipeStatsSection = ({ form }) => {
   }, [originalGravity, finalGravity, setValue]);
 
   return (
-    <section className="space-y-5">
-      <h2 className="text-2xl font-bold tracking-tight mb-1 text-brewing-amber">Recipe Statistics</h2>
-      <div className="grid gap-6 md:grid-cols-4">
+    <div className="space-y-4">
+      <h2 className="text-xl font-semibold">Recipe Statistics</h2>
+      <div className="grid gap-4 md:grid-cols-4">
         <FormField
           control={form.control}
           name="batchSize"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Batch Size (L)<span className="text-red-600">*</span></FormLabel>
+              <FormLabel>Batch Size (L)*</FormLabel>
               <FormControl>
                 <Input type="number" step="0.1" {...field} />
               </FormControl>
@@ -42,7 +42,7 @@ export const RecipeStatsSection = ({ form }) => {
           name="boilSize"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Boil Size (L)<span className="text-red-600">*</span></FormLabel>
+              <FormLabel>Boil Size (L)*</FormLabel>
               <FormControl>
                 <Input type="number" step="0.1" {...field} />
               </FormControl>
@@ -76,7 +76,7 @@ export const RecipeStatsSection = ({ form }) => {
         />
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-3">
         <FormField
           control={form.control}
           name="originalGravity"
@@ -135,7 +135,7 @@ export const RecipeStatsSection = ({ form }) => {
         />
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2">
         <FormField
           control={form.control}
           name="abv"
@@ -171,7 +171,6 @@ export const RecipeStatsSection = ({ form }) => {
           )}
         />
       </div>
-    </section>
+    </div>
   );
 };
-

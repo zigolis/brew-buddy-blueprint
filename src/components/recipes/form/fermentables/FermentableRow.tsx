@@ -22,7 +22,7 @@ export const FermentableRow = ({
 }: FermentableRowProps) => (
   <div
     key={fermentable.id}
-    className="grid gap-6 md:grid-cols-5 items-end bg-muted/40 rounded-lg p-4 mb-2"
+    className="grid gap-4 md:grid-cols-5 items-end"
   >
     <FormField
       control={form.control}

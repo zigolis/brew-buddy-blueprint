@@ -18,10 +18,10 @@ export const MashScheduleSection = ({ form }) => {
   };
 
   return (
-    <section className="space-y-5">
-      <h2 className="text-2xl font-bold tracking-tight mb-1 text-brewing-amber">Mash Schedule</h2>
+    <div className="space-y-4">
+      <h2 className="text-xl font-semibold">Mash Schedule</h2>
       {steps.map((step, index) => (
-        <div key={step.id} className="grid gap-6 md:grid-cols-5 items-end rounded-lg bg-muted/40 p-4 mb-2">
+        <div key={step.id} className="grid gap-4 md:grid-cols-5 items-end">
           <FormField
             control={form.control}
             name={`mash.steps.${index}.name`}
@@ -94,9 +94,9 @@ export const MashScheduleSection = ({ form }) => {
         </div>
       ))}
 
-      <Button type="button" onClick={addStep} className="w-full bg-brewing-amber text-white hover:bg-brewing-amber/90 rounded-lg py-3 mt-2 shadow hover:shadow-md transition-all">
+      <Button type="button" onClick={addStep} className="w-full">
         <Plus className="h-4 w-4 mr-2" /> Add Mash Step
       </Button>
-    </section>
+    </div>
   );
 };

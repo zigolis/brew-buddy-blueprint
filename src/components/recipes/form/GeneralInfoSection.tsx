@@ -5,16 +5,16 @@ import { Textarea } from "@/components/ui/textarea";
 
 export const GeneralInfoSection = ({ form }) => {
   return (
-    <section className="space-y-5">
-      <h2 className="text-2xl font-bold tracking-tight mb-1 text-brewing-amber">General Information</h2>
-      <div className="grid gap-6 md:grid-cols-2">
+    <div className="space-y-4">
+      <h2 className="text-xl font-semibold">General Information</h2>
+      <div className="grid gap-4 md:grid-cols-2">
         <FormField
           control={form.control}
           name="name"
           rules={{ required: "Recipe name is required" }}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Recipe Name<span className="text-red-600">*</span></FormLabel>
+              <FormLabel>Recipe Name*</FormLabel>
               <FormControl>
                 <Input placeholder="Enter recipe name" {...field} />
               </FormControl>
@@ -36,20 +36,20 @@ export const GeneralInfoSection = ({ form }) => {
           )}
         />
       </div>
-      <div className="grid gap-6 md:grid-cols-2">
-        <FormField
-          control={form.control}
-          name="style.name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Beer Style</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter beer style" {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-      </div>
+
+      <FormField
+        control={form.control}
+        name="style.name"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Beer Style</FormLabel>
+            <FormControl>
+              <Input placeholder="Enter beer style" {...field} />
+            </FormControl>
+          </FormItem>
+        )}
+      />
+
       <FormField
         control={form.control}
         name="notes"
@@ -66,7 +66,6 @@ export const GeneralInfoSection = ({ form }) => {
           </FormItem>
         )}
       />
-    </section>
+    </div>
   );
 };
-

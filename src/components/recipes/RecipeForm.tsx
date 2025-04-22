@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 import { Recipe } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -24,7 +23,6 @@ interface RecipeFormProps {
   visibleSections?: string[];
 }
 
-// Logical section structure for easier adjustments
 const sectionComponents = {
   general: GeneralInfoSection,
   stats: RecipeStatsSection,
@@ -126,30 +124,19 @@ export function RecipeForm({ onSubmit, initialData, visibleSections }: RecipeFor
     ? Object.entries(sectionComponents).filter(([key]) => visibleSections.includes(key))
     : Object.entries(sectionComponents);
 
-  // Visual wrapper for a super user friendly, modern UX!
   return (
     <Form {...form}>
-      <form 
-        id="recipe-form" 
-        onSubmit={form.handleSubmit(onSubmit)} 
-        className="space-y-10 max-w-3xl mx-auto bg-white md:p-10 p-4 rounded-2xl shadow-md md:mt-8 mt-4 animate-fade-in"
-      >
+      <form id="recipe-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         {sectionsToRender.map(([key, Component]) => (
-          // Add vertical margin between sections
-          <div key={key} className="mb-6 last:mb-0">
-            <Component form={form} />
-          </div>
+          <Component key={key} form={form} />
         ))}
+        
         {(visibleSections?.includes('bottling') || !visibleSections) && (
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-6 border-t border-muted">
+          <div className="flex justify-between items-center pt-4">
             <div className="text-lg font-semibold">
-              Total Recipe Cost: <span className="text-brewing-amber">${totalCost.toFixed(2)}</span>
+              Total Recipe Cost: ${totalCost.toFixed(2)}
             </div>
-            <Button 
-              type="submit" 
-              size="lg" 
-              className="w-full md:w-auto bg-primary hover:bg-primary/90 mt-2 md:mt-0"
-            >
+            <Button type="submit">
               {visibleSections?.includes('bottling') ? 'Create Recipe' : 'Save and Continue'}
             </Button>
           </div>
