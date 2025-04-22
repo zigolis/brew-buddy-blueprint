@@ -1,3 +1,4 @@
+
 import { FermentablesToolbar } from "./FermentablesToolbar";
 import { FermentablesList } from "./FermentablesList";
 import { FermentableDialogForm } from "./FermentableDialogForm";
@@ -52,7 +53,7 @@ export const FermentablesSection = ({ form }) => {
 
   return (
     <div className="space-y-4">
-      <FermentablesToolbar totalCost={totalCost} />
+      <h2 className="text-xl font-semibold">Fermentables</h2>
       <FermentablesList
         fermentables={fermentables}
         form={form}

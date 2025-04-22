@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -50,9 +51,6 @@ export const YeastSection = ({ form }) => {
     setOpenPopover(false);
   };
 
-  const yeastCost = parseFloat(form.watch('ingredients.yeasts.0.costPerUnit') || '0') || 0;
-  const yeastAmount = parseFloat(form.watch('ingredients.yeasts.0.amount') || '0') || 0;
-
   const addYeast = () => {
     setYeasts([...yeasts, { id: yeasts.length }]);
   };
@@ -64,12 +62,7 @@ export const YeastSection = ({ form }) => {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Yeast</h2>
-        <div className="text-sm text-muted-foreground">
-          Cost: ${(yeastCost * (yeastAmount / 1000)).toFixed(2)}
-        </div>
-      </div>
+      <h2 className="text-xl font-semibold">Yeast</h2>
       
       <div className="grid gap-4 md:grid-cols-3 border p-4 rounded-lg">
         <FormField

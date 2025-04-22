@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 import { Recipe } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -6,7 +5,7 @@ import { Form } from "@/components/ui/form";
 import { GeneralInfoSection } from "./form/GeneralInfoSection";
 import { RecipeStatsSection } from "./form/RecipeStatsSection";
 import { FermentablesSection } from "./form/fermentables/FermentablesSection";
-import HopsSection from "./form/HopsSection"; // Changed from named import to default import
+import HopsSection from "./form/HopsSection"; 
 import { YeastSection } from "./form/YeastSection";
 import { MashScheduleSection } from "./form/MashScheduleSection";
 import { BoilSection } from "./form/BoilSection";
@@ -110,10 +109,8 @@ export function RecipeForm({ onSubmit, initialData, visibleSections }: RecipeFor
     },
   });
 
-  // Update form when initialData changes
   useEffect(() => {
     if (initialData) {
-      // Reset form with initialData whenever it changes
       Object.keys(initialData).forEach(key => {
         form.setValue(key as any, initialData[key as keyof typeof initialData]);
       });
@@ -123,7 +120,6 @@ export function RecipeForm({ onSubmit, initialData, visibleSections }: RecipeFor
   const formValues = form.watch();
   const { totalCost } = useRecipeCost(formValues);
 
-  // Determine which sections to display
   const sectionsToRender = visibleSections && visibleSections.length > 0 
     ? Object.entries(sectionComponents).filter(([key]) => visibleSections.includes(key))
     : Object.entries(sectionComponents);
