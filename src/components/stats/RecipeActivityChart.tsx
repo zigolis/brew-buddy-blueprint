@@ -67,9 +67,9 @@ export function RecipeActivityChart() {
                 allowDecimals={false}
                 fontSize={12}
               />
-              <ChartTooltip>
-                <ChartTooltipContent />
-              </ChartTooltip>
+              <ChartTooltip 
+                content={<ChartTooltipContent />} 
+              />
               <Area
                 type="monotone"
                 dataKey="recipes"
