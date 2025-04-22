@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Beer, Menu, X } from "lucide-react";
+import { Beer, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Sidebar } from "./Sidebar";
@@ -30,7 +30,7 @@ export function Header() {
 
         <div className="flex items-center">
           <Link to="/" className="flex items-center space-x-2">
-            <Beer className="h-6 w-6 text-brewing-amber" />
+            <Beer className="h-6 w-6 text-primary" />
             <span className="hidden md:inline-block font-bold text-xl">iBeer Brewing Pro</span>
           </Link>
         </div>
@@ -47,4 +47,3 @@ export function Header() {
     </header>
   );
 }
-
