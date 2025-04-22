@@ -1,3 +1,4 @@
+
 import { useForm } from "react-hook-form";
 import { Recipe } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -126,9 +127,11 @@ export function RecipeForm({ onSubmit, initialData, visibleSections }: RecipeFor
 
   return (
     <Form {...form}>
-      <form id="recipe-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form id="recipe-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
         {sectionsToRender.map(([key, Component]) => (
-          <Component key={key} form={form} />
+          <div key={key} className="bg-background p-6 rounded-lg shadow-sm">
+            <Component form={form} />
+          </div>
         ))}
         
         {(visibleSections?.includes('bottling') || !visibleSections) && (
