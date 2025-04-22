@@ -5,6 +5,7 @@ import { Beer, Calculator, FileText, List, Package } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useBrewContext } from "@/contexts/BrewContext";
 import { useIngredients } from "@/hooks/useIngredients";
+import { RecipeActivityChart } from "@/components/stats/RecipeActivityChart";
 
 const HomePage = () => {
   const { recipes, equipment } = useBrewContext();
@@ -84,6 +85,8 @@ const HomePage = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <RecipeActivityChart />
+          
           <Card className="card-hover">
             <CardHeader className="space-y-1">
               <div className="flex items-center justify-between">
