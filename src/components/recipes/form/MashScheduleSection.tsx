@@ -21,7 +21,7 @@ export const MashScheduleSection = ({ form }) => {
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Mash Schedule</h2>
       {steps.map((step, index) => (
-        <div key={step.id} className="grid gap-4 md:grid-cols-4 items-end border p-4 rounded-lg">
+        <div key={step.id} className="grid gap-4 md:grid-cols-5 items-end border p-4 rounded-lg">
           <FormField
             control={form.control}
             name={`mash.steps.${index}.name`}
@@ -65,6 +65,19 @@ export const MashScheduleSection = ({ form }) => {
                 <FormLabel>Temperature (°C)*</FormLabel>
                 <FormControl>
                   <Input type="number" step="0.1" {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name={`mash.steps.${index}.time`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Time (min)*</FormLabel>
+                <FormControl>
+                  <Input type="number" step="1" placeholder="60" {...field} />
                 </FormControl>
               </FormItem>
             )}

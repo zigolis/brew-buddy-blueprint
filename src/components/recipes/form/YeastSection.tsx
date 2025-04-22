@@ -30,7 +30,6 @@ export const YeastSection = ({ form }) => {
         return [];
       }
       const results = getYeastSuggestions(query);
-      console.log('Yeast suggestions in component:', query, results);
       return Array.isArray(results) ? results : [];
     } catch (error) {
       console.error('Error getting yeast suggestions:', error);
@@ -38,7 +37,19 @@ export const YeastSection = ({ form }) => {
     }
   };
 
-  // Safely get the yeast cost and amount values
+  // Handle yeast selection and auto-fill extra fields
+  const handleYeastSelect = (item: any) => {
+    form.setValue('ingredients.yeasts.0.name', item.name);
+    if (item.type) form.setValue('ingredients.yeasts.0.type', item.type);
+    if (item.form) form.setValue('ingredients.yeasts.0.form', item.form);
+    if (item.laboratory) form.setValue('ingredients.yeasts.0.laboratory', item.laboratory);
+    if (item.productId) form.setValue('ingredients.yeasts.0.productId', item.productId);
+    if (item.minAttenuation) form.setValue('ingredients.yeasts.0.minAttenuation', item.minAttenuation);
+    if (item.maxAttenuation) form.setValue('ingredients.yeasts.0.maxAttenuation', item.maxAttenuation);
+    if (item.costPerUnit) form.setValue('ingredients.yeasts.0.costPerUnit', item.costPerUnit);
+    setOpenPopover(false);
+  };
+
   const yeastCost = parseFloat(form.watch('ingredients.yeasts.0.costPerUnit') || '0') || 0;
   const yeastAmount = parseFloat(form.watch('ingredients.yeasts.0.amount') || '0') || 0;
 
@@ -91,11 +102,7 @@ export const YeastSection = ({ form }) => {
                             <CommandItem
                               key={item.id || `yeast-${Math.random()}`}
                               value={item.name}
-                              onSelect={(value) => {
-                                field.onChange(value);
-                                form.setValue('ingredients.yeasts.0.costPerUnit', item.costPerUnit || 0);
-                                setOpenPopover(false);
-                              }}
+                              onSelect={() => handleYeastSelect(item)}
                             >
                               {item.name}
                             </CommandItem>
@@ -138,7 +145,7 @@ export const YeastSection = ({ form }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value || "Ale"}>
+              <Select onValueChange={field.onChange} value={field.value || "Ale"}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select type" />
@@ -162,7 +169,7 @@ export const YeastSection = ({ form }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Form</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value || "Dry"}>
+              <Select onValueChange={field.onChange} value={field.value || "Dry"}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select form" />
@@ -197,7 +204,7 @@ export const YeastSection = ({ form }) => {
           name="ingredients.yeasts.0.minAttenuation"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Attenuation (%)</FormLabel>
+              <FormLabel>Min Attenuation (%)</FormLabel>
               <FormControl>
                 <Input 
                   type="number" 
@@ -212,6 +219,28 @@ export const YeastSection = ({ form }) => {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="ingredients.yeasts.0.maxAttenuation"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Max Attenuation (%)</FormLabel>
+              <FormControl>
+                <Input 
+                  type="number" 
+                  step="0.1" 
+                  {...field}
+                  onChange={(e) => {
+                    const value = e.target.value ? parseFloat(e.target.value) : 0;
+                    field.onChange(isNaN(value) ? 0 : value);
+                  }}  
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
       </div>
     </div>
   );
