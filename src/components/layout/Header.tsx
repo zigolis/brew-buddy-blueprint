@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Beer, Menu, Moon, Sun } from "lucide-react";
+import { Beer, Menu, Moon, Sun, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Sidebar } from "./Sidebar";
@@ -51,6 +51,14 @@ export function Header() {
             )}
             <span className="sr-only">Toggle theme</span>
           </Button>
+
+          <Button asChild variant="ghost" size="icon" className="mr-2">
+            <Link to="/settings">
+              <Settings className="h-5 w-5" />
+              <span className="sr-only">Settings</span>
+            </Link>
+          </Button>
+
           <Button asChild variant="secondary" size="sm">
             <Link to="/import">Import Recipe</Link>
           </Button>
