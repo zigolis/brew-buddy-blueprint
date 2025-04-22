@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -23,6 +22,7 @@ import ImportRecipe from "@/pages/import/ImportRecipe";
 import BrewingGuide from "@/pages/brewing-guide/BrewingGuide";
 import Settings from "@/pages/settings/Settings";
 import NotFound from "@/pages/NotFound";
+import EditRecipe from "@/pages/recipes/EditRecipe";
 
 const queryClient = new QueryClient();
 
