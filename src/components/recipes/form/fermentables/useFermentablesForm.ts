@@ -16,7 +16,9 @@ export const useFermentablesForm = (form: any) => {
 
   const handleAddNewFermentable = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
+      // Ensure we're preventing default behavior
       event.preventDefault();
+      
       const formData = new FormData(event.currentTarget);
 
       const name = formData.get("name") as string;
@@ -37,8 +39,10 @@ export const useFermentablesForm = (form: any) => {
 
       addIngredient(newFermentable);
 
+      // Add the new fermentable to the form values
+      const currentLength = fermentables.length;
       form.setValue(
-        `ingredients.fermentables.${fermentables.length}`,
+        `ingredients.fermentables.${currentLength}`,
         {
           name,
           type,
@@ -51,6 +55,7 @@ export const useFermentablesForm = (form: any) => {
         { shouldDirty: true, shouldTouch: true }
       );
 
+      // Update the fermentables list
       setFermentables((prev) => [...prev, { id: prev.length }]);
       setShowNewFermentableDialog(false);
     },

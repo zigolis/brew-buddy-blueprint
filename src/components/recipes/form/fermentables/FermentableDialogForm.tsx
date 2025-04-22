@@ -22,8 +22,9 @@ export const FermentableDialogForm = ({
   onOpenChange,
   onSubmit,
 }: FermentableDialogFormProps) => {
+  // Make sure we're properly preventing default behavior to avoid form navigation
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // Prevent form submission from triggering navigation
+    event.preventDefault(); // This is crucial to prevent form submission from triggering navigation
     onSubmit(event);
   };
 

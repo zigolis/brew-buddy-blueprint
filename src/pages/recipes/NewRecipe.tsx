@@ -47,6 +47,7 @@ const defaultRecipeData: Partial<Recipe> = {
 const NewRecipe = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [recipeFormData, setRecipeFormData] = useState<Partial<Recipe>>(defaultRecipeData);
+  const [shouldChangeStep, setShouldChangeStep] = useState(true);
 
   const { handleStepFormSubmit, handleCreateRecipe } = useCreateRecipe(recipeFormData, setRecipeFormData);
 
@@ -58,7 +59,7 @@ const NewRecipe = () => {
 
   // Modified to save form data without automatically changing step
   const handleNext = () => {
-    // Get form data, then move to next
+    // Get form data, then move to next if shouldChangeStep is true
     const formElement = document.getElementById('recipe-form') as HTMLFormElement;
     if (formElement) {
       const formData = new FormData(formElement);
@@ -80,8 +81,8 @@ const NewRecipe = () => {
         ...currentFormData
       }));
       
-      // Only change step if it's a manual navigation
-      if (currentStep < recipeSteps.length - 1) {
+      // Only change step if shouldChangeStep is true and it's a manual navigation
+      if (shouldChangeStep && currentStep < recipeSteps.length - 1) {
         setCurrentStep(currentStep + 1);
       }
     }
@@ -105,6 +106,7 @@ const NewRecipe = () => {
             recipeFormData={recipeFormData}
             handleStepFormSubmit={onStepSubmit}
             handleCreateRecipe={handleCreateRecipe}
+            setShouldChangeStep={setShouldChangeStep}
           />
           <RecipeStepNavButtons
             currentStep={currentStep}
