@@ -20,10 +20,10 @@ export const FermentationSection = ({ form }) => {
   };
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-xl font-semibold">Fermentation</h2>
+    <section className="space-y-5">
+      <h2 className="text-2xl font-bold tracking-tight mb-1 text-brewing-amber">Fermentation</h2>
       {steps.map((step, index) => (
-        <div key={step.id} className="grid gap-4 md:grid-cols-6 items-end">
+        <div key={step.id} className="grid gap-6 md:grid-cols-6 items-end rounded-lg bg-muted/40 p-4 mb-2">
           <FormField
             control={form.control}
             name={`fermentation.steps.${index}.name`}
@@ -124,9 +124,9 @@ export const FermentationSection = ({ form }) => {
         </div>
       ))}
 
-      <Button type="button" onClick={addStep} className="w-full">
+      <Button type="button" onClick={addStep} className="w-full bg-brewing-amber text-white hover:bg-brewing-amber/90 rounded-lg py-3 mt-2 shadow hover:shadow-md transition-all">
         <Plus className="h-4 w-4 mr-2" /> Add Fermentation Step
       </Button>
-    </div>
+    </section>
   );
 };
