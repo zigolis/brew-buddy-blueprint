@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { GeneralInfoSection } from "./form/GeneralInfoSection";
 import { RecipeStatsSection } from "./form/RecipeStatsSection";
-import { FermentablesSection } from "./form/FermentablesSection";
+import { FermentablesSection } from "./form/fermentables/FermentablesSection";
 import { HopsSection } from "./form/HopsSection";
 import { YeastSection } from "./form/YeastSection";
 import { MashScheduleSection } from "./form/MashScheduleSection";
