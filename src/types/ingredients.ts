@@ -48,6 +48,7 @@ export interface Misc {
   id: string;
   name: string;
   amount: number;
+  unit?: string;
   time: number;
   use: string;
   notes: string;

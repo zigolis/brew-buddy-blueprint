@@ -202,7 +202,7 @@ const ViewRecipe = () => {
                   <ul className="list-disc pl-4">
                     {recipe.fermentation.steps.map((step, i) => (
                       <li key={i}>
-                        <span className="font-medium">{step.name}</span> | {step.type}, {step.temperature}°C, {step.time ?? step.period} days
+                        <span className="font-medium">{step.name}</span> | {step.temperature}°C, {step.time} days
                         {step.notes ? ` – ${step.notes}` : ""}
                       </li>
                     ))}
@@ -289,3 +289,5 @@ const ViewRecipe = () => {
     </Layout>
   );
 };
+
+export default ViewRecipe;

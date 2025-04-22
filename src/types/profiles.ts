@@ -38,8 +38,11 @@ export interface FermentationProfile {
   notes: string;
   steps?: {
     name: string;
+    type?: string;
     temperature: number;
     time: number;
+    period?: number;
+    notes?: string;
   }[];
 }
 
