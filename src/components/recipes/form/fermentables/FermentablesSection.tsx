@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Plus, Trash2 } from "lucide-react";
 import { useIngredients } from "@/hooks/useIngredients";
 import { EmptyFermentables } from "./EmptyFermentables";
@@ -15,7 +16,7 @@ export const FermentablesSection = ({ form }) => {
   const { addIngredient } = useIngredients();
 
   const addFermentable = () => {
-    setFermentables([...fermentables, { id: fermentables.length }]);
+    setFermentables(prev => [...prev, { id: prev.length }]);
   };
 
   const removeFermentable = (id: number) => {
@@ -53,6 +54,19 @@ export const FermentablesSection = ({ form }) => {
     setCurrentFermentableIndex(index);
     setShowNewFermentableDialog(true);
   };
+
+  // Initialize form values if they don't exist
+  const ensureFermentablesExist = () => {
+    const currentFermentables = form.getValues('ingredients.fermentables') || [];
+    fermentables.forEach((_, index) => {
+      if (!currentFermentables[index]) {
+        form.setValue(`ingredients.fermentables.${index}`, { name: '', amount: 0, costPerUnit: 0 });
+      }
+    });
+  };
+  
+  // Make sure we have form values for all our fermentables
+  ensureFermentablesExist();
 
   const watchedFermentables = form.watch('ingredients.fermentables') || [];
 
@@ -105,18 +119,13 @@ export const FermentablesSection = ({ form }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Amount (g)*</FormLabel>
-                  <FermentableSearch
-                    index={index}
+                  <Input 
+                    type="number"
                     value={field.value?.toString() || ''}
-                    onChange={(value) => {
-                      const numValue = value ? Number(value) : 0;
+                    onChange={(e) => {
+                      const numValue = e.target.value ? Number(e.target.value) : 0;
                       field.onChange(numValue);
                     }}
-                    onSelect={(value) => {
-                      const numValue = Number(value) || 0;
-                      field.onChange(numValue);
-                    }}
-                    onCreateNew={() => {}}
                   />
                 </FormItem>
               )}

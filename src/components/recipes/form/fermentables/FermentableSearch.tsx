@@ -103,19 +103,17 @@ export const FermentableSearch = ({
                     {item.name}
                   </CommandItem>
                 ))}
-                {suggestions.length > 0 && (
-                  <CommandItem
-                    value="create-new"
-                    className="text-primary"
-                    onSelect={() => {
-                      onCreateNew();
-                      setOpen(false);
-                    }}
-                  >
-                    <Plus className="mr-2 h-4 w-4" />
-                    Create "{searchQuery}"
-                  </CommandItem>
-                )}
+                <CommandItem
+                  value="create-new"
+                  className="text-primary"
+                  onSelect={() => {
+                    onCreateNew();
+                    setOpen(false);
+                  }}
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create "{searchQuery}"
+                </CommandItem>
               </CommandGroup>
             )}
           </CommandList>
