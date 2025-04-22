@@ -1,3 +1,4 @@
+
 import { Layout } from "@/components/layout/Layout";
 import { useBrewContext } from "@/contexts/BrewContext";
 import { useState, useRef } from "react";
@@ -10,7 +11,6 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { parseBeerXml } from "@/utils/beerXmlParser";
 import { Recipe } from "@/types/beer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BackToHome } from "@/components/navigation/BackToHome";
 
 const ImportRecipe = () => {
   const { addRecipe } = useBrewContext();
@@ -37,6 +37,7 @@ const ImportRecipe = () => {
     setFiles(fileList);
     
     try {
+      // Process each file
       for (let i = 0; i < fileList.length; i++) {
         const file = fileList[i];
         const reader = new FileReader();
@@ -50,6 +51,7 @@ const ImportRecipe = () => {
               throw new Error("No valid recipes found in the XML file.");
             }
             
+            // Select all recipes by default
             const newSelectedRecipes = new Set(selectedRecipes);
             recipes.forEach(recipe => newSelectedRecipes.add(recipe.id));
             
@@ -88,6 +90,7 @@ const ImportRecipe = () => {
   };
 
   const handleImport = () => {
+    // Import only selected recipes
     const recipesToImport = parsedRecipes.filter(recipe => selectedRecipes.has(recipe.id));
     
     recipesToImport.forEach(recipe => {
@@ -104,7 +107,6 @@ const ImportRecipe = () => {
   return (
     <Layout>
       <div className="space-y-6">
-        <BackToHome />
         <div>
           <h1 className="text-3xl font-bold">Import Recipes</h1>
           <p className="text-muted-foreground">Import recipes from BeerXML files</p>
