@@ -1,3 +1,4 @@
+
 export interface Yeast {
   id: string;
   name: string;
@@ -71,6 +72,11 @@ export interface FermentationProfile {
   temperature: number; // in Celsius
   period: number; // in days
   notes: string;
+  steps?: {
+    name: string;
+    temperature: number;
+    time: number;
+  }[];
 }
 
 export interface ColdCrashProfile {
@@ -103,8 +109,12 @@ export interface Equipment {
   name: string;
   type: string;
   batchSize: number;
+  boilSize: number;
+  boilTime: number;
   efficiency: number;
+  notes: string;
   cost: number;
+  purchaseDate: string;
 }
 
 export interface Style {
@@ -113,7 +123,7 @@ export interface Style {
   categoryNumber: string;
   styleLetter: string;
   styleGuide: string;
-  type: 'Ale' | 'Lager' | 'Mead' | 'Wheat' | 'Mixed' | 'Cider';
+  type: 'Ale' | 'Lager' | 'Mead' | 'Wheat' | 'Mixed' | 'Cider' | 'Other';
   minOg: number;
   maxOg: number;
   minFg: number;
@@ -133,10 +143,13 @@ export interface Style {
 export interface Fermentable {
   id: string;
   name: string;
+  type?: string;
   amount: number;
   color: number;
-  potential: number;
+  potential?: number;
   yield: number;
+  supplier?: string;
+  notes?: string;
   costPerUnit: number;
 }
 
@@ -148,6 +161,7 @@ export interface Hop {
   time: number;
   use: 'Boil' | 'Dry Hop' | 'Mash' | 'First Wort' | 'Aroma';
   form: 'Pellet' | 'Plug' | 'Leaf';
+  notes?: string;
   costPerUnit: number;
 }
 
@@ -216,4 +230,6 @@ export interface BrewingStep {
   duration: number;
   temperature: number;
   completed: boolean;
+  type?: string;
+  instructions?: string;
 }

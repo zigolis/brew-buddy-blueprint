@@ -61,12 +61,15 @@ const NewRecipe = () => {
 
       const defaultFermentation = {
         name: "Ale",
+        type: "Primary" as const,
+        temperature: 20,
+        period: 14,
+        notes: "",
         steps: [{
           name: "Primary",
           temperature: 20,
           time: 14
-        }],
-        notes: ""
+        }]
       };
 
       const defaultWaterProfile = {
@@ -84,11 +87,45 @@ const NewRecipe = () => {
       const newRecipe: Recipe = {
         ...formData,
         id: uuidv4(),
-        style: defaultStyle,
-        ingredients: defaultIngredients,
-        mash: defaultMash,
-        fermentation: defaultFermentation,
-        waterProfile: defaultWaterProfile,
+        style: formData.style || defaultStyle,
+        ingredients: formData.ingredients || defaultIngredients,
+        mash: formData.mash || defaultMash,
+        fermentation: formData.fermentation || defaultFermentation,
+        waterProfile: formData.waterProfile || defaultWaterProfile,
+        boil: formData.boil || {
+          name: "Standard Boil",
+          time: 60,
+          temperature: 100
+        },
+        clarification: formData.clarification || {
+          name: "Standard Clarification",
+          type: "Whirlpool",
+          amount: 0,
+          temperature: 20,
+          notes: ""
+        },
+        coldCrash: formData.coldCrash || {
+          name: "Standard Cold Crash",
+          type: "Standard",
+          temperature: 2,
+          period: 48,
+          notes: ""
+        },
+        carbonation: formData.carbonation || {
+          name: "Standard Carbonation",
+          type: "Natural",
+          volumeCo2: 2.4,
+          temperature: 20,
+          period: 14,
+          notes: ""
+        },
+        bottling: formData.bottling || {
+          name: "Standard Bottling",
+          type: "Bottle",
+          temperature: 20,
+          period: 14,
+          notes: ""
+        },
         estimatedCost: 0,
         tags: formData.tags || [],
         createdAt: new Date().toISOString(),

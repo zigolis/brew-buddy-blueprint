@@ -103,6 +103,7 @@ export const mockRecipes: Recipe[] = [
           form: 'Liquid',
           laboratory: 'Wyeast',
           productId: '1056',
+          amount: 11.5, // Added the required amount property
           minAttenuation: 73,
           maxAttenuation: 77,
           tempRange: {
@@ -140,14 +141,17 @@ export const mockRecipes: Recipe[] = [
     },
     fermentation: {
       name: 'Ale, Single Stage',
+      type: 'Primary',
+      temperature: 20,
+      period: 14,
+      notes: 'Ferment at 20°C for 2 weeks.',
       steps: [
         {
           name: 'Primary',
           temperature: 20,
           time: 14,
         }
-      ],
-      notes: 'Ferment at 20°C for 2 weeks.',
+      ]
     },
     waterProfile: {
       name: 'Balanced Profile',
@@ -159,6 +163,40 @@ export const mockRecipes: Recipe[] = [
       bicarbonate: 100,
       ph: 7.0,
       notes: 'Balanced water profile suitable for pale ales.',
+    },
+    boil: {
+      name: 'Standard Boil',
+      time: 60,
+      temperature: 100
+    },
+    clarification: {
+      name: 'Standard Clarification',
+      type: 'Whirlpool',
+      amount: 0,
+      temperature: 20,
+      notes: ''
+    },
+    coldCrash: {
+      name: 'Standard Cold Crash',
+      type: 'Standard',
+      temperature: 2,
+      period: 48,
+      notes: ''
+    },
+    carbonation: {
+      name: 'Standard Carbonation',
+      type: 'Natural',
+      volumeCo2: 2.4,
+      temperature: 20,
+      period: 14,
+      notes: ''
+    },
+    bottling: {
+      name: 'Standard Bottling',
+      type: 'Bottle',
+      temperature: 20,
+      period: 14,
+      notes: ''
     },
     notes: 'A classic American pale ale with Cascade hops providing a signature citrus and floral character.',
     estimatedCost: 25,
@@ -253,6 +291,7 @@ export const mockRecipes: Recipe[] = [
           form: 'Liquid',
           laboratory: 'White Labs',
           productId: 'WLP004',
+          amount: 11.5, // Added the required amount property
           minAttenuation: 69,
           maxAttenuation: 74,
           tempRange: {
@@ -284,14 +323,17 @@ export const mockRecipes: Recipe[] = [
     },
     fermentation: {
       name: 'Ale, Single Stage',
+      type: 'Primary',
+      temperature: 19,
+      period: 14,
+      notes: 'Ferment at 19°C for 2 weeks.',
       steps: [
         {
           name: 'Primary',
           temperature: 19,
           time: 14,
         }
-      ],
-      notes: 'Ferment at 19°C for 2 weeks.',
+      ]
     },
     waterProfile: {
       name: 'Dublin',
@@ -303,6 +345,40 @@ export const mockRecipes: Recipe[] = [
       bicarbonate: 200,
       ph: 8.0,
       notes: 'Water profile similar to Dublin. High in carbonates which suits dark beers.',
+    },
+    boil: {
+      name: 'Standard Boil',
+      time: 60,
+      temperature: 100
+    },
+    clarification: {
+      name: 'Standard Clarification',
+      type: 'Whirlpool',
+      amount: 0,
+      temperature: 20,
+      notes: ''
+    },
+    coldCrash: {
+      name: 'Standard Cold Crash',
+      type: 'Standard',
+      temperature: 2,
+      period: 48,
+      notes: ''
+    },
+    carbonation: {
+      name: 'Standard Carbonation',
+      type: 'Natural',
+      volumeCo2: 2.4,
+      temperature: 20,
+      period: 14,
+      notes: ''
+    },
+    bottling: {
+      name: 'Standard Bottling',
+      type: 'Bottle',
+      temperature: 20,
+      period: 14,
+      notes: ''
     },
     notes: 'Classic Irish stout with a dry finish and roasted barley character.',
     estimatedCost: 22,
