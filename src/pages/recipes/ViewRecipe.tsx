@@ -26,184 +26,274 @@ export function ViewRecipe() {
 
   return (
     <Layout>
-      <div className="space-y-6">
-        <div className="flex flex-col space-y-2">
-          <div className="flex justify-between items-start">
-            <Button 
-              variant="outline" 
-              size="sm" 
+      <div className="space-y-8">
+        <div className="flex flex-col space-y-2 md:flex-row md:space-y-0 md:justify-between md:items-center">
+          <div>
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => navigate('/recipes')}
-              className="mb-4"
+              className="mb-3 animate-fade-in"
             >
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back to Recipes
             </Button>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                onClick={() => navigate(`/recipes/edit/${recipe.id}`)}
-              >
-                <Edit className="h-5 w-5 mr-2" />
-                Edit Recipe
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => toggleBookmark(recipe.id)}
-                className="h-10 w-10"
-              >
-                {isBookmarked(recipe.id) ? (
-                  <BookmarkCheck className="h-5 w-5" />
-                ) : (
-                  <BookmarkPlus className="h-5 w-5" />
-                )}
-                <span className="sr-only">
-                  {isBookmarked(recipe.id) ? "Remove bookmark" : "Add bookmark"}
-                </span>
-              </Button>
+            <h1 className="text-3xl font-extrabold tracking-tight mb-1">{recipe.name || "Unnamed Recipe"}</h1>
+            <div className="flex gap-2 mt-1">
+              {recipe.tags?.map((tag) =>
+                <Badge variant="outline" key={tag} className="bg-muted/70 border">{tag}</Badge>
+              )}
             </div>
           </div>
-          <h1 className="text-3xl font-bold">{recipe.name || "Unnamed Recipe"}</h1>
+          <div className="flex gap-2 self-end">
+            <Button
+              variant="outline"
+              onClick={() => navigate(`/recipes/edit/${recipe.id}`)}
+            >
+              <Edit className="h-5 w-5 mr-2" />
+              Edit Recipe
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => toggleBookmark(recipe.id)}
+              className="h-10 w-10"
+            >
+              {isBookmarked(recipe.id) ? (
+                <BookmarkCheck className="h-5 w-5" />
+              ) : (
+                <BookmarkPlus className="h-5 w-5" />
+              )}
+              <span className="sr-only">
+                {isBookmarked(recipe.id) ? "Remove bookmark" : "Add bookmark"}
+              </span>
+            </Button>
+          </div>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
-          <Card>
+        <div className="grid gap-8 md:grid-cols-2">
+          {/* Recipe Details */}
+          <Card className="shadow-xl rounded-2xl border-0 card-gradient">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Beer className="h-5 w-5" />
+                <Beer className="h-5 w-5 text-brewing-amber" />
                 Recipe Details
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div>
-                <div className="font-semibold">Author</div>
-                <div>{recipe.author || "Unknown"}</div>
-              </div>
-              <div>
-                <div className="font-semibold">Style</div>
-                <div>{recipe.style?.name || "No style"}</div>
-              </div>
-              <div>
-                <div className="font-semibold">Type</div>
-                <div>{recipe.type || "Not specified"}</div>
-              </div>
-              <div>
-                <div className="font-semibold">Batch Size</div>
-                <div>{recipe.batchSize || 0} liters</div>
-              </div>
-              <div>
-                <div className="font-semibold">Boil Time</div>
-                <div>{recipe.boilTime || 0} minutes</div>
-              </div>
-              <div>
-                <div className="font-semibold">Efficiency</div>
-                <div>{recipe.efficiency || 0}%</div>
-              </div>
-              <div>
-                <div className="font-semibold">Original Gravity (OG)</div>
-                <div>{recipe.originalGravity || "Not specified"}</div>
-              </div>
-              <div>
-                <div className="font-semibold">Final Gravity (FG)</div>
-                <div>{recipe.finalGravity || "Not specified"}</div>
-              </div>
-              <div>
-                <div className="font-semibold">ABV</div>
-                <div>{recipe.abv ? `${recipe.abv}%` : "Not specified"}</div>
-              </div>
-              <div>
-                <div className="font-semibold">Estimated Cost</div>
-                <div>${recipe.estimatedCost?.toFixed(2) || "0.00"}</div>
-              </div>
-              <div>
-                <div className="font-semibold">Tags</div>
-                <div>{recipe.tags?.length ? recipe.tags.join(", ") : "No tags"}</div>
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
+                <div>
+                  <div className="font-semibold text-muted-foreground">Author</div>
+                  <div>{recipe.author || "Unknown"}</div>
+                </div>
+                <div>
+                  <div className="font-semibold text-muted-foreground">Style</div>
+                  <div className="flex flex-col gap-0.5">
+                    <span>{recipe.style?.name || "No style"}</span>
+                    <span className="text-xs text-muted-foreground">{recipe.style?.category}</span>
+                  </div>
+                </div>
+                <div>
+                  <div className="font-semibold text-muted-foreground">Type</div>
+                  <Badge className="bg-brewing-amber/20 text-brewing-amber capitalize">{recipe.type || "Not specified"}</Badge>
+                </div>
+                <div>
+                  <div className="font-semibold text-muted-foreground">Batch Size</div>
+                  <Badge className="bg-muted border">{recipe.batchSize || 0} L</Badge>
+                </div>
+                <div>
+                  <div className="font-semibold text-muted-foreground">Boil Time</div>
+                  <Badge className="bg-muted border">{recipe.boilTime || 0} min</Badge>
+                </div>
+                <div>
+                  <div className="font-semibold text-muted-foreground">Efficiency</div>
+                  <Badge className="bg-brewing-hops/10 text-brewing-hops">{recipe.efficiency || 0}%</Badge>
+                </div>
+                <div>
+                  <div className="font-semibold text-muted-foreground">Original Gravity (OG)</div>
+                  <Badge variant="outline">{recipe.originalGravity || "Not specified"}</Badge>
+                </div>
+                <div>
+                  <div className="font-semibold text-muted-foreground">Final Gravity (FG)</div>
+                  <Badge variant="outline">{recipe.finalGravity || "Not specified"}</Badge>
+                </div>
+                <div>
+                  <div className="font-semibold text-muted-foreground">ABV</div>
+                  <Badge className="bg-brewing-copper/20 text-brewing-copper">
+                    {recipe.abv ? `${recipe.abv}%` : "Not specified"}
+                  </Badge>
+                </div>
+                <div>
+                  <div className="font-semibold text-muted-foreground">Estimated Cost</div>
+                  <Badge className="bg-brewing-brown/20 text-brewing-brown">
+                    ${recipe.estimatedCost?.toFixed(2) || "0.00"}
+                  </Badge>
+                </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          {/* Ingredients */}
+          <Card className="shadow-xl rounded-2xl border-0 card-gradient">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Package className="h-5 w-5" />
+                <Package className="h-5 w-5 text-brewing-hops" />
                 Ingredients
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-7">
               {Array.isArray(recipe.ingredients?.fermentables) && recipe.ingredients.fermentables.length > 0 && (
-                <div>
-                  <div className="font-semibold mb-2">Fermentables</div>
-                  <ul className="list-disc pl-4 space-y-1">
-                    {recipe.ingredients.fermentables.map((f, i) => (
-                      <li key={f.id || `fermentable-${i}`}>
-                        {f.name || "Unnamed"} - {f.amount || 0}kg
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <section>
+                  <div className="font-semibold mb-2 text-brewing-malt">Fermentables</div>
+                  <table className="w-full text-sm mb-4 rounded-md overflow-hidden">
+                    <thead className="text-muted-foreground bg-muted">
+                      <tr>
+                        <th className="px-3 py-1 text-left">Name</th>
+                        <th className="px-3 py-1 text-left">Amount (kg)</th>
+                        <th className="px-3 py-1 text-left">Color (°L)</th>
+                        <th className="px-3 py-1 text-left">Notes</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {recipe.ingredients.fermentables.map((f, i) => (
+                        <tr key={f.id || `fermentable-${i}`} className="hover:bg-muted/60">
+                          <td className="px-3 py-1">{f.name || "Unnamed"}</td>
+                          <td className="px-3 py-1">{f.amount || 0}</td>
+                          <td className="px-3 py-1">{f.color || 0}</td>
+                          <td className="px-3 py-1 text-xs">{f.notes || "-"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </section>
               )}
 
               {Array.isArray(recipe.ingredients?.hops) && recipe.ingredients.hops.length > 0 && (
-                <div>
-                  <div className="font-semibold mb-2">Hops</div>
-                  <ul className="list-disc pl-4 space-y-1">
-                    {recipe.ingredients.hops.map((h, i) => (
-                      <li key={h.id || `hop-${i}`}>
-                        {h.name || "Unnamed"} - {h.amount || 0}kg ({h.use || "boil"}, {h.time || 0} min)
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <section>
+                  <div className="font-semibold mb-2 text-brewing-hops">Hops</div>
+                  <table className="w-full text-sm mb-4 rounded-md overflow-hidden">
+                    <thead className="text-muted-foreground bg-muted">
+                      <tr>
+                        <th className="px-2 py-1">Name</th>
+                        <th className="px-2 py-1">Alpha %</th>
+                        <th className="px-2 py-1">Beta %</th>
+                        <th className="px-2 py-1">Form</th>
+                        <th className="px-2 py-1">Amount (kg)</th>
+                        <th className="px-2 py-1">Time (min)</th>
+                        <th className="px-2 py-1">Use</th>
+                        <th className="px-2 py-1">Notes</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {recipe.ingredients.hops.map((h, i) => (
+                        <tr key={h.id || `hop-${i}`} className="hover:bg-muted/60">
+                          <td className="px-2 py-1">{h.name || "Unnamed"}</td>
+                          <td className="px-2 py-1">{h.alpha ?? '-'}</td>
+                          <td className="px-2 py-1">{h.beta ?? '-'}</td>
+                          <td className="px-2 py-1">{h.form ?? '-'}</td>
+                          <td className="px-2 py-1">{h.amount || 0}</td>
+                          <td className="px-2 py-1">{h.time ?? '-'}</td>
+                          <td className="px-2 py-1">{h.use || '-'}</td>
+                          <td className="px-2 py-1">{h.notes || '-'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </section>
               )}
 
               {Array.isArray(recipe.ingredients?.yeasts) && recipe.ingredients.yeasts.length > 0 && (
-                <div>
-                  <div className="font-semibold mb-2">Yeast</div>
-                  <ul className="list-disc pl-4 space-y-1">
-                    {recipe.ingredients.yeasts.map((y, i) => (
-                      <li key={y.id || `yeast-${i}`}>
-                        {y.name || "Unnamed"}
-                        {y.laboratory ? ` (${y.laboratory}${y.productId ? ` ${y.productId}` : ""})` : ""}
-                        {y.type ? ` - ${y.type}` : ""}
-                        {y.form ? `, ${y.form}` : ""}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <section>
+                  <div className="font-semibold mb-2 text-brewing-wheat">Yeast</div>
+                  <table className="w-full text-sm mb-4 rounded-md overflow-hidden">
+                    <thead className="text-muted-foreground bg-muted">
+                      <tr>
+                        <th className="px-2 py-1">Name</th>
+                        <th className="px-2 py-1">Lab</th>
+                        <th className="px-2 py-1">Product</th>
+                        <th className="px-2 py-1">Type</th>
+                        <th className="px-2 py-1">Form</th>
+                        <th className="px-2 py-1">Flocculation</th>
+                        <th className="px-2 py-1">Temp (°C)</th>
+                        <th className="px-2 py-1">Attenuation (%)</th>
+                        <th className="px-2 py-1">Notes</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {recipe.ingredients.yeasts.map((y, i) => (
+                        <tr key={y.id || `yeast-${i}`} className="hover:bg-muted/60">
+                          <td className="px-2 py-1 font-semibold">{y.name || "Unnamed"}</td>
+                          <td className="px-2 py-1">{y.laboratory || "-"}</td>
+                          <td className="px-2 py-1">{y.productId || "-"}</td>
+                          <td className="px-2 py-1">{y.type || "-"}</td>
+                          <td className="px-2 py-1">{y.form || "-"}</td>
+                          <td className="px-2 py-1">{y.flocculation || "-"}</td>
+                          <td className="px-2 py-1">
+                            {y.tempRange ? `${y.tempRange.min}–${y.tempRange.max}` : "-"}
+                          </td>
+                          <td className="px-2 py-1">
+                            {typeof y.minAttenuation === "number" && typeof y.maxAttenuation === "number"
+                              ? `${y.minAttenuation}–${y.maxAttenuation}`
+                              : "-"}
+                          </td>
+                          <td className="px-2 py-1 text-xs">{y.notes || "-"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </section>
               )}
 
               {Array.isArray(recipe.ingredients?.miscs) && recipe.ingredients.miscs.length > 0 && (
-                <div>
-                  <div className="font-semibold mb-2">Miscellaneous</div>
-                  <ul className="list-disc pl-4 space-y-1">
-                    {recipe.ingredients.miscs.map((m, i) => (
-                      <li key={m.id || `misc-${i}`}>
-                        {m.name || "Unnamed"} - {m.amount || 0} {m.unit || ""} ({m.use || "boil"}, {m.time || 0} min)
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <section>
+                  <div className="font-semibold mb-2 text-brewing-copper">Miscellaneous</div>
+                  <table className="w-full text-sm mb-4 rounded-md overflow-hidden">
+                    <thead className="text-muted-foreground bg-muted">
+                      <tr>
+                        <th className="px-2 py-1">Name</th>
+                        <th className="px-2 py-1">Amount</th>
+                        <th className="px-2 py-1">Unit</th>
+                        <th className="px-2 py-1">Time (min)</th>
+                        <th className="px-2 py-1">Use</th>
+                        <th className="px-2 py-1">Notes</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {recipe.ingredients.miscs.map((m, i) => (
+                        <tr key={m.id || `misc-${i}`} className="hover:bg-muted/60">
+                          <td className="px-2 py-1">{m.name || "Unnamed"}</td>
+                          <td className="px-2 py-1">{m.amount || 0}</td>
+                          <td className="px-2 py-1">{m.unit || "-"}</td>
+                          <td className="px-2 py-1">{m.time || 0}</td>
+                          <td className="px-2 py-1">{m.use || "-"}</td>
+                          <td className="px-2 py-1 text-xs">{m.notes || "-"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </section>
               )}
-              
-              {(!recipe.ingredients?.fermentables?.length && !recipe.ingredients?.hops?.length && 
+
+              {(!recipe.ingredients?.fermentables?.length && !recipe.ingredients?.hops?.length &&
                 !recipe.ingredients?.yeasts?.length && !recipe.ingredients?.miscs?.length) && (
                 <div className="text-muted-foreground">No ingredients added</div>
               )}
             </CardContent>
           </Card>
 
-          <Card className="md:col-span-2">
+          {/* Brewing Process */}
+          <Card className="md:col-span-2 shadow-xl rounded-2xl border-0 card-gradient">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5" />
+                <FileText className="h-5 w-5 text-brewing-stout" />
                 Brewing Process
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 mt-2">
               <div>
-                <div className="font-semibold mb-1">Mash Schedule</div>
+                <div className="font-semibold mb-1 text-md">Mash Schedule</div>
                 {Array.isArray(recipe.mash?.steps) && recipe.mash.steps.length > 0 ? (
-                  <ul className="list-disc pl-4">
+                  <ul className="list-disc pl-4 fade-in">
                     {recipe.mash.steps.map((step, i) => (
                       <li key={i}>
                         <span className="font-medium">{step.name || `Step ${i + 1}`}</span>
@@ -214,14 +304,14 @@ export function ViewRecipe() {
                     ))}
                   </ul>
                 ) : (
-                  <div>No mash steps.</div>
+                  <div className="text-muted-foreground">No mash steps.</div>
                 )}
               </div>
-              
+
               <div>
-                <div className="font-semibold mb-1">Fermentation</div>
+                <div className="font-semibold mb-1 text-md">Fermentation</div>
                 {recipe.fermentation?.steps && Array.isArray(recipe.fermentation.steps) && recipe.fermentation.steps.length > 0 ? (
-                  <ul className="list-disc pl-4">
+                  <ul className="list-disc pl-4 fade-in">
                     {recipe.fermentation.steps.map((step, i) => (
                       <li key={i}>
                         <span className="font-medium">{step.name || `Step ${i + 1}`}</span>
@@ -242,23 +332,23 @@ export function ViewRecipe() {
                     {recipe.fermentation.notes ? ` – ${recipe.fermentation.notes}` : ""}
                   </div>
                 ) : (
-                  <div>No fermentation info.</div>
+                  <div className="text-muted-foreground">No fermentation info.</div>
                 )}
               </div>
-              
+
               <div>
-                <div className="font-semibold mb-1">Boil</div>
+                <div className="font-semibold mb-1 text-md">Boil</div>
                 {recipe.boil ? (
                   <span>
                     {recipe.boil.name || "Standard Boil"}, {recipe.boil.time || 60} min, {recipe.boil.temperature || 100}°C
                   </span>
                 ) : (
-                  <div>No boil info.</div>
+                  <div className="text-muted-foreground">No boil info.</div>
                 )}
               </div>
-              
+
               <div>
-                <div className="font-semibold mb-1">Clarification</div>
+                <div className="font-semibold mb-1 text-md">Clarification</div>
                 {recipe.clarification ? (
                   <span>
                     {recipe.clarification.name || "Standard Clarification"}, 
@@ -267,12 +357,12 @@ export function ViewRecipe() {
                     {typeof recipe.clarification.temperature !== "undefined" ? ` ${recipe.clarification.temperature}°C` : ""}
                   </span>
                 ) : (
-                  <div>No clarification info.</div>
+                  <div className="text-muted-foreground">No clarification info.</div>
                 )}
               </div>
-              
+
               <div>
-                <div className="font-semibold mb-1">Cold Crash</div>
+                <div className="font-semibold mb-1 text-md">Cold Crash</div>
                 {recipe.coldCrash ? (
                   <span>
                     {recipe.coldCrash.name || "Standard Cold Crash"}, 
@@ -280,12 +370,12 @@ export function ViewRecipe() {
                     {typeof recipe.coldCrash.period !== "undefined" ? ` ${recipe.coldCrash.period} hours` : ""}
                   </span>
                 ) : (
-                  <div>No cold crash info.</div>
+                  <div className="text-muted-foreground">No cold crash info.</div>
                 )}
               </div>
-              
+
               <div>
-                <div className="font-semibold mb-1">Carbonation</div>
+                <div className="font-semibold mb-1 text-md">Carbonation</div>
                 {recipe.carbonation ? (
                   <span>
                     {recipe.carbonation.name || "Standard Carbonation"}, 
@@ -295,12 +385,12 @@ export function ViewRecipe() {
                     {typeof recipe.carbonation.period !== "undefined" ? ` ${recipe.carbonation.period} days` : ""}
                   </span>
                 ) : (
-                  <div>No carbonation info.</div>
+                  <div className="text-muted-foreground">No carbonation info.</div>
                 )}
               </div>
-              
+
               <div>
-                <div className="font-semibold mb-1">Bottling</div>
+                <div className="font-semibold mb-1 text-md">Bottling</div>
                 {recipe.bottling ? (
                   <span>
                     {recipe.bottling.name || "Standard Bottling"}, 
@@ -309,12 +399,12 @@ export function ViewRecipe() {
                     {typeof recipe.bottling.period !== "undefined" ? ` ${recipe.bottling.period} days` : ""}
                   </span>
                 ) : (
-                  <div>No bottling info.</div>
+                  <div className="text-muted-foreground">No bottling info.</div>
                 )}
               </div>
-              
+
               <div>
-                <div className="font-semibold mb-1">Water Profile</div>
+                <div className="font-semibold mb-1 text-md">Water Profile</div>
                 {recipe.waterProfile ? (
                   <ul className="list-disc pl-4">
                     <li>
@@ -331,18 +421,19 @@ export function ViewRecipe() {
                     )}
                   </ul>
                 ) : (
-                  <span>No water profile.</span>
+                  <span className="text-muted-foreground">No water profile.</span>
                 )}
               </div>
-              
+
               {recipe.notes && (
                 <div>
-                  <div className="font-semibold mb-1">Other Notes</div>
+                  <div className="font-semibold mb-1 text-md">Other Notes</div>
                   <p className="whitespace-pre-wrap">{recipe.notes}</p>
                 </div>
               )}
             </CardContent>
           </Card>
+
         </div>
       </div>
     </Layout>
