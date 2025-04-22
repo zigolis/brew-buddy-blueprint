@@ -80,22 +80,28 @@ export const YeastSection = ({ form }) => {
                       value={searchQuery} 
                       onValueChange={(value) => setSearchQuery(value || '')}
                     />
-                    <CommandEmpty>No yeast found.</CommandEmpty>
-                    <CommandGroup>
-                      {getSuggestions(searchQuery).map((item) => (
-                        <CommandItem
-                          key={item.id || `yeast-${Math.random()}`}
-                          value={item.name}
-                          onSelect={(value) => {
-                            field.onChange(value);
-                            form.setValue('ingredients.yeasts.0.costPerUnit', item.costPerUnit || 0);
-                            setOpenPopover(false);
-                          }}
-                        >
-                          {item.name}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
+                    <CommandList>
+                      <CommandEmpty>
+                        <div className="py-1.5 px-2 text-sm">No yeast found.</div>
+                      </CommandEmpty>
+                      {getSuggestions(searchQuery).length > 0 && (
+                        <CommandGroup>
+                          {getSuggestions(searchQuery).map((item) => (
+                            <CommandItem
+                              key={item.id || `yeast-${Math.random()}`}
+                              value={item.name}
+                              onSelect={(value) => {
+                                field.onChange(value);
+                                form.setValue('ingredients.yeasts.0.costPerUnit', item.costPerUnit || 0);
+                                setOpenPopover(false);
+                              }}
+                            >
+                              {item.name}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      )}
+                    </CommandList>
                   </Command>
                 </PopoverContent>
               </Popover>

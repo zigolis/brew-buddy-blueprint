@@ -81,22 +81,21 @@ export const FermentableSearch = ({
             onValueChange={setSearchQuery}
           />
           <CommandList>
-            {suggestions.length === 0 ? (
-              <CommandEmpty>
-                {searchQuery.trim() !== '' && (
-                  <div 
-                    className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer hover:bg-accent"
-                    onClick={() => {
-                      onCreateNew();
-                      setOpen(false);
-                    }}
-                  >
-                    <Plus className="mr-2 h-4 w-4" />
-                    Create "{searchQuery}"
-                  </div>
-                )}
-              </CommandEmpty>
-            ) : (
+            <CommandEmpty>
+              {searchQuery.trim() !== '' && (
+                <div 
+                  className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer hover:bg-accent"
+                  onClick={() => {
+                    onCreateNew();
+                    setOpen(false);
+                  }}
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create "{searchQuery}"
+                </div>
+              )}
+            </CommandEmpty>
+            {suggestions.length > 0 && (
               <CommandGroup>
                 {suggestions.map((item) => (
                   <CommandItem
