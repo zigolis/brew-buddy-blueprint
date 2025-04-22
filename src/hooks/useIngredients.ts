@@ -8,8 +8,10 @@ export const useIngredients = () => {
   const [ingredients, setIngredients] = useState<Ingredient[]>(() => {
     try {
       const saved = localStorage.getItem('brewMasterIngredients');
+      if (!saved) return [];
+      
       // Ensure we always return an array, even if localStorage has invalid data
-      const parsedData = saved ? JSON.parse(saved) : [];
+      const parsedData = JSON.parse(saved);
       return Array.isArray(parsedData) ? parsedData : [];
     } catch (error) {
       console.error('Error loading ingredients from localStorage', error);
@@ -19,7 +21,9 @@ export const useIngredients = () => {
 
   useEffect(() => {
     try {
-      localStorage.setItem('brewMasterIngredients', JSON.stringify(ingredients));
+      if (ingredients && ingredients.length > 0) {
+        localStorage.setItem('brewMasterIngredients', JSON.stringify(ingredients));
+      }
     } catch (error) {
       console.error('Error saving ingredients to localStorage', error);
     }
@@ -75,11 +79,12 @@ export const useIngredients = () => {
   };
 
   const getIngredientById = (id: string) => {
+    if (!id) return undefined;
     return ingredients.find(ing => ing.id === id);
   };
 
   return {
-    ingredients,
+    ingredients: ingredients || [],
     addIngredient,
     updateIngredient,
     deleteIngredient,

@@ -5,11 +5,13 @@ import { Ingredient } from '@/types/ingredients';
 export const useIngredientSuggestions = () => {
   const { ingredients } = useIngredients();
 
-  const getFermentableSuggestions = (query: string): Ingredient[] => {
-    // Ensure ingredients exists and is an array before filtering
-    if (!ingredients || !Array.isArray(ingredients) || ingredients.length === 0) return [];
+  // Ensure ingredients is always an array, even if undefined or null
+  const safeIngredients = Array.isArray(ingredients) ? ingredients : [];
 
-    return ingredients
+  const getFermentableSuggestions = (query: string): Ingredient[] => {
+    if (!query) return []; // Return empty array for empty queries
+    
+    return safeIngredients
       .filter(ing => 
         ing.type === 'Grain' || 
         ing.type === 'Sugar' || 
@@ -23,10 +25,9 @@ export const useIngredientSuggestions = () => {
   };
 
   const getHopSuggestions = (query: string): Ingredient[] => {
-    // Ensure ingredients exists and is an array before filtering
-    if (!ingredients || !Array.isArray(ingredients) || ingredients.length === 0) return [];
-
-    return ingredients
+    if (!query) return []; // Return empty array for empty queries
+    
+    return safeIngredients
       .filter(ing => ing.type === 'Hop')
       .filter(ing => 
         ing.name.toLowerCase().includes(query.toLowerCase())
@@ -34,10 +35,9 @@ export const useIngredientSuggestions = () => {
   };
 
   const getYeastSuggestions = (query: string): Ingredient[] => {
-    // Ensure ingredients exists and is an array before filtering
-    if (!ingredients || !Array.isArray(ingredients) || ingredients.length === 0) return [];
-
-    return ingredients
+    if (!query) return []; // Return empty array for empty queries
+    
+    return safeIngredients
       .filter(ing => ing.type === 'Yeast')
       .filter(ing => 
         ing.name.toLowerCase().includes(query.toLowerCase())

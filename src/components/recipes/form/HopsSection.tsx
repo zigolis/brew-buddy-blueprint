@@ -22,6 +22,7 @@ import {
 export const HopsSection = ({ form }) => {
   const [hops, setHops] = useState([{ id: 0 }]);
   const [openPopover, setOpenPopover] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const { getHopSuggestions } = useIngredientSuggestions();
 
   const addHop = () => {
@@ -54,7 +55,10 @@ export const HopsSection = ({ form }) => {
                 <FormLabel>Name*</FormLabel>
                 <Popover 
                   open={openPopover === index} 
-                  onOpenChange={(open) => setOpenPopover(open ? index : null)}
+                  onOpenChange={(open) => {
+                    setOpenPopover(open ? index : null);
+                    if (open) setSearchQuery(field.value || '');
+                  }}
                 >
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -63,11 +67,14 @@ export const HopsSection = ({ form }) => {
                   </PopoverTrigger>
                   <PopoverContent className="p-0" align="start">
                     <Command>
-                      <CommandInput placeholder="Search hop..." />
+                      <CommandInput 
+                        placeholder="Search hop..." 
+                        value={searchQuery} 
+                        onValueChange={setSearchQuery}
+                      />
                       <CommandEmpty>No hop found.</CommandEmpty>
                       <CommandGroup>
-                        {/* Use an empty array as fallback */}
-                        {(getHopSuggestions(field.value || '') || []).map((item) => (
+                        {getHopSuggestions(searchQuery).map((item) => (
                           <CommandItem
                             key={item.id}
                             value={item.name}

@@ -28,6 +28,7 @@ import {
 export const FermentablesSection = ({ form }) => {
   const [fermentables, setFermentables] = useState([{ id: 0 }]);
   const [openPopover, setOpenPopover] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const { getFermentableSuggestions } = useIngredientSuggestions();
 
   const addFermentable = () => {
@@ -60,7 +61,10 @@ export const FermentablesSection = ({ form }) => {
                 <FormLabel>Name*</FormLabel>
                 <Popover 
                   open={openPopover === index} 
-                  onOpenChange={(open) => setOpenPopover(open ? index : null)}
+                  onOpenChange={(open) => {
+                    setOpenPopover(open ? index : null);
+                    if (open) setSearchQuery(field.value || '');
+                  }}
                 >
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -69,11 +73,14 @@ export const FermentablesSection = ({ form }) => {
                   </PopoverTrigger>
                   <PopoverContent className="p-0" align="start">
                     <Command>
-                      <CommandInput placeholder="Search fermentable..." />
+                      <CommandInput 
+                        placeholder="Search fermentable..." 
+                        value={searchQuery} 
+                        onValueChange={setSearchQuery}
+                      />
                       <CommandEmpty>No fermentable found.</CommandEmpty>
                       <CommandGroup>
-                        {/* Use an empty array as fallback */}
-                        {(getFermentableSuggestions(field.value || '') || []).map((item) => (
+                        {getFermentableSuggestions(searchQuery).map((item) => (
                           <CommandItem
                             key={item.id}
                             value={item.name}

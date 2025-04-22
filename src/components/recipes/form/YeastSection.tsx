@@ -19,6 +19,7 @@ import { useState } from "react";
 
 export const YeastSection = ({ form }) => {
   const [openPopover, setOpenPopover] = useState(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const { getYeastSuggestions } = useIngredientSuggestions();
 
   return (
@@ -38,7 +39,13 @@ export const YeastSection = ({ form }) => {
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Name*</FormLabel>
-              <Popover open={openPopover} onOpenChange={setOpenPopover}>
+              <Popover 
+                open={openPopover} 
+                onOpenChange={(open) => {
+                  setOpenPopover(open);
+                  if (open) setSearchQuery(field.value || '');
+                }}
+              >
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Input placeholder="Search yeast..." {...field} />
@@ -46,11 +53,14 @@ export const YeastSection = ({ form }) => {
                 </PopoverTrigger>
                 <PopoverContent className="p-0" align="start">
                   <Command>
-                    <CommandInput placeholder="Search yeast..." />
+                    <CommandInput 
+                      placeholder="Search yeast..." 
+                      value={searchQuery} 
+                      onValueChange={setSearchQuery}
+                    />
                     <CommandEmpty>No yeast found.</CommandEmpty>
                     <CommandGroup>
-                      {/* Use an empty array as fallback */}
-                      {(getYeastSuggestions(field.value || '') || []).map((item) => (
+                      {getYeastSuggestions(searchQuery).map((item) => (
                         <CommandItem
                           key={item.id}
                           value={item.name}
