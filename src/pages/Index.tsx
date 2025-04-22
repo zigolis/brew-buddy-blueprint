@@ -1,14 +1,150 @@
-// Update this page (the content is just a fallback if you fail to update the page)
 
-const Index = () => {
+import { Layout } from "@/components/layout/Layout";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Beer, Calculator, FileText, List, Package } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useBrewContext } from "@/contexts/BrewContext";
+
+const HomePage = () => {
+  const { recipes, equipment } = useBrewContext();
+  
+  const recipeCount = recipes.length;
+  const equipmentCount = equipment.length;
+  
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <Layout>
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold">Welcome to BrewMaster Pro</h1>
+          <p className="text-muted-foreground">
+            Your comprehensive brewing companion - manage recipes, track costs, and brew with confidence.
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card>
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xl">Recipes</CardTitle>
+                <Beer className="h-5 w-5 text-brewing-amber" />
+              </div>
+              <CardDescription>Manage your brewing recipes</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{recipeCount}</div>
+              <p className="text-sm text-muted-foreground">saved recipes</p>
+            </CardContent>
+            <CardFooter>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/recipes">View Recipes</Link>
+              </Button>
+            </CardFooter>
+          </Card>
+          
+          <Card>
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xl">Ingredients</CardTitle>
+                <Package className="h-5 w-5 text-brewing-amber" />
+              </div>
+              <CardDescription>Track your brewing ingredients</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                Manage your malt, hops, yeast and other ingredients. Track usage and costs.
+              </p>
+            </CardContent>
+            <CardFooter>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/ingredients">View Ingredients</Link>
+              </Button>
+            </CardFooter>
+          </Card>
+          
+          <Card>
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xl">Equipment</CardTitle>
+                <List className="h-5 w-5 text-brewing-amber" />
+              </div>
+              <CardDescription>Manage your brewing gear</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{equipmentCount}</div>
+              <p className="text-sm text-muted-foreground">equipment items</p>
+            </CardContent>
+            <CardFooter>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/equipment">View Equipment</Link>
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xl">Brewing Guide</CardTitle>
+                <FileText className="h-5 w-5 text-brewing-amber" />
+              </div>
+              <CardDescription>Step-by-step brewing instructions</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                Interactive brewing guides to help you brew with confidence. Get started with a guided brewing session.
+              </p>
+            </CardContent>
+            <CardFooter>
+              <Button asChild className="w-full">
+                <Link to="/brewing-guide">Start Brewing</Link>
+              </Button>
+            </CardFooter>
+          </Card>
+          
+          <Card>
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xl">Cost Calculator</CardTitle>
+                <Calculator className="h-5 w-5 text-brewing-amber" />
+              </div>
+              <CardDescription>Track and analyze brewing costs</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                Calculate the cost of your recipes, including ingredients, equipment, and utilities.
+              </p>
+            </CardContent>
+            <CardFooter>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/calculator">Open Calculator</Link>
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
+        
+        <div className="mt-8">
+          <Card className="bg-accent">
+            <CardHeader>
+              <CardTitle>Import BeerXML</CardTitle>
+              <CardDescription>
+                Import your existing recipes from BeerSmith, Brewfather or other brewing software
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">
+                BrewMaster Pro supports the industry-standard BeerXML format for importing recipes.
+              </p>
+              <Button asChild>
+                <Link to="/import">Import Recipe</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 
-export default Index;
+export default HomePage;

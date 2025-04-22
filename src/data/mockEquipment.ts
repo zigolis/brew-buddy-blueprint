@@ -1,0 +1,66 @@
+
+import { Equipment } from '@/types/beer';
+import { v4 as uuidv4 } from 'uuid';
+
+export const mockEquipment: Equipment[] = [
+  {
+    id: uuidv4(),
+    name: 'Basic All-Grain Setup',
+    type: 'All Grain',
+    batchSize: 20,
+    boilSize: 25,
+    boilTime: 60,
+    efficiency: 75,
+    notes: 'Standard 20L all-grain brewing setup with cooler mash tun.',
+    cost: 350,
+    purchaseDate: '2022-01-15',
+  },
+  {
+    id: uuidv4(),
+    name: 'Electric Brewing System',
+    type: 'All Grain',
+    batchSize: 25,
+    boilSize: 30,
+    boilTime: 90,
+    efficiency: 80,
+    notes: 'High-efficiency electric brewing system with recirculation pump.',
+    cost: 1200,
+    purchaseDate: '2023-07-22',
+  },
+  {
+    id: uuidv4(),
+    name: '10L BIAB Kit',
+    type: 'BIAB',
+    batchSize: 10,
+    boilSize: 12,
+    boilTime: 60,
+    efficiency: 70,
+    notes: 'Small batch brew in a bag setup, perfect for testing recipes.',
+    cost: 150,
+    purchaseDate: '2022-05-10',
+  },
+  {
+    id: uuidv4(),
+    name: 'Stainless Conical Fermenter',
+    type: 'Fermenter',
+    batchSize: 20,
+    boilSize: 0,
+    boilTime: 0,
+    efficiency: 0,
+    notes: 'Temperature controlled stainless steel conical fermenter.',
+    cost: 400,
+    purchaseDate: '2023-02-28',
+  },
+  {
+    id: uuidv4(),
+    name: 'Bottling Equipment',
+    type: 'Packaging',
+    batchSize: 20,
+    boilSize: 0,
+    boilTime: 0,
+    efficiency: 0,
+    notes: 'Complete bottling setup with bottle capper and 50 reusable bottles.',
+    cost: 120,
+    purchaseDate: '2022-01-15',
+  }
+];

@@ -52,6 +52,16 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				brewing: {
+					amber: '#D9A13B',
+					brown: '#8B4513',
+					cream: '#F5F0E1',
+					copper: '#B87333',
+					stout: '#2E1E0F',
+					wheat: '#F5DEB3',
+					hops: '#5D8C3E',
+					malt: '#C19A6B'
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
