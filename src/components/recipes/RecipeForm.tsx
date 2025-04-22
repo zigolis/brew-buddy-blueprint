@@ -10,6 +10,7 @@ import { HopsSection } from "./form/HopsSection";
 import { YeastSection } from "./form/YeastSection";
 import { MashScheduleSection } from "./form/MashScheduleSection";
 import { Separator } from "@/components/ui/separator";
+import { useRecipeCost } from "@/hooks/useRecipeCost";
 
 interface RecipeFormProps {
   onSubmit: (data: Partial<Recipe>) => void;
@@ -41,6 +42,9 @@ export function RecipeForm({ onSubmit, initialData }: RecipeFormProps) {
     },
   });
 
+  const formValues = form.watch();
+  const { totalCost } = useRecipeCost(formValues);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -56,7 +60,10 @@ export function RecipeForm({ onSubmit, initialData }: RecipeFormProps) {
         <Separator />
         <MashScheduleSection form={form} />
         
-        <div className="flex justify-end space-x-4">
+        <div className="flex justify-between items-center">
+          <div className="text-lg font-semibold">
+            Total Recipe Cost: ${totalCost.toFixed(2)}
+          </div>
           <Button type="submit">Create Recipe</Button>
         </div>
       </form>
