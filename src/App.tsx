@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { BrewContextProvider } from "@/contexts/BrewContext";
 import Index from "./pages/Index";
 import RecipeList from "./pages/recipes/RecipeList";
+import NewRecipe from "./pages/recipes/NewRecipe";
 import ImportRecipe from "./pages/import/ImportRecipe";
 import BrewingGuide from "./pages/brewing-guide/BrewingGuide";
 import IngredientsList from "./pages/ingredients/IngredientsList";
@@ -25,6 +27,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/recipes" element={<RecipeList />} />
+            <Route path="/recipes/new" element={<NewRecipe />} />
             <Route path="/ingredients" element={<IngredientsList />} />
             <Route path="/equipment" element={<EquipmentList />} />
             <Route path="/calculator" element={<CostCalculator />} />
