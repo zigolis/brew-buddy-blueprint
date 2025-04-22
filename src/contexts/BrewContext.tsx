@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useState, useEffect } from "react";
 import { Recipe, Equipment } from "@/types";
 import { mockRecipes } from "@/data/mockRecipes";
@@ -12,6 +13,8 @@ interface BrewContextProps {
   addEquipment: (equipment: Equipment) => void;
   updateEquipment: (id: string, equipment: Equipment) => void;
   deleteEquipment: (id: string) => void;
+  toggleBookmark: (id: string) => void;
+  isBookmarked: (id: string) => boolean;
 }
 
 const BrewContext = createContext<BrewContextProps | undefined>(undefined);
@@ -39,6 +42,16 @@ export const BrewContextProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   });
 
+  const [bookmarkedRecipes, setBookmarkedRecipes] = useState<string[]>(() => {
+    try {
+      const storedBookmarks = localStorage.getItem("brewMasterBookmarks");
+      return storedBookmarks ? JSON.parse(storedBookmarks) : [];
+    } catch (error) {
+      console.error("Error loading bookmarks from localStorage:", error);
+      return [];
+    }
+  });
+
   useEffect(() => {
     localStorage.setItem("brewMasterRecipes", JSON.stringify(recipes));
   }, [recipes]);
@@ -46,6 +59,10 @@ export const BrewContextProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     localStorage.setItem("brewMasterEquipment", JSON.stringify(equipment));
   }, [equipment]);
+
+  useEffect(() => {
+    localStorage.setItem("brewMasterBookmarks", JSON.stringify(bookmarkedRecipes));
+  }, [bookmarkedRecipes]);
 
   const addRecipe = (recipe: Recipe) => {
     setRecipes((prevRecipes) => [...prevRecipes, recipe]);
@@ -61,6 +78,10 @@ export const BrewContextProvider: React.FC<{ children: React.ReactNode }> = ({
     setRecipes((prevRecipes) =>
       prevRecipes.filter((recipe) => recipe.id !== id)
     );
+    // Also remove from bookmarks if it exists there
+    if (isBookmarked(id)) {
+      toggleBookmark(id);
+    }
   };
 
   const addEquipment = (equipment: Equipment) => {
@@ -79,6 +100,20 @@ export const BrewContextProvider: React.FC<{ children: React.ReactNode }> = ({
     );
   };
 
+  const toggleBookmark = (id: string) => {
+    setBookmarkedRecipes((prevBookmarks) => {
+      if (prevBookmarks.includes(id)) {
+        return prevBookmarks.filter((bookmarkId) => bookmarkId !== id);
+      } else {
+        return [...prevBookmarks, id];
+      }
+    });
+  };
+
+  const isBookmarked = (id: string): boolean => {
+    return bookmarkedRecipes.includes(id);
+  };
+
   const value: BrewContextProps = {
     recipes,
     equipment,
@@ -88,6 +123,8 @@ export const BrewContextProvider: React.FC<{ children: React.ReactNode }> = ({
     addEquipment,
     updateEquipment,
     deleteEquipment,
+    toggleBookmark,
+    isBookmarked,
   };
 
   return <BrewContext.Provider value={value}>{children}</BrewContext.Provider>;
