@@ -18,6 +18,7 @@ export interface Recipe {
   author: string;
   type: 'Extract' | 'Partial Mash' | 'All Grain';
   batchSize: number;
+  boilSize: number;
   boilTime: number;
   efficiency: number;
   originalGravity: number | null;
