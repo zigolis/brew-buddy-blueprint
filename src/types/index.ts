@@ -1,8 +1,8 @@
 
 // Export types without duplicating them
-export * from './recipe';
 export * from './style';
 export { Ingredient } from './ingredients';
+export type * from './recipe';
 export type * from './profiles';
 export type * from './brewing';
 export type * from './equipment';
