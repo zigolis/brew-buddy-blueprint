@@ -16,7 +16,7 @@ export function Layout({ children }: LayoutProps) {
         <div className="hidden md:block transition-all duration-300 ease-in-out">
           <Sidebar />
         </div>
-        <main className="flex-1 p-6 md:p-8 overflow-y-auto">{children}</main>
+        <main className="flex-1 p-6 md:p-8 overflow-y-auto mt-6 md:mt-8">{children}</main>
       </div>
       <Footer />
     </div>
