@@ -75,7 +75,7 @@ export const BottlingSection = ({ form }) => {
                   {...field}
                   onChange={(e) => field.onChange(Number(e.target.value))}
                 />
-              </Control>
+              </FormControl>
             </FormItem>
           )}
         />
