@@ -34,7 +34,7 @@ export const ModernActivityChart = ({
 }: ChartProps) => {
   // Generate some default data if not provided
   const chartData = useMemo(() => {
-    if (data.length > 0) return data;
+    if (data && data.length > 0) return data;
     
     const defaultData = [];
     const date = new Date();
@@ -55,8 +55,8 @@ export const ModernActivityChart = ({
   }, [data]);
 
   return (
-    <Card className={cn("", className)}>
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
+    <Card className={cn("w-full", className)}>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
         <div>
           <CardTitle className="text-base font-medium">{title}</CardTitle>
           <CardDescription>{description}</CardDescription>
@@ -74,9 +74,9 @@ export const ModernActivityChart = ({
           </Select>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="h-8 px-2">
+              <Button variant="outline" size="sm" className="h-8 px-2">
                 Export
-                <ChevronDown className="ml-1 h-3 w-3 text-muted-foreground" />
+                <ChevronDown className="ml-2 h-3 w-3" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -87,39 +87,39 @@ export const ModernActivityChart = ({
           </DropdownMenu>
         </div>
       </CardHeader>
-      <CardContent className="pt-4">
-        <div className="h-[300px]">
+      <CardContent>
+        <div className="h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={chartData}
               margin={{
                 top: 10,
                 right: 10,
-                left: 0,
+                left: 10,
                 bottom: 20,
               }}
             >
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
               <XAxis
                 dataKey="date"
                 axisLine={false}
                 tickLine={false}
                 tickMargin={10}
-                stroke="#888888"
+                stroke="hsl(var(--muted-foreground))"
                 fontSize={12}
               />
               <YAxis
                 axisLine={false}
                 tickLine={false}
                 tickMargin={10}
-                stroke="#888888"
+                stroke="hsl(var(--muted-foreground))"
                 fontSize={12}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "white",
-                  borderRadius: "8px",
-                  border: "1px solid #e2e8f0",
+                  backgroundColor: "hsl(var(--card))",
+                  borderRadius: "0.5rem",
+                  border: "1px solid hsl(var(--border))",
                   boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
                 }}
               />
@@ -132,27 +132,27 @@ export const ModernActivityChart = ({
                 type="monotone"
                 dataKey="created"
                 name="Created"
-                stroke="#10b981"
+                stroke="hsl(var(--primary))"
                 strokeWidth={2}
-                dot={{ r: 0 }}
+                dot={false}
                 activeDot={{ r: 6, strokeWidth: 0 }}
               />
               <Line
                 type="monotone"
                 dataKey="brewed"
                 name="Brewed"
-                stroke="#f59e0b"
+                stroke="hsl(var(--secondary))"
                 strokeWidth={2}
-                dot={{ r: 0 }}
+                dot={false}
                 activeDot={{ r: 6, strokeWidth: 0 }}
               />
               <Line
                 type="monotone"
                 dataKey="updated"
                 name="Updated"
-                stroke="#3b82f6"
+                stroke="hsl(var(--accent))"
                 strokeWidth={2}
-                dot={{ r: 0 }}
+                dot={false}
                 activeDot={{ r: 6, strokeWidth: 0 }}
               />
             </LineChart>

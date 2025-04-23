@@ -1,8 +1,7 @@
 
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { RecipeActivityChart } from "@/components/stats/RecipeActivityChart";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ModernActivityChart } from "@/components/stats/ModernActivityChart";
 import { useBrewContext } from "@/contexts/BrewContext";
 import { Link } from "react-router-dom";
@@ -15,59 +14,53 @@ export default function HomePage() {
   
   return (
     <Layout>
-      <div className="space-y-6">
+      <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-bold">Dashboard</h1>
-          <p className="text-muted-foreground">Your brewing activity overview</p>
+          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+          <p className="text-muted-foreground mt-2">Your brewing activity overview</p>
         </div>
         
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <Card>
-            <CardHeader className="pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">Total Recipes</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">{totalRecipes}</div>
+              <div className="text-2xl font-bold">{totalRecipes}</div>
             </CardContent>
           </Card>
           
           <Card>
-            <CardHeader className="pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">Brewed Recipes</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">{brewedRecipes}</div>
+              <div className="text-2xl font-bold">{brewedRecipes}</div>
             </CardContent>
           </Card>
           
           <Card>
-            <CardHeader className="pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">Ingredients</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">-</div>
+              <div className="text-2xl font-bold">-</div>
             </CardContent>
           </Card>
           
           <Card>
-            <CardHeader className="pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">Equipment</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">-</div>
+              <div className="text-2xl font-bold">-</div>
             </CardContent>
           </Card>
         </div>
         
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
           <Card className="col-span-1">
-            <CardHeader>
-              <CardTitle>Recipe Activity</CardTitle>
-              <CardDescription>Your recipe creation and brewing activity</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ModernActivityChart data={recipes} />
-            </CardContent>
+            <ModernActivityChart data={recipes} />
           </Card>
           
           <Card className="col-span-1">
@@ -75,28 +68,28 @@ export default function HomePage() {
               <CardTitle>Quick Actions</CardTitle>
               <CardDescription>Common tasks and shortcuts</CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Link to="/recipes/new">
-                  <Button className="w-full" variant="outline">
+            <CardContent>
+              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
+                <Link to="/recipes/new" className="w-full">
+                  <Button className="w-full h-10" variant="outline">
                     <Plus className="mr-2 h-4 w-4" />
                     New Recipe
                   </Button>
                 </Link>
-                <Link to="/brewing-guide">
-                  <Button className="w-full" variant="outline">
+                <Link to="/brewing-guide" className="w-full">
+                  <Button className="w-full h-10" variant="outline">
                     <Beer className="mr-2 h-4 w-4" />
                     Start Brewing
                   </Button>
                 </Link>
-                <Link to="/import">
-                  <Button className="w-full" variant="outline">
+                <Link to="/import" className="w-full">
+                  <Button className="w-full h-10" variant="outline">
                     <Database className="mr-2 h-4 w-4" />
                     Import BeerXML
                   </Button>
                 </Link>
-                <Link to="/ingredients">
-                  <Button className="w-full" variant="outline">
+                <Link to="/ingredients" className="w-full">
+                  <Button className="w-full h-10" variant="outline">
                     <FileText className="mr-2 h-4 w-4" />
                     Manage Inventory
                   </Button>

@@ -16,7 +16,7 @@ export function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
-      <div className="flex flex-1 w-full">
+      <div className="flex flex-1 w-full max-w-[1920px] mx-auto">
         {/* Mobile sidebar toggle */}
         <div className="md:hidden fixed bottom-4 left-4 z-50">
           <Button 
@@ -46,8 +46,8 @@ export function Layout({ children }: LayoutProps) {
           <Sidebar />
         </div>
         
-        <main className="flex-1 p-4 md:p-8 overflow-y-auto max-w-full">
-          <div className="mx-auto max-w-7xl">
+        <main className="flex-1 p-4 md:p-8 overflow-y-auto w-full">
+          <div className="mx-auto max-w-7xl space-y-8">
             {children}
           </div>
         </main>
