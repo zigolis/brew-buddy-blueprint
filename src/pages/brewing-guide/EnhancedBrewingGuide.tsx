@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { useBrewContext } from "@/contexts/BrewContext";
@@ -179,7 +180,9 @@ const EnhancedBrewingGuide = () => {
                 <TabsContent value="instructions" className="space-y-4 pt-4">
                   <div className="space-y-4">
                     {currentStep.tips.map((tip, index) => (
-                      <BrewingTip key={index} tip={tip} />
+                      <BrewingTip key={index} title={tip}>
+                        {tip}
+                      </BrewingTip>
                     ))}
                   </div>
                   
@@ -214,7 +217,7 @@ const EnhancedBrewingGuide = () => {
                       {recipe.mash.steps.map((step, idx) => (
                         <div key={idx} className="space-y-2">
                           <p>{step.name} ({step.temperature}°C)</p>
-                          <BrewingTimer initialMinutes={step.time} label={step.name} />
+                          <BrewingTimer initialMinutes={step.time} title={step.name} />
                         </div>
                       ))}
                     </div>
@@ -223,7 +226,7 @@ const EnhancedBrewingGuide = () => {
                   {currentStep.id === "boiling" && (
                     <div className="space-y-4">
                       <h3 className="font-medium">Boil Timer:</h3>
-                      <BrewingTimer initialMinutes={recipe.boilTime} label="Full Boil" />
+                      <BrewingTimer initialMinutes={recipe.boilTime} title="Full Boil" />
                       
                       {recipe.ingredients?.hops && (
                         <div>
@@ -234,7 +237,7 @@ const EnhancedBrewingGuide = () => {
                             .map((hop, idx) => (
                               <div key={idx} className="mb-3">
                                 <p>{hop.name} ({hop.amount}g)</p>
-                                <BrewingTimer initialMinutes={hop.time} label={`Add ${hop.name}`} />
+                                <BrewingTimer initialMinutes={hop.time} title={`Add ${hop.name}`} />
                               </div>
                             ))}
                         </div>
@@ -246,7 +249,7 @@ const EnhancedBrewingGuide = () => {
                     <div className="space-y-4">
                       <BrewingTimer
                         initialMinutes={recipe.fermentation.period * 24 * 60}
-                        label="Fermentation Time"
+                        title="Fermentation Time"
                       />
                     </div>
                   )}
@@ -256,7 +259,7 @@ const EnhancedBrewingGuide = () => {
                    currentStep.id !== "fermentation" && (
                     <div className="p-4 text-center">
                       <h3 className="font-medium mb-2">Custom Timer:</h3>
-                      <BrewingTimer initialMinutes={30} label="Custom Timer" />
+                      <BrewingTimer initialMinutes={30} title="Custom Timer" />
                     </div>
                   )}
                 </TabsContent>
