@@ -32,9 +32,19 @@ export const useIngredientSuggestions = () => {
     return [];
   };
 
+  const addNewHop = (hopData: Partial<Ingredient>) => {
+    return createIngredientSuggestion(hopData);
+  };
+
+  const addNewYeast = (yeastData: Partial<Ingredient>) => {
+    return createIngredientSuggestion(yeastData);
+  };
+
   return {
     getFermentableSuggestions,
     getHopSuggestions,
-    getYeastSuggestions
+    getYeastSuggestions,
+    addNewHop,
+    addNewYeast
   };
 };

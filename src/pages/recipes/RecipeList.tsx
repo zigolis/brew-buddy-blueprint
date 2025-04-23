@@ -5,10 +5,9 @@ import { useBrewContext } from "@/contexts/BrewContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
-import { Plus, Search, Database, Edit, Trash2, FlaskConical } from "lucide-react";
+import { Plus, Search, Database, Edit, Trash2, FlaskConical, Eye } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 const RecipeList = () => {
   const { recipes, deleteRecipe } = useBrewContext();
@@ -133,27 +132,37 @@ const RecipeList = () => {
                 </CardContent>
                 <CardFooter className="pt-0">
                   <div className="flex justify-end w-full gap-2">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm">Actions</Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => navigate(`/recipes/edit/${recipe.id}`)}>
-                          <Edit className="w-4 h-4 mr-2" />
-                          Edit Recipe
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleBrew(recipe.id)}>
-                          <FlaskConical className="w-4 h-4 mr-2" />
-                          Brew Recipe
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleDelete(recipe.id)}>
-                          <Trash2 className="w-4 h-4 mr-2" />
-                          Delete Recipe
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                    <Button variant="outline" size="sm" onClick={() => navigate(`/recipes/${recipe.id}`)}>
-                      View
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => navigate(`/recipes/${recipe.id}`)}
+                      title="View Recipe"
+                    >
+                      <Eye className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => navigate(`/recipes/edit/${recipe.id}`)}
+                      title="Edit Recipe"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDelete(recipe.id)}
+                      title="Delete Recipe"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleBrew(recipe.id)}
+                      title="Brew Recipe"
+                    >
+                      <FlaskConical className="h-4 w-4" />
                     </Button>
                   </div>
                 </CardFooter>

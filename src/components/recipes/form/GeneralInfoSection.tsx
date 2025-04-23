@@ -1,10 +1,21 @@
-
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { WaterSection } from "./WaterSection";
+import { BeerStyleAutocomplete } from "./style/BeerStyleAutocomplete";
+import { waterProfiles } from "./style/beerStyles";
 
 export const GeneralInfoSection = ({ form }) => {
+  const handleStyleChange = (style) => {
+    form.setValue("style", style);
+    
+    // Update water profile based on selected style
+    const waterProfile = waterProfiles[style.name];
+    if (waterProfile) {
+      form.setValue("waterProfile", waterProfile);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">General Information</h2>
@@ -45,7 +56,10 @@ export const GeneralInfoSection = ({ form }) => {
           <FormItem>
             <FormLabel>Beer Style</FormLabel>
             <FormControl>
-              <Input placeholder="Enter beer style" {...field} />
+              <BeerStyleAutocomplete
+                value={field.value}
+                onChange={handleStyleChange}
+              />
             </FormControl>
           </FormItem>
         )}
