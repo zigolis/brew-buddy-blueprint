@@ -1,11 +1,10 @@
-
 import { useState } from "react";
 import { useBrewContext } from "@/contexts/BrewContext";
 import { Layout } from "@/components/layout/Layout";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, Edit, Trash2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -16,12 +15,16 @@ import {
 } from "@/components/ui/table";
 
 export default function EquipmentList() {
-  const { equipment } = useBrewContext();
+  const { equipment, deleteEquipment } = useBrewContext();
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredEquipment = equipment.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleDeleteEquipment = (id: string) => {
+    deleteEquipment(id);
+  };
 
   return (
     <Layout>
