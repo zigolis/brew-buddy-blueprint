@@ -75,13 +75,18 @@ export const RecipeWizardStepper = ({
     };
   }, [setShouldChangeStep, setIsDialogOpen]);
 
+  const handleTabChange = (value: string) => {
+    const newIndex = recipeSteps.findIndex(step => step.id === value);
+    if (newIndex !== -1 && newIndex <= currentStep) {
+      setCurrentStep(newIndex);
+    }
+  };
+
   return (
     <Tabs
       value={recipeSteps[currentStep].id}
-      onValueChange={value => {
-        const newIndex = recipeSteps.findIndex(step => step.id === value);
-        if (newIndex !== -1) setCurrentStep(newIndex);
-      }}
+      onValueChange={handleTabChange}
+      defaultValue={recipeSteps[0].id}
     >
       <RecipeStepsNavigation steps={recipeSteps} currentStep={currentStep} />
       <div className="mt-6 md:mt-8"> {/* Add margin here */}

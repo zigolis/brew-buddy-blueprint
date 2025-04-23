@@ -16,7 +16,6 @@ import { FermentationSection } from "./form/FermentationSection";
 import { ColdCrashSection } from "./form/ColdCrashSection";
 import { CarbonationSection } from "./form/CarbonationSection";
 import { BottlingSection } from "./form/BottlingSection";
-import { useRecipeCost } from "@/hooks/useRecipeCost";
 import { useEffect } from "react";
 
 interface RecipeFormProps {
@@ -121,15 +120,14 @@ export function RecipeForm({ onSubmit, initialData, visibleSections }: RecipeFor
   }, [initialData, form]);
 
   const formValues = form.watch();
-  const { totalCost } = useRecipeCost(formValues);
 
   const sectionsToRender = visibleSections && visibleSections.length > 0 
     ? Object.entries(sectionComponents).filter(([key]) => visibleSections.includes(key))
     : Object.entries(sectionComponents);
 
-  // Check if we're on the fermentation step (which is the last step)
+  // Check if we're on specific steps
   const isOnFermentationStep = visibleSections?.includes('fermentation');
-  const isOnStatsStep = visibleSections?.includes('stats');
+  const isOnCarbonationStep = visibleSections?.includes('carbonation');
   
   return (
     <Form {...form}>
@@ -141,21 +139,19 @@ export function RecipeForm({ onSubmit, initialData, visibleSections }: RecipeFor
           </div>
         ))}
         
-        {(visibleSections?.includes('bottling') || !visibleSections) && (
-          <div className="flex justify-between items-center pt-4">
-            <div className="text-lg font-semibold">
-              Total Recipe Cost: ${totalCost.toFixed(2)}
-            </div>
+        {isOnCarbonationStep && (
+          <div className="flex justify-end pt-4">
             <Button type="submit">
-              Save Recipe
+              Create Recipe
             </Button>
           </div>
         )}
         
-        {(visibleSections?.includes('carbonation')) && (
-          <div className="flex justify-end items-center pt-4">
+        {/* Show save button on the edit page */}
+        {!visibleSections && (
+          <div className="flex justify-end pt-4">
             <Button type="submit">
-              Create Recipe
+              Save Recipe
             </Button>
           </div>
         )}

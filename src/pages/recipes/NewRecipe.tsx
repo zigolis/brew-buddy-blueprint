@@ -82,7 +82,7 @@ const NewRecipe = () => {
         }
       });
       
-      // Update form data without changing step
+      // Update form data
       setRecipeFormData(prev => ({
         ...prev,
         ...currentFormData

@@ -33,11 +33,20 @@ const ingredientTypes = [
 
 type IngredientType = typeof ingredientTypes[number];
 
+// Define an extended form data type including yeast fields
+type IngredientFormData = Omit<Ingredient, 'id' | 'createdAt' | 'updatedAt'> & {
+  yeastType?: string;
+  form?: string;
+  laboratory?: string;
+  minAttenuation?: number;
+  maxAttenuation?: number;
+};
+
 interface IngredientFormProps {
   onSubmit: (data: Omit<Ingredient, 'id' | 'createdAt' | 'updatedAt'>) => void;
   onCancel: () => void;
   ingredientId: string | null;
-  defaultValues: Omit<Ingredient, 'id' | 'createdAt' | 'updatedAt'>;
+  defaultValues: IngredientFormData;
   typeOverride?: string;
   showYeastFields?: boolean;
 }
@@ -49,7 +58,7 @@ export function IngredientForm({
   typeOverride,
   showYeastFields = false 
 }: IngredientFormProps) {
-  const form = useForm<Omit<Ingredient, 'id' | 'createdAt' | 'updatedAt'>>({
+  const form = useForm<IngredientFormData>({
     defaultValues,
   });
 
@@ -57,8 +66,10 @@ export function IngredientForm({
     form.reset(defaultValues);
   }, [defaultValues, form]);
 
-  const handleSubmit = (data: Omit<Ingredient, 'id' | 'createdAt' | 'updatedAt'>) => {
-    onSubmit(data);
+  const handleSubmit = (data: IngredientFormData) => {
+    // Extract only the base ingredient fields
+    const { yeastType, form: yeastForm, laboratory, minAttenuation, maxAttenuation, ...ingredientData } = data;
+    onSubmit(ingredientData);
     form.reset();
   };
 
@@ -154,7 +165,7 @@ export function IngredientForm({
                 <FormItem>
                   <FormLabel>Yeast Type</FormLabel>
                   <Select
-                    onValueChange={(value) => field.onChange(value)}
+                    onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
@@ -182,7 +193,7 @@ export function IngredientForm({
                 <FormItem>
                   <FormLabel>Form</FormLabel>
                   <Select
-                    onValueChange={(value) => field.onChange(value)}
+                    onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
