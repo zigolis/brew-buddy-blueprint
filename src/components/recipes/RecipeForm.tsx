@@ -10,6 +10,7 @@ import { FermentablesSection } from "./form/fermentables/FermentablesSection";
 import HopsSection from "./form/HopsSection"; 
 import { YeastSection } from "./form/YeastSection";
 import { MashScheduleSection } from "./form/MashScheduleSection";
+import { SpargingSection } from "./form/SpargingSection";
 import { BoilSection } from "./form/BoilSection";
 import { ClarificationSection } from "./form/ClarificationSection";
 import { FermentationSection } from "./form/FermentationSection";
@@ -31,6 +32,7 @@ const sectionComponents = {
   hops: HopsSection,
   yeast: YeastSection,
   mash: MashScheduleSection,
+  sparging: SpargingSection,
   boil: BoilSection,
   clarification: ClarificationSection,
   fermentation: FermentationSection,

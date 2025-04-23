@@ -27,6 +27,9 @@ export const MashScheduleSection = ({ form }) => {
     }]);
   };
 
+  // Ensure we always have an array, default to empty array if undefined
+  const mashSteps = form.watch('mash.steps') || [];
+
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Mash Schedule</h2>
@@ -70,7 +73,7 @@ export const MashScheduleSection = ({ form }) => {
         />
       </div>
 
-      {form.watch('mash.steps')?.map((step: MashStep, index: number) => (
+      {mashSteps.map((step: MashStep, index: number) => (
         <div key={index} className="grid gap-4 md:grid-cols-3 border p-4 rounded-lg">
           <FormField
             control={form.control}

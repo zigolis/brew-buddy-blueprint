@@ -1,3 +1,4 @@
+
 import { useBrewContext } from "@/contexts/BrewContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -89,6 +90,13 @@ export const useCreateRecipe = (recipeFormData, setRecipeFormData) => {
               time: 60,
             }
           ],
+          notes: ""
+        },
+        sparging: completeFormData.sparging || {
+          name: "Batch Sparge",
+          temperature: 76,
+          amount: 15,
+          time: 20,
           notes: ""
         },
         fermentation: completeFormData.fermentation || {
