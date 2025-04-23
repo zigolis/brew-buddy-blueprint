@@ -55,6 +55,17 @@ export interface Recipe {
     notes?: string;
   };
   isBrewed?: boolean;
+  rating?: number;
+  brewingNotes?: string;
+  actualOriginalGravity?: number | null;
+  actualFinalGravity?: number | null;
+  actualAbv?: number | null;
+  actualIbu?: number | null;
+  fermentablesNotes?: string;
+  hopsNotes?: string;
+  yeastNotes?: string;
+  mashNotes?: string;
+  boilNotes?: string;
 }
 
 export type Ingredients = {

@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import HopsRowsList from "./HopsRowsList";
 import { useIngredientSuggestions } from "@/hooks/useIngredientSuggestions";
+import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
 
 const HopsSectionContainer = ({ form }) => {
   const [hops, setHops] = useState([{ id: 0 }]);
@@ -52,6 +54,23 @@ const HopsSectionContainer = ({ form }) => {
           <Plus className="h-4 w-4 mr-2" /> Add Hop
         </Button>
       </div>
+      
+      <FormField
+        control={form.control}
+        name="hopsNotes"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Notes</FormLabel>
+            <FormControl>
+              <Textarea
+                placeholder="Add notes about your hops here..."
+                className="min-h-[100px]"
+                {...field}
+              />
+            </FormControl>
+          </FormItem>
+        )}
+      />
     </div>
   );
 };

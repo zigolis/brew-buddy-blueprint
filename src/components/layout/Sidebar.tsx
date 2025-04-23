@@ -1,5 +1,5 @@
 
-import { Beer, Calculator, FileText, List, Package, Settings, LayoutDashboard, User, Calendar } from "lucide-react";
+import { Beer, Calculator, FileText, List, Package, LayoutDashboard, User, Calendar, Flask } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 const navItems = [
   { name: "Dashboard", icon: LayoutDashboard, path: "/" },
   { name: "Recipes", icon: Beer, path: "/recipes" },
+  { name: "Batches", icon: Flask, path: "/batches" },
   { name: "Ingredients", icon: Package, path: "/ingredients" },
   { name: "Equipment", icon: List, path: "/equipment" },
   { name: "Brewing Guide", icon: FileText, path: "/brewing-guide" },

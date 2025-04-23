@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -24,6 +25,8 @@ import BrewingPlanner from "@/pages/brewing-planner/BrewingPlanner";
 import NotFound from "@/pages/NotFound";
 import EditRecipe from "@/pages/recipes/EditRecipe";
 import MyAccount from "@/pages/my-account/MyAccount";
+import BatchesList from "@/pages/batches/BatchesList";
+import BatchDetail from "@/pages/batches/BatchDetail";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +51,8 @@ const App = () => {
                 <Route path="/recipes/new" element={<NewRecipe />} />
                 <Route path="/recipes/:recipeId" element={<ViewRecipe />} />
                 <Route path="/recipes/edit/:recipeId" element={<EditRecipe />} />
+                <Route path="/batches" element={<BatchesList />} />
+                <Route path="/batches/:recipeId" element={<BatchDetail />} />
                 <Route path="/ingredients" element={<IngredientsList />} />
                 <Route path="/equipment" element={<EquipmentList />} />
                 <Route path="/equipment/new" element={<NewEquipment />} />

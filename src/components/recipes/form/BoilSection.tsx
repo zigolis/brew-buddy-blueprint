@@ -1,6 +1,7 @@
 
 import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 export const BoilSection = ({ form }) => {
   return (
@@ -56,6 +57,23 @@ export const BoilSection = ({ form }) => {
           )}
         />
       </div>
+
+      <FormField
+        control={form.control}
+        name="boilNotes"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Notes</FormLabel>
+            <FormControl>
+              <Textarea
+                placeholder="Add notes about your boil here..."
+                className="min-h-[100px]"
+                {...field}
+              />
+            </FormControl>
+          </FormItem>
+        )}
+      />
     </div>
   );
 };

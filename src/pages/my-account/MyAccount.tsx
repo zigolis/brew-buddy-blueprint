@@ -8,13 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { useSettings } from "@/contexts/SettingsContext";
 import { useTheme } from "@/hooks/use-theme";
-import { MapPin, Currency, Thermometer, Moon, Sun } from "lucide-react";
+import { Currency, Thermometer, Moon, Sun } from "lucide-react";
 
-const locations = ["United States", "Canada", "United Kingdom", "Australia", "Germany", "France", "Spain", "Italy"];
 const currencies = ["USD", "CAD", "GBP", "AUD", "EUR"];
+const measurementSystems = ["Metric", "Imperial"];
 
 const MyAccount = () => {
   const [userData, setUserData] = useState({
@@ -45,7 +44,6 @@ const MyAccount = () => {
         <Tabs defaultValue="profile" className="space-y-4">
           <TabsList className="w-full sm:w-auto flex flex-wrap gap-1">
             <TabsTrigger value="profile">Profile</TabsTrigger>
-            <TabsTrigger value="preferences">Preferences</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
             <TabsTrigger value="data">My Data</TabsTrigger>
           </TabsList>
@@ -91,65 +89,8 @@ const MyAccount = () => {
               </CardContent>
             </Card>
           </TabsContent>
-          
-          <TabsContent value="preferences" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Preferences</CardTitle>
-                <CardDescription>Customize your brewing settings</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label>Default Units</Label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <Button 
-                      variant={settings.useMetric ? "default" : "outline"}
-                      onClick={() => updateSettings({ useMetric: true })}
-                    >
-                      Metric
-                    </Button>
-                    <Button 
-                      variant={!settings.useMetric ? "default" : "outline"}
-                      onClick={() => updateSettings({ useMetric: false })}
-                    >
-                      Imperial
-                    </Button>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label>Default Recipe Type</Label>
-                  <div className="grid grid-cols-3 gap-2">
-                    <Button variant="outline">All Grain</Button>
-                    <Button variant="outline">Extract</Button>
-                    <Button variant="outline">Partial Mash</Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
 
           <TabsContent value="settings" className="space-y-4">
-            <Card className="p-6">
-              <div className="flex items-center gap-4">
-                <MapPin className="h-5 w-5 text-muted-foreground" />
-                <div className="flex-1 space-y-1">
-                  <h3 className="font-medium">Location</h3>
-                  <p className="text-sm text-muted-foreground">Set your location for regional preferences</p>
-                </div>
-                <Select value={settings.location} onValueChange={(value) => updateSettings({ location: value })}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Select location" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {locations.map((loc) => (
-                      <SelectItem key={loc} value={loc}>{loc}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </Card>
-
             <Card className="p-6">
               <div className="flex items-center gap-4">
                 <Currency className="h-5 w-5 text-muted-foreground" />
@@ -175,12 +116,21 @@ const MyAccount = () => {
                 <Thermometer className="h-5 w-5 text-muted-foreground" />
                 <div className="flex-1 space-y-1">
                   <h3 className="font-medium">Measurement System</h3>
-                  <p className="text-sm text-muted-foreground">Toggle between metric and imperial units</p>
+                  <p className="text-sm text-muted-foreground">Choose between metric and imperial units</p>
                 </div>
-                <Switch 
-                  checked={settings.useMetric}
-                  onCheckedChange={(checked) => updateSettings({ useMetric: checked })}
-                />
+                <Select 
+                  value={settings.useMetric ? "Metric" : "Imperial"}
+                  onValueChange={(value) => updateSettings({ useMetric: value === "Metric" })}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select system" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {measurementSystems.map((system) => (
+                      <SelectItem key={system} value={system}>{system}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </Card>
 
@@ -195,10 +145,18 @@ const MyAccount = () => {
                   <h3 className="font-medium">Dark Mode</h3>
                   <p className="text-sm text-muted-foreground">Toggle between light and dark theme</p>
                 </div>
-                <Switch 
-                  checked={theme === 'dark'}
-                  onCheckedChange={toggleTheme}
-                />
+                <Select 
+                  value={theme} 
+                  onValueChange={toggleTheme}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select theme" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="light">Light</SelectItem>
+                    <SelectItem value="dark">Dark</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </Card>
           </TabsContent>

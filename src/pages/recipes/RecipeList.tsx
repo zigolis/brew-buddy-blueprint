@@ -1,282 +1,147 @@
 
+import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { useBrewContext } from "@/contexts/BrewContext";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { Beer, Edit, FileText, Trash2, BookmarkPlus, BookmarkCheck, Filter } from "lucide-react";
+import { Plus, Search, Database } from "lucide-react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuCheckboxItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 const RecipeList = () => {
-  const { recipes, deleteRecipe, toggleBookmark, isBookmarked } = useBrewContext();
+  const { recipes } = useBrewContext();
   const [searchTerm, setSearchTerm] = useState("");
-  const [styleFilter, setStyleFilter] = useState<string>("all");
-  const [showBookmarkedOnly, setShowBookmarkedOnly] = useState(false);
-  
-  // Create array of unique styles from recipes with valid style names
-  const uniqueStyles = Array.from(
-    new Set(
-      recipes
-        .filter(recipe => recipe.style && recipe.style.name)
-        .map(recipe => recipe.style.name)
-    )
-  );
-  
-  // Filter recipes based on search, style, and bookmark criteria
-  const filteredRecipes = recipes.filter(recipe => {
-    const matchesSearch = recipe.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          recipe.author?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          recipe.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())) || false;
+  const [recipeType, setRecipeType] = useState("all");
+
+  const filteredRecipes = recipes.filter((recipe) => {
+    const matchesSearch = recipe.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          recipe.style?.name.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesStyle = styleFilter === "all" || (recipe.style && recipe.style.name === styleFilter);
-    const matchesBookmark = !showBookmarkedOnly || isBookmarked(recipe.id);
+    if (recipeType === "all") return matchesSearch;
+    if (recipeType === "brewed") return matchesSearch && recipe.isBrewed;
+    if (recipeType === "unbrewed") return matchesSearch && !recipe.isBrewed;
     
-    return matchesSearch && matchesStyle && matchesBookmark;
+    return matchesSearch;
   });
 
   return (
     <Layout>
       <div className="space-y-6">
-        <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold">Recipes</h1>
             <p className="text-muted-foreground">Manage your brewing recipes</p>
           </div>
-          <Button asChild size="sm">
-            <Link to="/recipes/new">
-              <Beer className="mr-2 h-4 w-4" />
-              New Recipe
+          <div className="flex flex-wrap gap-2">
+            <Link to="/import">
+              <Button variant="outline">
+                <Database className="mr-2 h-4 w-4" />
+                Import Recipe
+              </Button>
             </Link>
-          </Button>
+            <Link to="/recipes/new">
+              <Button>
+                <Plus className="mr-2 h-4 w-4" />
+                New Recipe
+              </Button>
+            </Link>
+          </div>
         </div>
-        
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="w-full md:w-2/3">
-            <Input 
-              placeholder="Search recipes..." 
+
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="relative w-full sm:w-auto flex-1">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search recipes..."
+              className="pl-8"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full"
             />
           </div>
-          <div className="w-full md:w-1/6">
-            <Select value={styleFilter} onValueChange={setStyleFilter}>
-              <SelectTrigger>
-                <SelectValue placeholder="Filter by style" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Styles</SelectItem>
-                {uniqueStyles.map(style => (
-                  <SelectItem key={style} value={style}>{style}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="w-full md:w-1/6">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-full">
-                  <Filter className="h-4 w-4" />
-                  Filters
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuCheckboxItem
-                  checked={showBookmarkedOnly}
-                  onCheckedChange={setShowBookmarkedOnly}
-                >
-                  Bookmarked Only
-                </DropdownMenuCheckboxItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          <div className="flex gap-2">
+            <Button
+              variant={recipeType === "all" ? "default" : "outline"}
+              onClick={() => setRecipeType("all")}
+              className="flex-1 sm:flex-none"
+            >
+              All
+            </Button>
+            <Button
+              variant={recipeType === "brewed" ? "default" : "outline"}
+              onClick={() => setRecipeType("brewed")}
+              className="flex-1 sm:flex-none"
+            >
+              Brewed
+            </Button>
+            <Button
+              variant={recipeType === "unbrewed" ? "default" : "outline"}
+              onClick={() => setRecipeType("unbrewed")}
+              className="flex-1 sm:flex-none"
+            >
+              Unbrewed
+            </Button>
           </div>
         </div>
-        
-        <Tabs defaultValue="grid" className="w-full">
-          <div className="flex justify-between items-center">
-            <TabsList>
-              <TabsTrigger value="grid">Grid</TabsTrigger>
-              <TabsTrigger value="list">List</TabsTrigger>
-            </TabsList>
-            <div className="text-sm text-muted-foreground">
-              {filteredRecipes.length} recipe{filteredRecipes.length !== 1 ? 's' : ''}
-            </div>
-          </div>
-          
-          <TabsContent value="grid" className="mt-6">
-            {filteredRecipes.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredRecipes.map(recipe => (
-                  <Card key={recipe.id}>
-                    <CardHeader className="pb-2">
-                      <div className="flex justify-between items-start">
-                        <CardTitle className="text-xl truncate">{recipe.name || "Unnamed Recipe"}</CardTitle>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => toggleBookmark(recipe.id)}
-                          className="h-8 w-8"
-                        >
-                          {isBookmarked(recipe.id) ? (
-                            <BookmarkCheck className="h-4 w-4" />
-                          ) : (
-                            <BookmarkPlus className="h-4 w-4" />
-                          )}
-                          <span className="sr-only">
-                            {isBookmarked(recipe.id) ? "Remove bookmark" : "Add bookmark"}
-                          </span>
-                        </Button>
-                      </div>
-                      <CardDescription>
-                        <span className="block">{recipe.style?.name || "No style"}</span>
-                        <span className="text-sm">by {recipe.author || "Unknown"}</span>
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex flex-wrap gap-2 mb-3">
-                        <Badge variant="outline">{recipe.type || "Unknown"}</Badge>
-                        <Badge variant="secondary">{recipe.batchSize || 0}L</Badge>
-                        <Badge variant="secondary">{recipe.ingredients?.hops?.length || 0} Hops</Badge>
-                      </div>
-                      <div className="grid grid-cols-3 gap-2 text-sm">
-                        <div>
-                          <div className="font-medium">ABV</div>
-                          <div>{recipe.abv ? recipe.abv.toFixed(1) : (recipe.style ? ((recipe.style.minAbv + recipe.style.maxAbv) / 2).toFixed(1) : "N/A")}%</div>
-                        </div>
-                        <div>
-                          <div className="font-medium">IBU</div>
-                          <div>{recipe.style ? ((recipe.style.minIbu + recipe.style.maxIbu) / 2).toFixed(0) : "N/A"}</div>
-                        </div>
-                        <div>
-                          <div className="font-medium">Cost</div>
-                          <div>${recipe.estimatedCost?.toFixed(2) || "0.00"}</div>
-                        </div>
-                      </div>
-                    </CardContent>
-                    <CardFooter className="flex justify-between">
-                      <Button variant="outline" size="sm" asChild>
-                        <Link to={`/recipes/${recipe.id}`}>
-                          <FileText className="mr-1 h-4 w-4" />
-                          View
-                        </Link>
-                      </Button>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm" asChild>
-                          <Link to={`/recipes/edit/${recipe.id}`}>
-                            <Edit className="h-4 w-4" />
-                            <span className="sr-only">Edit</span>
-                          </Link>
-                        </Button>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => deleteRecipe(recipe.id)}
-                        >
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                          <span className="sr-only">Delete</span>
-                        </Button>
-                      </div>
-                    </CardFooter>
-                  </Card>
-                ))}
-              </div>
-            ) : (
-              <Alert>
-                <AlertTitle>No recipes found</AlertTitle>
-                <AlertDescription>
-                  No recipes match your current search criteria. Try adjusting your filters or create a new recipe.
-                </AlertDescription>
-              </Alert>
-            )}
-          </TabsContent>
-          
-          <TabsContent value="list" className="mt-6">
-            {filteredRecipes.length > 0 ? (
-              <div className="space-y-4">
-                {filteredRecipes.map(recipe => (
-                  <Card key={recipe.id}>
-                    <div className="flex flex-col md:flex-row">
-                      <div className="p-4 md:w-2/3">
-                        <div className="flex justify-between items-start mb-1">
-                          <Link to={`/recipes/${recipe.id}`} className="text-lg font-medium hover:underline">
-                            {recipe.name || "Unnamed Recipe"}
-                          </Link>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => toggleBookmark(recipe.id)}
-                            className="h-8 w-8"
-                          >
-                            {isBookmarked(recipe.id) ? (
-                              <BookmarkCheck className="h-4 w-4" />
-                            ) : (
-                              <BookmarkPlus className="h-4 w-4" />
-                            )}
-                            <span className="sr-only">
-                              {isBookmarked(recipe.id) ? "Remove bookmark" : "Add bookmark"}
-                            </span>
-                          </Button>
-                        </div>
-                        <div className="flex flex-wrap gap-2 mb-2">
-                          <Badge variant="outline">{recipe.style?.name || "No style"}</Badge>
-                          <Badge variant="outline">{recipe.type || "Unknown"}</Badge>
-                          <Badge variant="secondary">{recipe.batchSize || 0}L</Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground line-clamp-2">
-                          {recipe.notes || "No recipe notes available."}
-                        </p>
-                      </div>
-                      <div className="p-4 bg-muted/50 md:w-1/3 flex flex-row md:flex-col justify-between">
-                        <div>
-                          <div className="text-sm font-medium">Author</div>
-                          <div className="text-sm">{recipe.author || "Unknown"}</div>
-                        </div>
-                        <div>
-                          <div className="text-sm font-medium">Est. Cost</div>
-                          <div className="text-sm">${recipe.estimatedCost?.toFixed(2) || "0.00"}</div>
-                        </div>
-                        <div className="flex gap-2 md:mt-4">
-                          <Button variant="outline" size="sm" asChild>
-                            <Link to={`/recipes/edit/${recipe.id}`}>
-                              <Edit className="h-4 w-4 mr-1" />
-                              Edit
-                            </Link>
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => deleteRecipe(recipe.id)}
-                          >
-                            <Trash2 className="h-4 w-4 mr-1 text-destructive" />
-                            Delete
-                          </Button>
-                        </div>
-                      </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredRecipes.length > 0 ? (
+            filteredRecipes.map((recipe) => (
+              <Card key={recipe.id} className="flex flex-col hover:shadow-md transition-shadow">
+                <CardHeader className="pb-2">
+                  <CardTitle className="flex justify-between items-start">
+                    <Link to={`/recipes/${recipe.id}`} className="hover:underline">
+                      {recipe.name}
+                    </Link>
+                    {recipe.isBrewed && (
+                      <Badge variant="secondary">Brewed</Badge>
+                    )}
+                  </CardTitle>
+                  <CardDescription>
+                    {recipe.style?.name || "Unknown Style"}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex-1">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="text-sm">
+                      <div className="text-muted-foreground">ABV</div>
+                      <div>{recipe.abv ? `${recipe.abv}%` : "N/A"}</div>
                     </div>
-                  </Card>
-                ))}
-              </div>
-            ) : (
-              <Alert>
-                <AlertTitle>No recipes found</AlertTitle>
-                <AlertDescription>
-                  No recipes match your current search criteria. Try adjusting your filters or create a new recipe.
-                </AlertDescription>
-              </Alert>
-            )}
-          </TabsContent>
-        </Tabs>
+                    <div className="text-sm">
+                      <div className="text-muted-foreground">IBU</div>
+                      <div>{recipe.ibu || "N/A"}</div>
+                    </div>
+                    <div className="text-sm">
+                      <div className="text-muted-foreground">Batch Size</div>
+                      <div>{recipe.batchSize}L</div>
+                    </div>
+                    <div className="text-sm">
+                      <div className="text-muted-foreground">Type</div>
+                      <div>{recipe.type}</div>
+                    </div>
+                  </div>
+                </CardContent>
+                <CardFooter className="pt-0">
+                  <div className="flex justify-end w-full gap-2">
+                    <Link to={`/recipes/${recipe.id}`}>
+                      <Button variant="outline" size="sm">View</Button>
+                    </Link>
+                  </div>
+                </CardFooter>
+              </Card>
+            ))
+          ) : (
+            <div className="col-span-full flex flex-col items-center justify-center p-12 bg-muted/30 rounded-lg border border-dashed">
+              <h3 className="text-xl font-medium mb-2">No Recipes Found</h3>
+              <p className="mb-4 text-muted-foreground text-center">
+                {searchTerm ? "No recipes match your search" : "Start by adding a new recipe"}
+              </p>
+              <Link to="/recipes/new">
+                <Button>Create Recipe</Button>
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </Layout>
   );

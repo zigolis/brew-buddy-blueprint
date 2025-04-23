@@ -18,6 +18,13 @@ import {
 import { useIngredientSuggestions } from "@/hooks/useIngredientSuggestions";
 import { Plus } from "lucide-react";
 
+// Default fermentable suggestions to always show
+const DEFAULT_FERMENTABLES = [
+  { id: 'default-1', name: "Pilsner Malt", type: "Grain", amount: 5000, color: 2, yield: 80, costPerUnit: 2.5 },
+  { id: 'default-2', name: "Munich Malt", type: "Grain", amount: 1000, color: 9, yield: 78, costPerUnit: 3 },
+  { id: 'default-3', name: "Crystal Malt", type: "Grain", amount: 500, color: 60, yield: 75, costPerUnit: 3.2 },
+];
+
 interface FermentableSearchProps {
   index: number;
   value: string;
@@ -47,14 +54,33 @@ export const FermentableSearch = ({
   // Get suggestions based on the current search query
   const getSuggestions = (query: string) => {
     try {
+      // Always show default suggestions if no search query
       if (!query || query.trim() === '') {
-        return [];
+        return DEFAULT_FERMENTABLES;
       }
-      const results = getFermentableSuggestions(query);
-      return Array.isArray(results) ? results : [];
+      
+      // Get suggestions from the hook
+      const customSuggestions = getFermentableSuggestions(query);
+      
+      // Filter default suggestions based on query
+      const matchingDefaults = DEFAULT_FERMENTABLES.filter(item => 
+        item.name.toLowerCase().includes(query.toLowerCase())
+      );
+      
+      // Combine custom suggestions with filtered defaults
+      let combinedSuggestions = [...(Array.isArray(customSuggestions) ? customSuggestions : [])];
+      
+      // Add default suggestions that aren't already in the custom suggestions
+      matchingDefaults.forEach(defaultItem => {
+        if (!combinedSuggestions.some(item => item.name === defaultItem.name)) {
+          combinedSuggestions.push(defaultItem);
+        }
+      });
+      
+      return combinedSuggestions;
     } catch (error) {
       console.error('Error getting fermentable suggestions:', error);
-      return [];
+      return DEFAULT_FERMENTABLES;
     }
   };
 
@@ -70,10 +96,11 @@ export const FermentableSearch = ({
             value={value} 
             onClick={() => setOpen(true)}
             onChange={(e) => onChange(e.target.value)}
+            className="w-full"
           />
         </FormControl>
       </PopoverTrigger>
-      <PopoverContent className="p-0" align="start">
+      <PopoverContent className="p-0 w-[--radix-popover-trigger-width]" align="start">
         <Command>
           <CommandInput 
             placeholder="Search fermentable..." 
@@ -109,16 +136,18 @@ export const FermentableSearch = ({
                     {item.name}
                   </CommandItem>
                 ))}
-                <div 
-                  className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer text-primary hover:bg-accent"
-                  onClick={() => {
-                    onCreateNew();
-                    setOpen(false);
-                  }}
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Create "{searchQuery}"
-                </div>
+                {searchQuery.trim() !== '' && (
+                  <div 
+                    className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer text-primary hover:bg-accent"
+                    onClick={() => {
+                      onCreateNew();
+                      setOpen(false);
+                    }}
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Create "{searchQuery}"
+                  </div>
+                )}
               </CommandGroup>
             )}
           </CommandList>
