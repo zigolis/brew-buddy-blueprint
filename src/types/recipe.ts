@@ -9,7 +9,8 @@ import {
   BottlingProfile, 
   WaterProfile,
   MashStep,
-  FermentationStep
+  FermentationStep,
+  SpargingProfile
 } from './profiles';
 import { 
   Fermentable as IngredientFermentable, 
