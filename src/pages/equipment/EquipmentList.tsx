@@ -1,127 +1,100 @@
 
 import { useState } from "react";
-import { Layout } from "@/components/layout/Layout";
-import { Button } from "@/components/ui/button";
-import { Plus, Search, Filter, Trash2, Pencil } from "lucide-react";
-import { CustomInput } from "@/components/ui/custom-input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useNavigate } from "react-router-dom";
 import { useBrewContext } from "@/contexts/BrewContext";
+import { Layout } from "@/components/layout/Layout";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { Plus, Search } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-// Equipment categories
-const categories = ["All", "Kettle", "Fermentation", "Mash", "Other"];
+export default function EquipmentList() {
+  const { equipment } = useBrewContext();
+  const [searchTerm, setSearchTerm] = useState("");
 
-const EquipmentList = () => {
-  const [search, setSearch] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("All");
-  const { equipment, deleteEquipment } = useBrewContext();
-  const navigate = useNavigate();
-  
-  // Search and filter logic
-  const filteredEquipment = equipment
-    .filter(eq => categoryFilter === "All" || eq.type === categoryFilter)
-    .filter(eq => eq.name.toLowerCase().includes(search.toLowerCase()));
-
-  const handleEdit = (id: string) => {
-    navigate(`/equipment/edit/${id}`);
-  };
-
-  const handleDelete = (id: string) => {
-    deleteEquipment(id);
-  };
-  
-  const handleAddEquipment = () => {
-    navigate("/equipment/new");
-  };
+  const filteredEquipment = equipment.filter((item) =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <Layout>
-      <div className="space-y-6 w-full">
-        <div>
-          <h1 className="text-3xl font-bold">Equipment</h1>
-          <p className="text-muted-foreground">Manage your brewing equipment</p>
-        
-          <div className="flex flex-col md:flex-row md:items-center gap-4 mt-4">
-            <CustomInput
-              className="w-full md:w-64"
-              placeholder="Search equipment..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              startIcon={<Search className="h-4 w-4" />}
-            />
-            <select
-              className="rounded-md border px-3 py-2 text-sm w-full md:w-40"
-              value={categoryFilter}
-              onChange={e => setCategoryFilter(e.target.value)}
-            >
-              {categories.map(cat => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
-            <Button variant="outline" className="hidden md:inline-flex">
-              <Filter className="h-4 w-4 mr-2" /> Filters
-            </Button>
-            <Button onClick={handleAddEquipment}>
-              <Plus className="h-4 w-4 mr-2" />
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold">Equipment</h1>
+            <p className="text-muted-foreground">
+              Manage your brewing equipment
+            </p>
+          </div>
+          <Link to="/equipment/new">
+            <Button>
+              <Plus className="mr-2 h-4 w-4" />
               Add Equipment
             </Button>
+          </Link>
+        </div>
+
+        <div className="flex justify-between gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search equipment..."
+              className="pl-8"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>All Equipment</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <table className="w-full text-sm">
-              <thead className="bg-muted">
-                <tr>
-                  <th className="px-3 py-2 text-left">Name</th>
-                  <th className="px-3 py-2 text-left">Type</th>
-                  <th className="px-3 py-2 text-left">Notes</th>
-                  <th className="px-3 py-2 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredEquipment.map(eq => (
-                  <tr key={eq.id} className="border-b hover:bg-muted/60">
-                    <td className="px-3 py-2">{eq.name}</td>
-                    <td className="px-3 py-2">{eq.type}</td>
-                    <td className="px-3 py-2">{eq.notes}</td>
-                    <td className="px-3 py-2 text-right">
-                      <div className="flex justify-end gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleEdit(eq.id)}
-                        >
-                          <Pencil className="h-4 w-4" />
+        <div className="border rounded-lg">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead>Batch Size</TableHead>
+                <TableHead>Efficiency</TableHead>
+                <TableHead>Cost</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredEquipment.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.type}</TableCell>
+                  <TableCell>{item.batchSize}L</TableCell>
+                  <TableCell>{item.efficiency}%</TableCell>
+                  <TableCell>${item.cost}</TableCell>
+                  <TableCell>
+                    <div className="flex gap-2">
+                      <Link to={`/equipment/edit/${item.id}`}>
+                        <Button variant="ghost" size="sm">
+                          <Edit className="h-4 w-4" />
                         </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => handleDelete(eq.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-                {filteredEquipment.length === 0 && (
-                  <tr>
-                    <td colSpan={4} className="text-center py-4">
-                      No equipment found
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </CardContent>
-        </Card>
+                      </Link>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDeleteEquipment(item.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </Layout>
   );
-};
-
-export default EquipmentList;
+}

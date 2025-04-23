@@ -1,16 +1,17 @@
-
 import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { useBrewContext } from "@/contexts/BrewContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
-import { Plus, Search, Database } from "lucide-react";
+import { Plus, Search, Database, Edit, Trash2, FlaskConical } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 const RecipeList = () => {
-  const { recipes } = useBrewContext();
+  const { recipes, deleteRecipe } = useBrewContext();
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [recipeType, setRecipeType] = useState("all");
 
@@ -24,6 +25,14 @@ const RecipeList = () => {
     
     return matchesSearch;
   });
+
+  const handleDelete = (id: string) => {
+    deleteRecipe(id);
+  };
+
+  const handleBrew = (id: string) => {
+    navigate(`/batches/${id}`);
+  };
 
   return (
     <Layout>
@@ -123,9 +132,28 @@ const RecipeList = () => {
                 </CardContent>
                 <CardFooter className="pt-0">
                   <div className="flex justify-end w-full gap-2">
-                    <Link to={`/recipes/${recipe.id}`}>
-                      <Button variant="outline" size="sm">View</Button>
-                    </Link>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm">Actions</Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem onClick={() => navigate(`/recipes/edit/${recipe.id}`)}>
+                          <Edit className="w-4 h-4 mr-2" />
+                          Edit Recipe
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleBrew(recipe.id)}>
+                          <FlaskConical className="w-4 h-4 mr-2" />
+                          Brew Recipe
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleDelete(recipe.id)}>
+                          <Trash2 className="w-4 h-4 mr-2" />
+                          Delete Recipe
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                    <Button variant="outline" size="sm" onClick={() => navigate(`/recipes/${recipe.id}`)}>
+                      View
+                    </Button>
                   </div>
                 </CardFooter>
               </Card>
