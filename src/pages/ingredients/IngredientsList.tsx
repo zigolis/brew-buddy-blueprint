@@ -8,7 +8,7 @@ import { IngredientForm } from "@/components/ingredients/IngredientForm";
 import { useIngredients } from "@/hooks/useIngredients";
 import { Ingredient } from "@/types/ingredients";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { CustomInput } from "@/components/ui/custom-input";
 import { Select, SelectItem, SelectTrigger, SelectContent, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 
@@ -102,7 +102,7 @@ const IngredientsList = () => {
             <p className="text-muted-foreground">Manage your brewing ingredients</p>
           </div>
           <div className="flex items-center gap-2 md:gap-4">
-            <Input
+            <CustomInput
               className="w-48"
               placeholder="Search ingredients..."
               value={search}
@@ -164,10 +164,6 @@ const IngredientsList = () => {
                 onCancel={handleCancel}
                 ingredientId={editingIngredient}
                 defaultValues={getFormDefaultValues()}
-                typeOverride={editingIngredient
-                  ? getIngredientById(editingIngredient)?.type
-                  : undefined}
-                // Show yeast fields if type is yeast
                 showYeastFields={
                   (editingIngredient && getIngredientById(editingIngredient)?.type === 'Yeast') ||
                   (!editingIngredient && typeFilter === 'Yeast')

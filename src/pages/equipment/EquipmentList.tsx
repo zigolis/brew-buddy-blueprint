@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Plus, Bookmark, Filter, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { CustomInput } from "@/components/ui/custom-input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 // Dummy equipment data for demonstration
@@ -40,7 +40,7 @@ const EquipmentList = () => {
             <p className="text-muted-foreground">Manage your brewing equipment</p>
           </div>
           <div className="flex items-center gap-2 md:gap-4">
-            <Input
+            <CustomInput
               className="w-48"
               placeholder="Search equipment..."
               value={search}

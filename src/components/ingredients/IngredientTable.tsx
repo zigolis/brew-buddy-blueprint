@@ -8,16 +8,24 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Bookmark } from "lucide-react";
 import { Ingredient } from "@/types/ingredients";
 
 interface IngredientTableProps {
   ingredients: Ingredient[];
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
+  onBookmark?: (id: string) => void;
+  bookmarks?: string[];
 }
 
-export const IngredientTable = ({ ingredients, onEdit, onDelete }: IngredientTableProps) => {
+export const IngredientTable = ({ 
+  ingredients, 
+  onEdit, 
+  onDelete,
+  onBookmark,
+  bookmarks = [] 
+}: IngredientTableProps) => {
   if (ingredients.length === 0) {
     return (
       <div className="text-center py-6">
@@ -47,6 +55,15 @@ export const IngredientTable = ({ ingredients, onEdit, onDelete }: IngredientTab
             <TableCell>${ingredient.costPerUnit.toFixed(2)}</TableCell>
             <TableCell>{ingredient.supplier || '-'}</TableCell>
             <TableCell className="text-right space-x-2">
+              {onBookmark && (
+                <Button
+                  variant={bookmarks.includes(ingredient.id) ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => onBookmark(ingredient.id)}
+                >
+                  <Bookmark className="h-4 w-4" />
+                </Button>
+              )}
               <Button
                 variant="ghost"
                 size="sm"
