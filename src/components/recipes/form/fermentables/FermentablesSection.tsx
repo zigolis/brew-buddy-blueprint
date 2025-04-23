@@ -43,14 +43,6 @@ export const FermentablesSection = ({ form }) => {
     );
   };
 
-  const handleCreateFermentable = () => {
-    setShowNewFermentableDialog(true);
-  };
-
-  const handleCreateNew = (index: number) => {
-    setShowNewFermentableDialog(true);
-  };
-
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Fermentables</h2>
@@ -58,9 +50,7 @@ export const FermentablesSection = ({ form }) => {
         fermentables={fermentables}
         form={form}
         onRemove={removeFermentable}
-        onCreateNew={handleCreateNew}
         onAdd={handleAddFermentable}
-        onCreate={handleCreateFermentable}
       />
       <Button
         type="button"

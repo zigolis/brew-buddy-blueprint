@@ -3,12 +3,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import HopsRowsList from "./HopsRowsList";
-import { HopDialogForm } from "./HopDialogForm";
 import { useIngredientSuggestions } from "@/hooks/useIngredientSuggestions";
 
 const HopsSectionContainer = ({ form }) => {
   const [hops, setHops] = useState([{ id: 0 }]);
-  const [showNewHopDialog, setShowNewHopDialog] = useState(false);
   const { addNewHop } = useIngredientSuggestions();
 
   const addHop = () => {
@@ -20,25 +18,24 @@ const HopsSectionContainer = ({ form }) => {
     setHops(hops.filter((h) => h.id !== id));
   };
 
-  const handleAddNewHop = (e: React.FormEvent<HTMLFormElement>) => {
-    const formData = new FormData(e.currentTarget);
-    const hopData = {
-      name: formData.get('name') as string,
-      alpha: parseFloat(formData.get('alpha') as string),
-      beta: parseFloat(formData.get('beta') as string) || 0,
-      form: formData.get('form') as string,
-      costPerUnit: parseFloat(formData.get('costPerUnit') as string) || 0,
-      notes: formData.get('notes') as string || '',
-      amount: 0,
-      time: 0,
-      use: 'Boil'
-    };
-    
-    // Add the hop to the ingredient suggestions
-    addNewHop(hopData);
-    
-    // Close the dialog
-    setShowNewHopDialog(false);
+  const handleAddHopToRecipe = (hopData) => {
+    // Add the hop to the current recipe
+    const currentHops = form.getValues('ingredients.hops') || [];
+    const newHopIndex = currentHops.length;
+
+    form.setValue(`ingredients.hops.${newHopIndex}`, {
+      name: hopData.name,
+      alpha: hopData.alpha || 0,
+      beta: hopData.beta || 0,
+      form: hopData.form || 'Pellet',
+      amount: hopData.amount || 0,
+      time: hopData.time || 0,
+      use: hopData.use || 'Boil',
+      costPerUnit: hopData.costPerUnit || 0
+    }, { shouldDirty: true });
+
+    // Add a new hop row to the UI
+    setHops([...hops, { id: hops.length }]);
   };
 
   return (
@@ -48,21 +45,13 @@ const HopsSectionContainer = ({ form }) => {
         hops={hops} 
         form={form} 
         removeHop={removeHop} 
-        onCreateNew={() => setShowNewHopDialog(true)}
+        onAddToRecipe={handleAddHopToRecipe}
       />
-      <div className="flex gap-2">
-        <Button type="button" onClick={addHop} className="w-full">
+      <div>
+        <Button type="button" onClick={addHop} className="w-full bg-brewing-amber text-white hover:bg-brewing-amber/90">
           <Plus className="h-4 w-4 mr-2" /> Add Hop
         </Button>
-        <Button type="button" onClick={() => setShowNewHopDialog(true)} variant="outline" className="whitespace-nowrap">
-          Create New Hop
-        </Button>
       </div>
-      <HopDialogForm
-        open={showNewHopDialog}
-        onOpenChange={setShowNewHopDialog}
-        onSubmit={handleAddNewHop}
-      />
     </div>
   );
 };

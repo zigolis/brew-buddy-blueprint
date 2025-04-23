@@ -6,10 +6,10 @@ interface HopsRowsListProps {
   hops: { id: number }[];
   form: any;
   removeHop: (id: number) => void;
-  onCreateNew: () => void;
+  onAddToRecipe?: (hopData: any) => void;
 }
 
-export default function HopsRowsList({ hops, form, removeHop, onCreateNew }: HopsRowsListProps) {
+export default function HopsRowsList({ hops, form, removeHop, onAddToRecipe }: HopsRowsListProps) {
   const { control } = useFormContext();
 
   return (
@@ -22,7 +22,7 @@ export default function HopsRowsList({ hops, form, removeHop, onCreateNew }: Hop
           index={index} 
           hop={hop} 
           onRemove={removeHop}
-          onCreateNew={onCreateNew}
+          onAddToRecipe={onAddToRecipe}
         />
       ))}
     </div>

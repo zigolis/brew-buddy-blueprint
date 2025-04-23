@@ -78,42 +78,6 @@ const EditRecipe = () => {
 
   const progress = ((currentStep + 1) / recipeSteps.length) * 100;
 
-  const handleNext = () => {
-    // Don't proceed to next step if a dialog is open
-    if (isDialogOpen.current) {
-      console.log("Dialog is open, not changing step");
-      return;
-    }
-    
-    // Get form data, then move to next if shouldChangeStep is true
-    const formElement = document.getElementById('recipe-form') as HTMLFormElement;
-    if (formElement) {
-      const formData = new FormData(formElement);
-      const currentFormData: Record<string, any> = {};
-      formData.forEach((value, key) => {
-        // Handle nested form fields (e.g., style.name)
-        if (key.includes('.')) {
-          const [parent, child] = key.split('.');
-          if (!currentFormData[parent]) currentFormData[parent] = {};
-          currentFormData[parent][child] = value;
-        } else {
-          currentFormData[key] = value;
-        }
-      });
-      
-      // Update form data without changing step
-      setRecipeFormData(prev => ({
-        ...prev,
-        ...currentFormData
-      }));
-      
-      // Only change step if shouldChangeStep is true and it's a manual navigation
-      if (shouldChangeStep && currentStep < recipeSteps.length - 1) {
-        setCurrentStep(currentStep + 1);
-      }
-    }
-  };
-
   const handlePrevious = () => {
     if (currentStep > 0) setCurrentStep(currentStep - 1);
   };
@@ -149,11 +113,10 @@ const EditRecipe = () => {
               </Button>
               <Button 
                 form={singlePage ? "recipe-form" : undefined} 
-                type={singlePage ? "submit" : "button"} 
-                onClick={singlePage ? undefined : handleNext}
+                type="submit"
               >
                 <Save className="mr-2 h-4 w-4" />
-                {singlePage ? "Save Recipe" : "Next"}
+                Save Recipe
               </Button>
             </div>
           </div>
@@ -179,7 +142,7 @@ const EditRecipe = () => {
                 currentStep={currentStep}
                 totalSteps={recipeSteps.length}
                 onPrevious={handlePrevious}
-                onNext={handleNext}
+                onNext={null}
               />
             </div>
           </div>

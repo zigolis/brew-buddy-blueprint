@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useEffect } from "react";
 import { useIngredients } from "@/hooks/useIngredients";
 
@@ -7,11 +8,22 @@ export const useFermentablesForm = (form: any) => {
   const { addIngredient } = useIngredients();
 
   const removeFermentable = useCallback((id: number) => {
+    // Get current form values
+    const currentFermentables = form.getValues('ingredients.fermentables') || [];
+    
+    // Don't remove if it's the only fermentable
+    if (currentFermentables.length <= 1) return;
+    
+    // Update the form data - remove the item at the specified index
+    const updatedFermentables = currentFermentables.filter((_, index) => index !== id);
+    form.setValue('ingredients.fermentables', updatedFermentables, { shouldDirty: true });
+    
+    // Update UI state
     setFermentables(prev => {
       if (prev.length <= 1) return prev;
-      return prev.filter(f => f.id !== id);
+      return prev.filter((_, index) => index !== id);
     });
-  }, []);
+  }, [form]);
 
   const handleAddNewFermentable = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
@@ -79,7 +91,6 @@ export const useFermentablesForm = (form: any) => {
         [...prev, ...[...Array(currentFermentables.length - fermentables.length)].map((_, i) => ({ id: nextId + i }))]
       );
     }
-    // No longer auto-create blanks; just sync length
   }, [fermentables, form]);
 
   return {

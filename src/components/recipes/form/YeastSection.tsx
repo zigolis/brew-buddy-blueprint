@@ -100,14 +100,14 @@ export const YeastSection = ({ form }) => {
       form.setValue(`ingredients.yeasts.${index}.productId`, yeast.productId || "");
       form.setValue(`ingredients.yeasts.${index}.minAttenuation`, yeast.minAttenuation || undefined);
       form.setValue(`ingredients.yeasts.${index}.maxAttenuation`, yeast.maxAttenuation || undefined);
-      form.setValue(`ingredients.yeasts.${index}.flocculation`, yeast.flocculation || "");
+      form.setValue(`ingredients.yeasts.${index}.flocculation`, yeast.flocculation || "Medium");
       form.setValue(`ingredients.yeasts.${index}.costPerUnit`, yeast.costPerUnit || 0);
       form.setValue(`ingredients.yeasts.${index}.notes`, yeast.notes || "");
       setOpenNamePopover(false);
     };
     
     return (
-      <div className="space-y-6 border p-4 rounded-md">
+      <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <FormField
             control={form.control}
@@ -140,16 +140,7 @@ export const YeastSection = ({ form }) => {
                       />
                       <CommandList>
                         <CommandEmpty>
-                          <div
-                            className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer hover:bg-accent"
-                            onClick={() => {
-                              setShowNewYeastDialog(true);
-                              setOpenNamePopover(false);
-                            }}
-                          >
-                            <Plus className="mr-2 h-4 w-4" />
-                            Create "{searchQuery}"
-                          </div>
+                          No results found.
                         </CommandEmpty>
                         {getSuggestions(searchQuery).length > 0 && (
                           <CommandGroup>
@@ -162,16 +153,6 @@ export const YeastSection = ({ form }) => {
                                 {item.name}
                               </CommandItem>
                             ))}
-                            <div
-                              className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer text-primary hover:bg-accent"
-                              onClick={() => {
-                                setShowNewYeastDialog(true);
-                                setOpenNamePopover(false);
-                              }}
-                            >
-                              <Plus className="mr-2 h-4 w-4" />
-                              Create "{searchQuery}"
-                            </div>
                           </CommandGroup>
                         )}
                       </CommandList>
@@ -356,12 +337,10 @@ export const YeastSection = ({ form }) => {
         <div className="flex justify-end">
           <Button
             type="button"
-            variant="outline"
-            size="sm"
             onClick={() => removeYeast(index)}
             disabled={yeasts.length <= 1}
           >
-            <Trash2 className="h-4 w-4 mr-1" /> Remove
+            <Trash2 className="h-4 w-4 mr-2" /> Remove
           </Button>
         </div>
       </div>
@@ -376,20 +355,12 @@ export const YeastSection = ({ form }) => {
           <YeastRow key={index} index={index} />
         ))}
       </div>
-      <div className="flex gap-2">
+      <div>
         <Button type="button" onClick={addYeast} className="w-full bg-brewing-amber text-white hover:bg-brewing-amber/90">
           <Plus className="h-4 w-4 mr-2" />
           Add Yeast
         </Button>
-        <Button type="button" onClick={() => setShowNewYeastDialog(true)} variant="outline" className="whitespace-nowrap">
-          Create New Yeast
-        </Button>
       </div>
-      <YeastDialogForm
-        open={showNewYeastDialog}
-        onOpenChange={setShowNewYeastDialog}
-        onSubmit={handleAddNewYeast}
-      />
     </div>
   );
 };

@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CustomInput } from "@/components/ui/custom-input";
 import { Select, SelectItem, SelectTrigger, SelectContent, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 
 const ingredientTypes = [
   "Grain", "Sugar", "Extract", "Dry Extract", "Adjunct", "Hop", "Yeast", "Other"
@@ -51,19 +52,41 @@ const IngredientsList = () => {
   };
 
   const handleSubmit = (data: Omit<Ingredient, 'id' | 'createdAt' | 'updatedAt'>) => {
-    if (editingIngredient) {
-      updateIngredient(editingIngredient, data);
-    } else {
-      addIngredient(data);
+    try {
+      if (editingIngredient) {
+        updateIngredient(editingIngredient, data);
+        toast.success("Ingredient updated successfully");
+      } else {
+        addIngredient(data);
+        toast.success("Ingredient added successfully");
+      }
+      setIsAddingIngredient(false);
+      setEditingIngredient(null);
+    } catch (error) {
+      console.error("Error handling ingredient:", error);
+      toast.error("An error occurred while saving the ingredient");
     }
-    setIsAddingIngredient(false);
-    setEditingIngredient(null);
   };
 
   const handleBookmark = (id: string) => {
     setBookmarks(prev => prev.includes(id)
       ? prev.filter(bid => bid !== id)
       : [...prev, id]);
+  };
+
+  const handleDelete = (id: string) => {
+    try {
+      deleteIngredient(id);
+      toast.success("Ingredient deleted successfully");
+      
+      // Also remove from bookmarks if it was there
+      if (bookmarks.includes(id)) {
+        setBookmarks(prev => prev.filter(bid => bid !== id));
+      }
+    } catch (error) {
+      console.error("Error deleting ingredient:", error);
+      toast.error("An error occurred while deleting the ingredient");
+    }
   };
 
   const getFormDefaultValues = (): Omit<Ingredient, 'id' | 'createdAt' | 'updatedAt'> => {
@@ -75,7 +98,7 @@ const IngredientsList = () => {
           type: ingredient.type,
           amount: ingredient.amount,
           unit: ingredient.unit,
-          costPerUnit: ingredient.costPerUnit,
+          costPerUnit: ingredient.costPerUnit || 0,
           supplier: ingredient.supplier || "",
           notes: ingredient.notes || "",
         };
@@ -175,7 +198,7 @@ const IngredientsList = () => {
           <IngredientTable 
             ingredients={filteredIngredients}
             onEdit={handleEdit}
-            onDelete={deleteIngredient}
+            onDelete={handleDelete}
             onBookmark={handleBookmark}
             bookmarks={bookmarks}
           />

@@ -18,7 +18,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useIngredientSuggestions } from "@/hooks/useIngredientSuggestions";
-import { Plus } from "lucide-react";
 
 interface HopRowProps {
   form: any;
@@ -26,10 +25,10 @@ interface HopRowProps {
   index: number;
   hop: { id: number };
   onRemove: (id: number) => void;
-  onCreateNew: () => void;
+  onAddToRecipe?: (hopData: any) => void;
 }
 
-export default function HopRow({ form, control, index, hop, onRemove, onCreateNew }: HopRowProps) {
+export default function HopRow({ form, control, index, hop, onRemove, onAddToRecipe }: HopRowProps) {
   const watchedHop = form.watch(`ingredients.hops.${index}`) || {};
   const [openPopover, setOpenPopover] = useState(false);
   const [searchQuery, setSearchQuery] = useState(watchedHop.name || '');
@@ -87,16 +86,7 @@ export default function HopRow({ form, control, index, hop, onRemove, onCreateNe
                   />
                   <CommandList>
                     <CommandEmpty>
-                      <div 
-                        className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer hover:bg-accent"
-                        onClick={() => {
-                          onCreateNew();
-                          setOpenPopover(false);
-                        }}
-                      >
-                        <Plus className="mr-2 h-4 w-4" />
-                        Create "{searchQuery}"
-                      </div>
+                      No results found.
                     </CommandEmpty>
                     {getSuggestions(searchQuery).length > 0 && (
                       <CommandGroup>
@@ -109,16 +99,6 @@ export default function HopRow({ form, control, index, hop, onRemove, onCreateNe
                             {item.name}
                           </CommandItem>
                         ))}
-                        <div 
-                          className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer text-primary hover:bg-accent"
-                          onClick={() => {
-                            onCreateNew();
-                            setOpenPopover(false);
-                          }}
-                        >
-                          <Plus className="mr-2 h-4 w-4" />
-                          Create "{searchQuery}"
-                        </div>
                       </CommandGroup>
                     )}
                   </CommandList>
@@ -265,11 +245,9 @@ export default function HopRow({ form, control, index, hop, onRemove, onCreateNe
 
       <Button
         type="button"
-        variant="outline"
-        size="icon"
         onClick={() => onRemove(hop.id)}
       >
-        <Trash2 className="h-4 w-4" />
+        <Trash2 className="h-4 w-4 mr-2" /> Remove
       </Button>
     </div>
   );

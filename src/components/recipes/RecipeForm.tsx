@@ -158,4 +158,4 @@ export function RecipeForm({ onSubmit, initialData, visibleSections }: RecipeFor
       </form>
     </Form>
   );
-}
+};
