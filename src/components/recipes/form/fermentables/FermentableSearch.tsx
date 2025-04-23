@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -87,6 +86,12 @@ export const FermentableSearch = ({
   // Get suggestions based on the current search query
   const suggestions = getSuggestions(searchQuery);
 
+  const handleCreateClick = () => {
+    if (!searchQuery.trim()) return;
+    onCreateNew();
+    setOpen(false);
+  };
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -100,7 +105,7 @@ export const FermentableSearch = ({
           />
         </FormControl>
       </PopoverTrigger>
-      <PopoverContent className="p-0 w-[--radix-popover-trigger-width]" align="start">
+      <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
         <Command>
           <CommandInput 
             placeholder="Search fermentable..." 
@@ -109,18 +114,13 @@ export const FermentableSearch = ({
           />
           <CommandList>
             <CommandEmpty>
-              {searchQuery.trim() !== '' && (
-                <div 
-                  className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer hover:bg-accent"
-                  onClick={() => {
-                    onCreateNew();
-                    setOpen(false);
-                  }}
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Create "{searchQuery}"
-                </div>
-              )}
+              <div 
+                className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer hover:bg-accent"
+                onClick={handleCreateClick}
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Create "{searchQuery}"
+              </div>
             </CommandEmpty>
             {suggestions.length > 0 && (
               <CommandGroup>
@@ -139,10 +139,7 @@ export const FermentableSearch = ({
                 {searchQuery.trim() !== '' && (
                   <div 
                     className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer text-primary hover:bg-accent"
-                    onClick={() => {
-                      onCreateNew();
-                      setOpen(false);
-                    }}
+                    onClick={handleCreateClick}
                   >
                     <Plus className="mr-2 h-4 w-4" />
                     Create "{searchQuery}"

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -18,7 +17,6 @@ import {
 import { useIngredientSuggestions } from "@/hooks/useIngredientSuggestions";
 import { Plus } from "lucide-react";
 
-// Default hop suggestions to always show
 const DEFAULT_HOPS = [
   { id: 'default-1', name: "Citra", alpha: 12, beta: 4, form: "Pellet", costPerUnit: 0.30 },
   { id: 'default-2', name: "Mosaic", alpha: 11.5, beta: 3.8, form: "Pellet", costPerUnit: 0.35 },
@@ -39,23 +37,18 @@ export default function HopNameField({ control, form, index, value }: HopNameFie
 
   const getSuggestions = (query: string) => {
     try {
-      // Always show default suggestions if no search query
       if (!query || query.trim() === '') {
         return DEFAULT_HOPS;
       }
       
-      // Get suggestions from the hook
       const customSuggestions = getHopSuggestions(query);
       
-      // Filter default suggestions based on query
       const matchingDefaults = DEFAULT_HOPS.filter(item => 
         item.name.toLowerCase().includes(query.toLowerCase())
       );
       
-      // Combine custom suggestions with filtered defaults
       let combinedSuggestions = [...(Array.isArray(customSuggestions) ? customSuggestions : [])];
       
-      // Add default suggestions that aren't already in the custom suggestions
       matchingDefaults.forEach(defaultItem => {
         if (!combinedSuggestions.some(item => item.name === defaultItem.name)) {
           combinedSuggestions.push(defaultItem);
@@ -79,13 +72,10 @@ export default function HopNameField({ control, form, index, value }: HopNameFie
       costPerUnit: 0
     };
     
-    // Add to ingredients database
     addNewHop(newHop);
     
-    // Update form field
     form.setValue(`ingredients.hops.${index}.name`, searchQuery);
     
-    // Close popover
     setOpenPopover(false);
   };
 
@@ -112,7 +102,7 @@ export default function HopNameField({ control, form, index, value }: HopNameFie
                 />
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent className="p-0 w-[--radix-popover-trigger-width]" align="start">
+            <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
               <Command>
                 <CommandInput
                   placeholder="Search hop..."
@@ -121,15 +111,13 @@ export default function HopNameField({ control, form, index, value }: HopNameFie
                 />
                 <CommandList>
                   <CommandEmpty>
-                    {searchQuery.trim() !== '' && (
-                      <div 
-                        className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer hover:bg-accent"
-                        onClick={handleCreateHop}
-                      >
-                        <Plus className="mr-2 h-4 w-4" />
-                        Create "{searchQuery}"
-                      </div>
-                    )}
+                    <div 
+                      className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer hover:bg-accent"
+                      onClick={handleCreateHop}
+                    >
+                      <Plus className="mr-2 h-4 w-4" />
+                      + Create "{searchQuery}"
+                    </div>
                   </CommandEmpty>
                   
                   {getSuggestions(searchQuery).length > 0 && (
@@ -141,7 +129,6 @@ export default function HopNameField({ control, form, index, value }: HopNameFie
                           onSelect={(val) => {
                             field.onChange(val);
                             
-                            // Update other related fields
                             if (item.alpha) {
                               form.setValue(`ingredients.hops.${index}.alpha`, item.alpha);
                             }
@@ -161,16 +148,6 @@ export default function HopNameField({ control, form, index, value }: HopNameFie
                           {item.name}
                         </CommandItem>
                       ))}
-                      
-                      {searchQuery.trim() !== '' && (
-                        <div 
-                          className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer text-primary hover:bg-accent"
-                          onClick={handleCreateHop}
-                        >
-                          <Plus className="mr-2 h-4 w-4" />
-                          Create "{searchQuery}"
-                        </div>
-                      )}
                     </CommandGroup>
                   )}
                 </CommandList>
