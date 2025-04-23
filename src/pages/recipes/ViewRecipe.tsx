@@ -1,3 +1,4 @@
+
 import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { useBrewContext } from "@/contexts/BrewContext";
@@ -147,8 +148,7 @@ export function ViewRecipe() {
                       <tr>
                         <th className="px-3 py-1 text-left">Name</th>
                         <th className="px-3 py-1 text-left">Amount (kg)</th>
-                        <th className="px-3 py-1 text-left">Color (°L)</th>
-                        <th className="px-3 py-1 text-left">Notes</th>
+                        <th className="px-3 py-1 text-left">Color (EBC)</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -157,7 +157,6 @@ export function ViewRecipe() {
                           <td className="px-3 py-1">{f.name || "Unnamed"}</td>
                           <td className="px-3 py-1">{f.amount || 0}</td>
                           <td className="px-3 py-1">{f.color || 0}</td>
-                          <td className="px-3 py-1 text-xs">{f.notes || "-"}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -172,26 +171,18 @@ export function ViewRecipe() {
                     <thead className="text-muted-foreground bg-muted">
                       <tr>
                         <th className="px-2 py-1">Name</th>
-                        <th className="px-2 py-1">Alpha %</th>
-                        <th className="px-2 py-1">Beta %</th>
                         <th className="px-2 py-1">Form</th>
-                        <th className="px-2 py-1">Amount (kg)</th>
-                        <th className="px-2 py-1">Time (min)</th>
-                        <th className="px-2 py-1">Use</th>
-                        <th className="px-2 py-1">Notes</th>
+                        <th className="px-2 py-1">Amount (g)</th>
+                        <th className="px-2 py-1">Purpose</th>
                       </tr>
                     </thead>
                     <tbody>
                       {recipe.ingredients.hops.map((h, i) => (
                         <tr key={h.id || `hop-${i}`} className="hover:bg-muted/60">
                           <td className="px-2 py-1">{h.name || "Unnamed"}</td>
-                          <td className="px-2 py-1">{h.alpha ?? '-'}</td>
-                          <td className="px-2 py-1">{h.beta ?? '-'}</td>
                           <td className="px-2 py-1">{h.form ?? '-'}</td>
                           <td className="px-2 py-1">{h.amount || 0}</td>
-                          <td className="px-2 py-1">{h.time ?? '-'}</td>
                           <td className="px-2 py-1">{h.use || '-'}</td>
-                          <td className="px-2 py-1">{h.notes || '-'}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -207,13 +198,9 @@ export function ViewRecipe() {
                       <tr>
                         <th className="px-2 py-1">Name</th>
                         <th className="px-2 py-1">Lab</th>
-                        <th className="px-2 py-1">Product</th>
-                        <th className="px-2 py-1">Type</th>
                         <th className="px-2 py-1">Form</th>
-                        <th className="px-2 py-1">Flocculation</th>
-                        <th className="px-2 py-1">Temp (°C)</th>
+                        <th className="px-2 py-1">Amount</th>
                         <th className="px-2 py-1">Attenuation (%)</th>
-                        <th className="px-2 py-1">Notes</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -221,49 +208,13 @@ export function ViewRecipe() {
                         <tr key={y.id || `yeast-${i}`} className="hover:bg-muted/60">
                           <td className="px-2 py-1 font-semibold">{y.name || "Unnamed"}</td>
                           <td className="px-2 py-1">{y.laboratory || "-"}</td>
-                          <td className="px-2 py-1">{y.productId || "-"}</td>
-                          <td className="px-2 py-1">{y.type || "-"}</td>
                           <td className="px-2 py-1">{y.form || "-"}</td>
-                          <td className="px-2 py-1">{y.flocculation || "-"}</td>
-                          <td className="px-2 py-1">
-                            {y.tempRange ? `${y.tempRange.min}–${y.tempRange.max}` : "-"}
-                          </td>
+                          <td className="px-2 py-1">{y.amount || "-"}</td>
                           <td className="px-2 py-1">
                             {typeof y.minAttenuation === "number" && typeof y.maxAttenuation === "number"
                               ? `${y.minAttenuation}–${y.maxAttenuation}`
                               : "-"}
                           </td>
-                          <td className="px-2 py-1 text-xs">{y.notes || "-"}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </section>
-              )}
-
-              {Array.isArray(recipe.ingredients?.miscs) && recipe.ingredients.miscs.length > 0 && (
-                <section>
-                  <div className="font-semibold mb-2 text-brewing-copper">Miscellaneous</div>
-                  <table className="w-full text-sm mb-4 rounded-md overflow-hidden">
-                    <thead className="text-muted-foreground bg-muted">
-                      <tr>
-                        <th className="px-2 py-1">Name</th>
-                        <th className="px-2 py-1">Amount</th>
-                        <th className="px-2 py-1">Unit</th>
-                        <th className="px-2 py-1">Time (min)</th>
-                        <th className="px-2 py-1">Use</th>
-                        <th className="px-2 py-1">Notes</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {recipe.ingredients.miscs.map((m, i) => (
-                        <tr key={m.id || `misc-${i}`} className="hover:bg-muted/60">
-                          <td className="px-2 py-1">{m.name || "Unnamed"}</td>
-                          <td className="px-2 py-1">{m.amount || 0}</td>
-                          <td className="px-2 py-1">{m.unit || "-"}</td>
-                          <td className="px-2 py-1">{m.time || 0}</td>
-                          <td className="px-2 py-1">{m.use || "-"}</td>
-                          <td className="px-2 py-1 text-xs">{m.notes || "-"}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -289,7 +240,7 @@ export function ViewRecipe() {
             </CardHeader>
             <CardContent className="space-y-6 mt-2">
 
-              <section className="bg-muted/70 rounded-lg p-4 space-y-2 border-l-4 border-brewing-amber shadow-sm">
+              <section className="rounded-lg p-4 space-y-2 border-l-4 border-brewing-amber shadow-sm">
                 <div className="flex items-center gap-2 pb-1">
                   <span className="bg-brewing-amber/90 text-white px-2 rounded text-xs font-bold uppercase tracking-wide shadow">Mash</span>
                   <span className="ml-2 font-semibold text-sm text-foreground">Mash Schedule</span>
@@ -299,7 +250,7 @@ export function ViewRecipe() {
                     {recipe.mash.steps.map((step, i) => (
                       <li
                         key={i}
-                        className="flex gap-2 items-center bg-white/70 border px-3 py-1.5 rounded hover:shadow transition animate-fade-in"
+                        className="flex gap-2 items-center px-3 py-1.5 rounded hover:bg-muted/30 transition animate-fade-in"
                       >
                         <span className="inline-block w-7 h-7 rounded-full bg-brewing-amber/10 flex items-center justify-center font-semibold text-brewing-amber">{i + 1}</span>
                         <span className="font-medium">{step.name || `Step ${i + 1}`}</span>
@@ -313,7 +264,7 @@ export function ViewRecipe() {
                 )}
               </section>
 
-              <section className="bg-muted/70 rounded-lg p-4 space-y-2 border-l-4 border-green-600 shadow-sm">
+              <section className="rounded-lg p-4 space-y-2 border-l-4 border-green-600 shadow-sm">
                 <div className="flex items-center gap-2 pb-1">
                   <span className="bg-green-600 text-white px-2 rounded text-xs font-bold uppercase tracking-wide shadow">Fermentation</span>
                   <span className="ml-2 font-semibold text-sm text-foreground">Fermentation Schedule</span>
@@ -323,7 +274,7 @@ export function ViewRecipe() {
                     {recipe.fermentation.steps.map((step, i) => (
                       <li
                         key={i}
-                        className="flex gap-2 items-center bg-white p-2 rounded-lg border-l-4 border-green-600 shadow-sm"
+                        className="flex gap-2 items-center p-2 rounded-lg border-l-4 border-green-600 shadow-sm"
                       >
                         <span className="inline-block w-7 h-7 rounded-full bg-green-100 flex items-center justify-center font-semibold text-green-700 border border-green-300">{i + 1}</span>
                         <span className="font-semibold text-green-800">{step.name || `Step ${i + 1}`}</span>
@@ -338,7 +289,7 @@ export function ViewRecipe() {
                     ))}
                   </ul>
                 ) : recipe.fermentation ? (
-                  <div className="flex gap-2 items-center mt-2 bg-white p-2 rounded-lg border-l-4 border-green-600 shadow-sm">
+                  <div className="flex gap-2 items-center mt-2 rounded-lg border-l-4 border-green-600 shadow-sm p-2">
                     <span className="inline-block w-7 h-7 rounded-full bg-green-100 flex items-center justify-center font-semibold text-green-700 border border-green-300">1</span>
                     <span className="font-semibold text-green-800">{recipe.fermentation.name || "Primary"}</span>
                     <span className="text-xs text-muted-foreground ml-1">{recipe.fermentation.type ? `| ${recipe.fermentation.type}` : ""}</span>
@@ -353,7 +304,7 @@ export function ViewRecipe() {
                 )}
               </section>
 
-              <section className="flex flex-col sm:flex-row items-center gap-6 bg-muted/60 border-l-4 border-brewing-copper rounded-lg p-4 shadow-sm">
+              <section className="flex flex-col sm:flex-row items-center gap-6 border-l-4 border-brewing-copper rounded-lg p-4 shadow-sm">
                 <div className="flex flex-col gap-2 flex-1">
                   <div className="flex items-center gap-2">
                     <span className="bg-brewing-copper/80 text-white px-2 rounded text-xs font-bold uppercase tracking-wide shadow">Boil</span>
@@ -374,7 +325,7 @@ export function ViewRecipe() {
               </section>
 
               <div className="grid md:grid-cols-2 gap-4">
-                <section className="bg-muted/60 rounded-lg p-4 flex flex-col border-l-4 border-brewing-copper/80 shadow-sm">
+                <section className="rounded-lg p-4 flex flex-col border-l-4 border-brewing-copper/80 shadow-sm">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="bg-brewing-copper/80 text-white px-2 rounded text-xs font-bold uppercase tracking-wide shadow">Clarification</span>
                     <span className="ml-2 font-semibold text-sm text-foreground">Clarification</span>
@@ -391,7 +342,7 @@ export function ViewRecipe() {
                   )}
                 </section>
 
-                <section className="bg-muted/60 rounded-lg p-4 flex flex-col border-l-4 border-green-700/80 shadow-sm">
+                <section className="rounded-lg p-4 flex flex-col border-l-4 border-green-700/80 shadow-sm">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="bg-green-700/90 text-white px-2 rounded text-xs font-bold uppercase tracking-wide shadow">Cold Crash</span>
                     <span className="ml-2 font-semibold text-sm text-foreground">Cold Crash</span>
@@ -400,78 +351,13 @@ export function ViewRecipe() {
                     <div className="text-sm space-y-0.5">
                       <span>{recipe.coldCrash.name || "Standard"},</span>
                       <span>{typeof recipe.coldCrash.temperature === "number" ? ` ${recipe.coldCrash.temperature}°C,` : ""}</span>
-                      <span>{typeof recipe.coldCrash.period === "number" ? ` ${recipe.coldCrash.period} hours` : ""}</span>
+                      <span>{typeof recipe.coldCrash.period === "number" ? ` ${recipe.coldCrash.period}h` : ""}</span>
                     </div>
                   ) : (
                     <div className="text-muted-foreground">No cold crash info.</div>
                   )}
                 </section>
-
-                <section className="bg-muted/60 rounded-lg p-4 flex flex-col border-l-4 border-brewing-wheat/80 shadow-sm">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="bg-brewing-wheat/90 text-white px-2 rounded text-xs font-bold uppercase tracking-wide shadow">Carbonation</span>
-                    <span className="ml-2 font-semibold text-sm text-foreground">Carbonation</span>
-                  </div>
-                  {recipe.carbonation ? (
-                    <div className="text-sm space-y-0.5">
-                      <span>{recipe.carbonation.name || "Standard"},</span>
-                      <span>{recipe.carbonation.type ? ` ${recipe.carbonation.type},` : ""}</span>
-                      <span>{typeof recipe.carbonation.volumeCo2 === "number" ? ` ${recipe.carbonation.volumeCo2} CO₂,` : ""}</span>
-                      <span>{typeof recipe.carbonation.temperature === "number" ? ` ${recipe.carbonation.temperature}°C,` : ""}</span>
-                      <span>{typeof recipe.carbonation.period === "number" ? ` ${recipe.carbonation.period} days` : ""}</span>
-                    </div>
-                  ) : (
-                    <div className="text-muted-foreground">No carbonation info.</div>
-                  )}
-                </section>
-
-                <section className="bg-muted/60 rounded-lg p-4 flex flex-col border-l-4 border-brewing-brown/80 shadow-sm">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="bg-brewing-brown/80 text-white px-2 rounded text-xs font-bold uppercase tracking-wide shadow">Bottling</span>
-                    <span className="ml-2 font-semibold text-sm text-foreground">Bottling</span>
-                  </div>
-                  {recipe.bottling ? (
-                    <div className="text-sm space-y-0.5">
-                      <span>{recipe.bottling.name || "Standard"},</span>
-                      <span>{recipe.bottling.type ? ` ${recipe.bottling.type},` : ""}</span>
-                      <span>{typeof recipe.bottling.temperature === "number" ? ` ${recipe.bottling.temperature}°C,` : ""}</span>
-                      <span>{typeof recipe.bottling.period === "number" ? ` ${recipe.bottling.period} days` : ""}</span>
-                    </div>
-                  ) : (
-                    <div className="text-muted-foreground">No bottling info.</div>
-                  )}
-                </section>
               </div>
-
-              <section className="bg-muted/70 rounded-lg p-4 border-l-4 border-brewing-amber/50 shadow-sm">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="bg-brewing-amber/80 text-white px-2 rounded text-xs font-bold uppercase tracking-wide shadow">Water</span>
-                  <span className="ml-2 font-semibold text-sm text-foreground">Water Profile</span>
-                </div>
-                {recipe.waterProfile ? (
-                  <ul className="list-disc pl-6 text-sm text-brewing-brown-700">
-                    <li>
-                      {Object.entries(recipe.waterProfile)
-                        .filter(([k, _]) => k !== "name" && k !== "notes")
-                        .map(([k, v]) => (
-                          <span key={k} className="mr-3 capitalize font-semibold">{k}: <span className="font-normal">{typeof v === "number" ? v : String(v)}</span></span>
-                        ))}
-                    </li>
-                    {recipe.waterProfile.notes && (
-                      <li className="pt-1 text-muted-foreground">Notes: <span className="italic">{recipe.waterProfile.notes}</span></li>
-                    )}
-                  </ul>
-                ) : (
-                  <span className="text-muted-foreground">No water profile.</span>
-                )}
-              </section>
-
-              {recipe.notes && (
-                <section className="bg-muted rounded-lg border-l-4 border-brewing-amber p-4 shadow">
-                  <div className="font-semibold mb-1 text-md text-foreground">Other Notes</div>
-                  <p className="whitespace-pre-wrap font-normal text-foreground">{recipe.notes}</p>
-                </section>
-              )}
             </CardContent>
           </Card>
         </div>
@@ -479,5 +365,3 @@ export function ViewRecipe() {
     </Layout>
   );
 }
-
-export default ViewRecipe;

@@ -18,8 +18,6 @@ import { CarbonationSection } from "./form/CarbonationSection";
 import { BottlingSection } from "./form/BottlingSection";
 import { useRecipeCost } from "@/hooks/useRecipeCost";
 import { useEffect } from "react";
-import { DollarSign } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
 
 interface RecipeFormProps {
   onSubmit: (data: Partial<Recipe>) => void;
@@ -136,33 +134,28 @@ export function RecipeForm({ onSubmit, initialData, visibleSections }: RecipeFor
   return (
     <Form {...form}>
       <form id="recipe-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
-        {/* Recipe Cost Card */}
-        <Card className="fixed top-24 right-4 z-10 shadow-lg bg-primary text-primary-foreground w-40">
-          <CardContent className="p-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <DollarSign className="h-5 w-5 mr-1" />
-                <span className="text-sm font-semibold">Total Cost:</span>
-              </div>
-              <span className="text-lg font-bold">${totalCost.toFixed(2)}</span>
-            </div>
-          </CardContent>
-        </Card>
-
         {sectionsToRender.map(([key, Component]) => (
-          <div key={key} className="bg-background p-6 rounded-lg shadow-sm">
+          <div key={key} className="bg-background p-6 rounded-lg shadow-sm mb-8">
             <Component form={form} />
             {key === 'stats' && <RecipeStatsNotesField form={form} />}
           </div>
         ))}
         
-        {(visibleSections?.includes('bottling') || !visibleSections || isOnFermentationStep) && (
+        {(visibleSections?.includes('bottling') || !visibleSections) && (
           <div className="flex justify-between items-center pt-4">
             <div className="text-lg font-semibold">
               Total Recipe Cost: ${totalCost.toFixed(2)}
             </div>
             <Button type="submit">
-              {isOnFermentationStep ? 'Create Recipe' : 'Save and Continue'}
+              Save Recipe
+            </Button>
+          </div>
+        )}
+        
+        {(visibleSections?.includes('carbonation')) && (
+          <div className="flex justify-end items-center pt-4">
+            <Button type="submit">
+              Create Recipe
             </Button>
           </div>
         )}

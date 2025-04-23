@@ -24,11 +24,7 @@ export const RecipeStepNavButtons = ({
       >
         <ArrowLeft className="mr-2 h-4 w-4" /> Previous
       </Button>
-      {currentStep === totalSteps - 1 ? (
-        <Button type="submit" form="recipe-form">
-          Create Recipe
-        </Button>
-      ) : (
+      {currentStep < totalSteps - 1 && (
         <Button onClick={onNext}>
           Next <ArrowRight className="ml-2 h-4 w-4" />
         </Button>

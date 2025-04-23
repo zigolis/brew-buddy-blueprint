@@ -1,21 +1,30 @@
 
+import { useFormContext } from "react-hook-form";
 import HopRow from "./HopRow";
 
-const HopsRowsList = ({ hops, form, removeHop }) => {
+interface HopsRowsListProps {
+  hops: { id: number }[];
+  form: any;
+  removeHop: (id: number) => void;
+  onCreateNew: () => void;
+}
+
+export default function HopsRowsList({ hops, form, removeHop, onCreateNew }: HopsRowsListProps) {
+  const { control } = useFormContext();
+
   return (
-    <>
+    <div className="space-y-6">
       {hops.map((hop, index) => (
-        <HopRow
-          key={hop.id}
-          hop={hop}
-          index={index}
-          form={form}
-          control={form.control}
+        <HopRow 
+          key={hop.id} 
+          form={form} 
+          control={control} 
+          index={index} 
+          hop={hop} 
           onRemove={removeHop}
+          onCreateNew={onCreateNew}
         />
       ))}
-    </>
+    </div>
   );
-};
-
-export default HopsRowsList;
+}

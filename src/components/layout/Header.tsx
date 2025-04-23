@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Beer, Menu, User } from "lucide-react";
+import { Beer, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Sidebar } from "./Sidebar";
@@ -11,7 +11,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="flex h-14 items-center px-4 container">
+      <div className="flex h-14 items-center px-4 w-full">
         <div className="md:hidden mr-2">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
@@ -36,12 +36,6 @@ export function Header() {
         </div>
 
         <div className="flex flex-1 items-center justify-end space-x-2">
-          <Button asChild variant="ghost" size="sm">
-            <Link to="/my-account">
-              <User className="h-4 w-4 mr-2" />
-              My Account
-            </Link>
-          </Button>
           <Button asChild size="sm">
             <Link to="/brewing-guide">Start Brewing</Link>
           </Button>

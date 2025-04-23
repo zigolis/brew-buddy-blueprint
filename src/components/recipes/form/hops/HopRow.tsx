@@ -1,10 +1,24 @@
-
 import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Trash2 } from "lucide-react";
-import HopNameField from "./HopNameField";
+import { useState } from "react";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { useIngredientSuggestions } from "@/hooks/useIngredientSuggestions";
+import { Plus } from "lucide-react";
 
 interface HopRowProps {
   form: any;
@@ -12,14 +26,108 @@ interface HopRowProps {
   index: number;
   hop: { id: number };
   onRemove: (id: number) => void;
+  onCreateNew: () => void;
 }
 
-export default function HopRow({ form, control, index, hop, onRemove }: HopRowProps) {
+export default function HopRow({ form, control, index, hop, onRemove, onCreateNew }: HopRowProps) {
   const watchedHop = form.watch(`ingredients.hops.${index}`) || {};
+  const [openPopover, setOpenPopover] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(watchedHop.name || '');
+  const { getHopSuggestions } = useIngredientSuggestions();
+
+  const getSuggestions = (query: string) => {
+    try {
+      if (!query || query.trim() === "") return [];
+      const results = getHopSuggestions(query);
+      return Array.isArray(results) ? results : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const handleSelectHop = (hop: any) => {
+    form.setValue(`ingredients.hops.${index}.name`, hop.name);
+    form.setValue(`ingredients.hops.${index}.alpha`, hop.alpha || 0);
+    form.setValue(`ingredients.hops.${index}.beta`, hop.beta || 0);
+    form.setValue(`ingredients.hops.${index}.form`, hop.form || "Pellet");
+    form.setValue(`ingredients.hops.${index}.costPerUnit`, hop.costPerUnit || 0);
+    setOpenPopover(false);
+  };
 
   return (
     <div className="grid gap-4 md:grid-cols-8 items-end">
-      <HopNameField control={control} form={form} index={index} value={watchedHop.name || ""} />
+      <FormField
+        control={control}
+        name={`ingredients.hops.${index}.name`}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Name*</FormLabel>
+            <Popover 
+              open={openPopover} 
+              onOpenChange={(open) => {
+                setOpenPopover(open);
+                if (open) setSearchQuery(field.value || "");
+              }}
+            >
+              <PopoverTrigger asChild>
+                <FormControl>
+                  <Input
+                    placeholder="Search hop..."
+                    {...field}
+                    onClick={() => setOpenPopover(true)}
+                  />
+                </FormControl>
+              </PopoverTrigger>
+              <PopoverContent className="p-0" align="start">
+                <Command>
+                  <CommandInput
+                    placeholder="Search hop..."
+                    value={searchQuery}
+                    onValueChange={(val) => setSearchQuery(val || "")}
+                  />
+                  <CommandList>
+                    <CommandEmpty>
+                      <div 
+                        className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer hover:bg-accent"
+                        onClick={() => {
+                          onCreateNew();
+                          setOpenPopover(false);
+                        }}
+                      >
+                        <Plus className="mr-2 h-4 w-4" />
+                        Create "{searchQuery}"
+                      </div>
+                    </CommandEmpty>
+                    {getSuggestions(searchQuery).length > 0 && (
+                      <CommandGroup>
+                        {getSuggestions(searchQuery).map((item) => (
+                          <CommandItem
+                            key={item.id || `hop-${Math.random()}`}
+                            value={item.name}
+                            onSelect={() => handleSelectHop(item)}
+                          >
+                            {item.name}
+                          </CommandItem>
+                        ))}
+                        <div 
+                          className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer text-primary hover:bg-accent"
+                          onClick={() => {
+                            onCreateNew();
+                            setOpenPopover(false);
+                          }}
+                        >
+                          <Plus className="mr-2 h-4 w-4" />
+                          Create "{searchQuery}"
+                        </div>
+                      </CommandGroup>
+                    )}
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
+          </FormItem>
+        )}
+      />
 
       <FormField
         control={control}
@@ -146,6 +254,7 @@ export default function HopRow({ form, control, index, hop, onRemove }: HopRowPr
               </FormControl>
               <SelectContent>
                 <SelectItem value="Pellet">Pellet</SelectItem>
+                <SelectItem value="Whole">Whole</SelectItem>
                 <SelectItem value="Plug">Plug</SelectItem>
                 <SelectItem value="Leaf">Leaf</SelectItem>
               </SelectContent>
