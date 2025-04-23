@@ -62,16 +62,30 @@ export const RecipeWizardStepper = ({
       });
     });
 
-    // Observe all dialogs for attribute changes
+    // Set up observer for the document body
+    const bodyObserver = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === 'childList' && mutation.addedNodes.length) {
+          mutation.addedNodes.forEach((node) => {
+            if (node instanceof Element && node.getAttribute('role') === 'dialog') {
+              mutationObserver.observe(node, { attributes: true });
+            }
+          });
+        }
+      }
+    });
+
+    bodyObserver.observe(document.body, { childList: true, subtree: true });
+    document.addEventListener('click', handleDialogState);
+
     document.querySelectorAll('[role="dialog"]').forEach(dialog => {
       mutationObserver.observe(dialog, { attributes: true });
     });
-
-    document.addEventListener('click', handleDialogState);
     
     return () => {
       document.removeEventListener('click', handleDialogState);
       mutationObserver.disconnect();
+      bodyObserver.disconnect();
     };
   }, [setShouldChangeStep, setIsDialogOpen]);
 
@@ -89,7 +103,7 @@ export const RecipeWizardStepper = ({
       defaultValue={recipeSteps[0].id}
     >
       <RecipeStepsNavigation steps={recipeSteps} currentStep={currentStep} />
-      <div className="mt-6 md:mt-8"> {/* Add margin here */}
+      <div className="mt-6 md:mt-8">
         {recipeSteps.map((step, index) => (
           <TabsContent key={step.id} value={step.id}>
             <RecipeForm

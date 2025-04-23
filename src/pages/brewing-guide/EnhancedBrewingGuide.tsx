@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { useBrewContext } from "@/contexts/BrewContext";
@@ -37,7 +38,17 @@ const EnhancedBrewingGuide = () => {
           
           {/* Your existing brewing guide components */}
           <div className="existing-content">
-            {/* Content from the original BrewingGuide component would go here */}
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle>Step-by-Step Guide for Brewing {recipe.name}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4">Follow these instructions to brew your beer successfully.</p>
+                <Button onClick={() => navigate(`/recipes/${recipe.id}`)}>
+                  View Recipe Details
+                </Button>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </Layout>

@@ -1,5 +1,5 @@
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { RecipeForm } from "@/components/recipes/RecipeForm";
 import { useBrewContext } from "@/contexts/BrewContext";
@@ -30,6 +30,12 @@ const EditRecipe = () => {
 
   const recipe = recipes.find((r) => r.id === recipeId);
 
+  useEffect(() => {
+    if (recipe) {
+      setRecipeFormData(recipe);
+    }
+  }, [recipe]);
+
   if (!recipe) {
     return (
       <Layout>
@@ -40,11 +46,6 @@ const EditRecipe = () => {
       </Layout>
     );
   }
-
-  // Initialize form data once recipe is loaded
-  useState(() => {
-    setRecipeFormData(recipe);
-  });
 
   const handleUpdateRecipe = (formData: Partial<Recipe>) => {
     try {
@@ -146,9 +147,13 @@ const EditRecipe = () => {
                 <X className="mr-2 h-4 w-4" />
                 Cancel
               </Button>
-              <Button form="recipe-form" type="submit">
+              <Button 
+                form={singlePage ? "recipe-form" : undefined} 
+                type={singlePage ? "submit" : "button"} 
+                onClick={singlePage ? undefined : handleNext}
+              >
                 <Save className="mr-2 h-4 w-4" />
-                Save Recipe
+                {singlePage ? "Save Recipe" : "Next"}
               </Button>
             </div>
           </div>

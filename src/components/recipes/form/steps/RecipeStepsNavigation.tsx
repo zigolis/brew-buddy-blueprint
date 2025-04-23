@@ -14,7 +14,7 @@ export const RecipeStepsNavigation = ({
   currentStep,
 }: RecipeStepsNavigationProps) => {
   return (
-    <TabsList className="grid w-full grid-cols-1 md:grid-cols-7">
+    <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-7">
       {steps.map((step, index) => (
         <TabsTrigger
           key={step.id}
