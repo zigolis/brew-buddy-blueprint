@@ -8,11 +8,13 @@ import { waterProfiles } from "./style/beerStyles";
 
 export const GeneralInfoSection = ({ form }) => {
   const handleStyleChange = (style) => {
+    // Early return if style is undefined or null
     if (!style) return;
     
+    // Set the selected style in the form
     form.setValue("style", style);
     
-    // Update water profile based on selected style
+    // Update water profile based on selected style if available
     const waterProfile = style.name && waterProfiles[style.name];
     if (waterProfile) {
       form.setValue("waterProfile", waterProfile);

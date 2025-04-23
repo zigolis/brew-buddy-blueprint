@@ -1,5 +1,6 @@
 
 import { Style } from "@/types";
+import { WaterProfile } from "@/types/profiles";
 
 export const beerStyles: Style[] = [
   {
@@ -71,8 +72,9 @@ export const beerStyles: Style[] = [
 ];
 
 // Water profiles mapped to beer styles
-export const waterProfiles = {
+export const waterProfiles: Record<string, WaterProfile> = {
   "American IPA": {
+    name: "American IPA Water Profile",
     calcium: 75,
     magnesium: 5,
     sodium: 10,
@@ -83,6 +85,7 @@ export const waterProfiles = {
     notes: "Balanced profile favoring hop character"
   },
   "English IPA": {
+    name: "English IPA Water Profile",
     calcium: 80,
     magnesium: 10,
     sodium: 15,
@@ -93,6 +96,7 @@ export const waterProfiles = {
     notes: "Slightly more mineral character than American IPAs"
   },
   "German Pilsner": {
+    name: "German Pilsner Water Profile",
     calcium: 50,
     magnesium: 5,
     sodium: 5,

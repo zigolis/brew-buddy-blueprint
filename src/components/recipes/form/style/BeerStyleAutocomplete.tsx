@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Command,
-  CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
@@ -30,32 +29,34 @@ export function BeerStyleAutocomplete({
   const [open, setOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
 
-  // Make sure we're working with a valid array of beer styles
-  const validBeerStyles = React.useMemo(() => {
+  // Ensure we have a valid array even if beerStyles is undefined
+  const validStyles = React.useMemo(() => {
     return Array.isArray(beerStyles) ? beerStyles : [];
   }, []);
 
-  // Safe filtering that handles undefined/null values
+  // Filter styles based on search query
   const filteredStyles = React.useMemo(() => {
     if (!searchQuery || !searchQuery.trim()) {
-      return validBeerStyles;
+      return validStyles;
     }
     
     const lowercaseQuery = searchQuery.toLowerCase().trim();
-    return validBeerStyles.filter((style) => 
-      style && style.name && typeof style.name === 'string' && 
+    return validStyles.filter((style) => 
+      style && 
+      style.name && 
+      typeof style.name === 'string' && 
       style.name.toLowerCase().includes(lowercaseQuery)
     );
-  }, [searchQuery, validBeerStyles]);
+  }, [searchQuery, validStyles]);
 
-  // Safely find the selected style
+  // Find the selected style
   const selectedStyle = React.useMemo(() => {
     if (!value) return null;
-    return validBeerStyles.find(style => style && style.name === value) || null;
-  }, [value, validBeerStyles]);
+    return validStyles.find(style => style && style.name === value) || null;
+  }, [value, validStyles]);
 
-  // Prevent trying to render when styles data isn't ready
-  if (!validBeerStyles || validBeerStyles.length === 0) {
+  // Show a loading state if no styles are available
+  if (!validStyles || validStyles.length === 0) {
     return (
       <Button
         variant="outline"
