@@ -32,8 +32,11 @@ export const MashScheduleSection = ({ form }) => {
     form.setValue('mash.steps', currentSteps.filter((_, i) => i !== index));
   };
 
-  // Ensure we always have an array, default to empty array if undefined
+  // Ensure we always have an array by using fallback to empty array
   const mashSteps = form.watch('mash.steps') || [];
+  
+  // Double-check that mashSteps is an array to prevent runtime errors
+  const isValidStepsArray = Array.isArray(mashSteps);
 
   return (
     <div className="space-y-4">
@@ -78,7 +81,7 @@ export const MashScheduleSection = ({ form }) => {
         />
       </div>
 
-      {Array.isArray(mashSteps) && mashSteps.map((step: MashStep, index: number) => (
+      {isValidStepsArray && mashSteps.map((step: MashStep, index: number) => (
         <div key={index} className="grid gap-4 md:grid-cols-4 border p-4 rounded-lg">
           <FormField
             control={form.control}
