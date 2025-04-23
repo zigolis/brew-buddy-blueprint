@@ -1,6 +1,6 @@
-
 export interface MashProfile {
   name: string;
+  type?: string;
   grainTemp: number;
   mashTemp: number;
   spargeTemp: number;
@@ -82,5 +82,13 @@ export interface WaterProfile {
   sulfate: number;
   bicarbonate: number;
   ph: number;
+  notes: string;
+}
+
+export interface SpargingProfile {
+  name: string;
+  temperature: number;
+  amount: number;
+  time: number;
   notes: string;
 }

@@ -1,4 +1,3 @@
-
 import { Style } from './style';
 import { 
   MashProfile, 
@@ -40,6 +39,7 @@ export interface Recipe {
   tags?: string[];
   ingredients?: Ingredients;
   mash?: MashProfile;
+  sparging?: SpargingProfile;
   fermentation?: FermentationProfile;
   waterProfile?: WaterProfile;
   notes?: string;
