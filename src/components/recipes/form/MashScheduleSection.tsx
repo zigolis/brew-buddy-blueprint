@@ -4,7 +4,7 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { MashStep } from "@/types";
 
@@ -25,6 +25,11 @@ export const MashScheduleSection = ({ form }) => {
       temperature: 67,
       time: 60
     }]);
+  };
+
+  const removeMashStep = (index: number) => {
+    const currentSteps = form.getValues('mash.steps') || [];
+    form.setValue('mash.steps', currentSteps.filter((_, i) => i !== index));
   };
 
   // Ensure we always have an array, default to empty array if undefined
@@ -73,8 +78,8 @@ export const MashScheduleSection = ({ form }) => {
         />
       </div>
 
-      {mashSteps.map((step: MashStep, index: number) => (
-        <div key={index} className="grid gap-4 md:grid-cols-3 border p-4 rounded-lg">
+      {Array.isArray(mashSteps) && mashSteps.map((step: MashStep, index: number) => (
+        <div key={index} className="grid gap-4 md:grid-cols-4 border p-4 rounded-lg">
           <FormField
             control={form.control}
             name={`mash.steps.${index}.type`}
@@ -120,6 +125,19 @@ export const MashScheduleSection = ({ form }) => {
               </FormItem>
             )}
           />
+
+          <div className="flex items-end pb-2">
+            <Button
+              type="button"
+              variant="destructive"
+              size="sm"
+              onClick={() => removeMashStep(index)}
+              className="w-full"
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Remove
+            </Button>
+          </div>
         </div>
       ))}
 
