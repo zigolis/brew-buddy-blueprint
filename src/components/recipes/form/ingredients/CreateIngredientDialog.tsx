@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { IngredientForm } from "@/components/ingredients/IngredientForm";
 import { Ingredient } from "@/types";
+import { v4 as uuidv4 } from 'uuid';
 
 interface CreateIngredientDialogProps {
   open: boolean;
@@ -27,7 +28,15 @@ export function CreateIngredientDialog({
   onIngredientCreated,
 }: CreateIngredientDialogProps) {
   const handleSubmit = (data: Omit<Ingredient, 'id' | 'createdAt' | 'updatedAt'>) => {
-    onIngredientCreated(data);
+    // Create a complete Ingredient object by adding the missing properties
+    const newIngredient: Ingredient = {
+      ...data,
+      id: uuidv4(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    
+    onIngredientCreated(newIngredient);
     onOpenChange(false);
   };
 

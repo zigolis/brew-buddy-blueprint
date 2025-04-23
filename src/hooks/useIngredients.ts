@@ -46,9 +46,11 @@ export const useIngredients = () => {
       
       setIngredients(prev => [...prev, newIngredient]);
       toast.success(`Added ${newIngredient.name} successfully`);
+      return newIngredient; // Return the created ingredient
     } catch (error) {
       console.error('Error adding ingredient:', error);
       toast.error('Failed to add ingredient');
+      throw error;
     }
   };
 
@@ -83,11 +85,43 @@ export const useIngredients = () => {
     return ingredients.find(ing => ing.id === id);
   };
 
+  // Add the missing suggestion functions
+  const getFermentableSuggestions = (query: string) => {
+    if (!query || query.trim() === '') return [];
+    
+    const lowerQuery = query.toLowerCase();
+    return ingredients
+      .filter(ing => ing.type === 'Grain' || ing.type === 'Sugar' || ing.type === 'Extract' || 
+                     ing.type === 'Dry Extract' || ing.type === 'Adjunct')
+      .filter(ing => ing.name.toLowerCase().includes(lowerQuery));
+  };
+
+  const getHopSuggestions = (query: string) => {
+    if (!query || query.trim() === '') return [];
+    
+    const lowerQuery = query.toLowerCase();
+    return ingredients
+      .filter(ing => ing.type === 'Hop')
+      .filter(ing => ing.name.toLowerCase().includes(lowerQuery));
+  };
+
+  const getYeastSuggestions = (query: string) => {
+    if (!query || query.trim() === '') return [];
+    
+    const lowerQuery = query.toLowerCase();
+    return ingredients
+      .filter(ing => ing.type === 'Yeast')
+      .filter(ing => ing.name.toLowerCase().includes(lowerQuery));
+  };
+
   return {
     ingredients: ingredients || [],
     addIngredient,
     updateIngredient,
     deleteIngredient,
     getIngredientById,
+    getFermentableSuggestions,
+    getHopSuggestions,
+    getYeastSuggestions,
   };
 };

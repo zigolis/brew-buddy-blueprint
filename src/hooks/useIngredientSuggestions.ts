@@ -1,6 +1,8 @@
 
 import { Ingredient } from "@/types";
 
+// This hook is kept for backward compatibility
+// Its functionality has been moved to useIngredients
 export const createIngredientSuggestion = (data: Partial<Ingredient>): Ingredient => {
   return {
     id: data.id || '',
@@ -17,26 +19,29 @@ export const createIngredientSuggestion = (data: Partial<Ingredient>): Ingredien
 };
 
 export const useIngredientSuggestions = () => {
+  // These methods are now provided by useIngredients
   const getFermentableSuggestions = (query: string) => {
-    // Mock implementation for now
+    console.warn('useIngredientSuggestions is deprecated, use useIngredients instead');
     return [];
   };
 
   const getHopSuggestions = (query: string) => {
-    // Mock implementation for now
+    console.warn('useIngredientSuggestions is deprecated, use useIngredients instead');
     return [];
   };
 
   const getYeastSuggestions = (query: string) => {
-    // Mock implementation for now
+    console.warn('useIngredientSuggestions is deprecated, use useIngredients instead');
     return [];
   };
 
   const addNewHop = (hopData: Partial<Ingredient>) => {
+    console.warn('useIngredientSuggestions is deprecated, use useIngredients instead');
     return createIngredientSuggestion(hopData);
   };
 
   const addNewYeast = (yeastData: Partial<Ingredient>) => {
+    console.warn('useIngredientSuggestions is deprecated, use useIngredients instead');
     return createIngredientSuggestion(yeastData);
   };
 
