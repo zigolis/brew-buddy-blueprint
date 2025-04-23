@@ -14,8 +14,10 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { useIngredientSuggestions } from "@/hooks/useIngredientSuggestions";
+import { useIngredients } from "@/hooks/useIngredients";
 import { Plus } from "lucide-react";
+import { CreateIngredientDialog } from "../ingredients/CreateIngredientDialog";
+import { Ingredient } from "@/types";
 
 // Default fermentable suggestions to always show
 const DEFAULT_FERMENTABLES = [
@@ -41,7 +43,8 @@ export const FermentableSearch = ({
 }: FermentableSearchProps) => {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const { getFermentableSuggestions } = useIngredientSuggestions();
+  const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const { addIngredient, getFermentableSuggestions } = useIngredients();
   
   // Only update the search query when the popover opens or value changes
   useEffect(() => {
@@ -88,68 +91,84 @@ export const FermentableSearch = ({
 
   const handleCreateClick = () => {
     if (!searchQuery.trim()) return;
-    onCreateNew();
+    setShowCreateDialog(true);
     setOpen(false);
   };
 
+  const handleIngredientCreated = (ingredient: Ingredient) => {
+    addIngredient(ingredient);
+    onChange(ingredient.name);
+    onSelect(ingredient.name);
+  };
+
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <FormControl>
-          <Input 
-            placeholder="Search fermentable..." 
-            value={value} 
-            onClick={() => setOpen(true)}
-            onChange={(e) => onChange(e.target.value)}
-            className="w-full"
-          />
-        </FormControl>
-      </PopoverTrigger>
-      <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
-        <Command>
-          <CommandInput 
-            placeholder="Search fermentable..." 
-            value={searchQuery} 
-            onValueChange={setSearchQuery}
-          />
-          <CommandList>
-            <CommandEmpty>
-              <div 
-                className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer hover:bg-accent"
-                onClick={handleCreateClick}
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                Create "{searchQuery}"
-              </div>
-            </CommandEmpty>
-            {suggestions.length > 0 && (
-              <CommandGroup>
-                {suggestions.map((item) => (
-                  <CommandItem
-                    key={item.id || `fermentable-${Math.random()}`}
-                    value={item.name}
-                    onSelect={() => {
-                      onSelect(item.name);
-                      setOpen(false);
-                    }}
-                  >
-                    {item.name}
-                  </CommandItem>
-                ))}
-                {searchQuery.trim() !== '' && (
-                  <div 
-                    className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer text-primary hover:bg-accent"
-                    onClick={handleCreateClick}
-                  >
-                    <Plus className="mr-2 h-4 w-4" />
-                    Create "{searchQuery}"
-                  </div>
-                )}
-              </CommandGroup>
-            )}
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+    <>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <FormControl>
+            <Input 
+              placeholder="Search fermentable..." 
+              value={value} 
+              onClick={() => setOpen(true)}
+              onChange={(e) => onChange(e.target.value)}
+              className="w-full"
+            />
+          </FormControl>
+        </PopoverTrigger>
+        <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
+          <Command>
+            <CommandInput 
+              placeholder="Search fermentable..." 
+              value={searchQuery} 
+              onValueChange={setSearchQuery}
+            />
+            <CommandList>
+              <CommandEmpty>
+                <div 
+                  className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer hover:bg-accent"
+                  onClick={handleCreateClick}
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create "{searchQuery}"
+                </div>
+              </CommandEmpty>
+              {suggestions.length > 0 && (
+                <CommandGroup>
+                  {suggestions.map((item) => (
+                    <CommandItem
+                      key={item.id || `fermentable-${Math.random()}`}
+                      value={item.name}
+                      onSelect={() => {
+                        onSelect(item.name);
+                        setOpen(false);
+                      }}
+                    >
+                      {item.name}
+                    </CommandItem>
+                  ))}
+                  {searchQuery.trim() !== '' && (
+                    <div 
+                      className="flex items-center px-2 py-1.5 text-sm rounded-sm cursor-pointer text-primary hover:bg-accent"
+                      onClick={handleCreateClick}
+                    >
+                      <Plus className="mr-2 h-4 w-4" />
+                      Create "{searchQuery}"
+                    </div>
+                  )}
+                </CommandGroup>
+              )}
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+
+      <CreateIngredientDialog
+        open={showCreateDialog}
+        onOpenChange={setShowCreateDialog}
+        initialName={searchQuery}
+        typeOverride="Grain"
+        onIngredientCreated={handleIngredientCreated}
+      />
+    </>
   );
 };
