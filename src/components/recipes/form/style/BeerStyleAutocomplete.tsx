@@ -8,6 +8,8 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
+  CommandEmpty,
 } from "@/components/ui/command";
 import {
   Popover,
@@ -29,43 +31,30 @@ export function BeerStyleAutocomplete({
   const [open, setOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
 
-  // Ensure we have a valid array even if beerStyles is undefined
-  const validStyles = React.useMemo(() => {
+  // Ensure we always have a valid array of styles - defensive programming
+  const styles = React.useMemo(() => {
     return Array.isArray(beerStyles) ? beerStyles : [];
   }, []);
 
-  // Filter styles based on search query
+  // Filter styles based on search query with additional safety checks
   const filteredStyles = React.useMemo(() => {
-    if (!searchQuery || !searchQuery.trim()) {
-      return validStyles;
+    if (!searchQuery || searchQuery.trim() === "") {
+      return styles;
     }
     
-    const lowercaseQuery = searchQuery.toLowerCase().trim();
-    return validStyles.filter((style) => 
-      style && 
-      style.name && 
-      typeof style.name === 'string' && 
-      style.name.toLowerCase().includes(lowercaseQuery)
-    );
-  }, [searchQuery, validStyles]);
+    const query = searchQuery.toLowerCase().trim();
+    return styles.filter((style) => {
+      return style && style.name && typeof style.name === 'string' && 
+        style.name.toLowerCase().includes(query);
+    });
+  }, [searchQuery, styles]);
 
-  // Find the selected style
-  const selectedStyle = React.useMemo(() => {
-    if (!value) return null;
-    return validStyles.find(style => style && style.name === value) || null;
-  }, [value, validStyles]);
-
-  // Show a loading state if no styles are available
-  if (!validStyles || validStyles.length === 0) {
-    return (
-      <Button
-        variant="outline"
-        className="w-full justify-between"
-      >
-        Loading beer styles...
-      </Button>
-    );
-  }
+  // Find the currently selected style name
+  const selectedStyleName = React.useMemo(() => {
+    if (!value) return "Select beer style...";
+    const selected = styles.find(style => style && style.name === value);
+    return selected ? selected.name : "Select beer style...";
+  }, [value, styles]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -76,7 +65,7 @@ export function BeerStyleAutocomplete({
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {selectedStyle ? selectedStyle.name : "Select beer style..."}
+          {selectedStyleName}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -87,30 +76,34 @@ export function BeerStyleAutocomplete({
             value={searchQuery}
             onValueChange={setSearchQuery}
           />
-          <CommandGroup className="max-h-[300px] overflow-y-auto">
-            {filteredStyles.length > 0 ? (
-              filteredStyles.map((style) => (
-                <CommandItem
-                  key={`${style.name}-${style.category}`}
-                  value={style.name}
-                  onSelect={() => {
-                    onChange(style);
-                    setOpen(false);
-                  }}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === style.name ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  {style.name}
-                </CommandItem>
-              ))
-            ) : (
-              <div className="py-6 text-center text-sm">No beer style found.</div>
-            )}
-          </CommandGroup>
+          <CommandList>
+            <CommandEmpty>No beer style found.</CommandEmpty>
+            <CommandGroup>
+              {filteredStyles.map((style) => {
+                // Additional safety check before rendering each item
+                if (!style || !style.name) return null;
+                
+                return (
+                  <CommandItem
+                    key={`${style.name}-${style.category || 'unknown'}`}
+                    value={style.name}
+                    onSelect={() => {
+                      onChange(style);
+                      setOpen(false);
+                    }}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value === style.name ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    {style.name}
+                  </CommandItem>
+                );
+              })}
+            </CommandGroup>
+          </CommandList>
         </Command>
       </PopoverContent>
     </Popover>

@@ -5,18 +5,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { WaterSection } from "./WaterSection";
 import { BeerStyleAutocomplete } from "./style/BeerStyleAutocomplete";
 import { waterProfiles } from "./style/beerStyles";
+import { Style } from "@/types";
 
 export const GeneralInfoSection = ({ form }) => {
-  const handleStyleChange = (style) => {
-    // Early return if style is undefined or null
+  const handleStyleChange = (style: Style) => {
+    // Safety check - early return if style is undefined or null
     if (!style) return;
     
     // Set the selected style in the form
     form.setValue("style", style);
     
     // Update water profile based on selected style if available
-    const waterProfile = style.name && waterProfiles[style.name];
-    if (waterProfile) {
+    if (style.name && waterProfiles && waterProfiles[style.name]) {
+      const waterProfile = waterProfiles[style.name];
       form.setValue("waterProfile", waterProfile);
     }
   };
