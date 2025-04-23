@@ -3,21 +3,21 @@ import { EmptyFermentables } from "./EmptyFermentables";
 import { FermentableRow } from "./FermentableRow";
 
 interface FermentablesListProps {
-  fermentables: { id: number }[];
   form: any;
-  onRemove: (id: number) => void;
-  onAdd: () => void;
+  fermentables?: { id: number }[];
+  onRemove?: (id: number) => void;
+  onAdd?: () => void;
   onCreateNew?: () => void;
 }
 
 export const FermentablesList = ({
-  fermentables,
   form,
-  onRemove,
-  onAdd,
+  fermentables = [],
+  onRemove = () => {},
+  onAdd = () => {},
   onCreateNew,
 }: FermentablesListProps) => {
-  if (fermentables.length === 0) {
+  if (!fermentables || fermentables.length === 0) {
     return <EmptyFermentables onAdd={onAdd} onCreate={onCreateNew} />;
   }
 
