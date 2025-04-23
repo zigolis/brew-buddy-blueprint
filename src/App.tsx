@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -22,7 +21,6 @@ import CostCalculator from "@/pages/calculator/CostCalculator";
 import ImportRecipe from "@/pages/import/ImportRecipe";
 import EnhancedBrewingGuide from "@/pages/brewing-guide/EnhancedBrewingGuide";
 import BrewingPlanner from "@/pages/brewing-planner/BrewingPlanner";
-import Settings from "@/pages/settings/Settings";
 import NotFound from "@/pages/NotFound";
 import EditRecipe from "@/pages/recipes/EditRecipe";
 import MyAccount from "@/pages/my-account/MyAccount";
@@ -60,7 +58,6 @@ const App = () => {
                 <Route path="/brewing-guide" element={<EnhancedBrewingGuide />} />
                 <Route path="/brewing-guide/:recipeId" element={<EnhancedBrewingGuide />} />
                 <Route path="/brewing-planner" element={<BrewingPlanner />} />
-                <Route path="/settings" element={<Settings />} />
                 <Route path="/my-account" element={<MyAccount />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>

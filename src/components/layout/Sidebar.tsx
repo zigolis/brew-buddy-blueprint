@@ -1,5 +1,5 @@
 
-import { Beer, Calculator, FileText, List, Package, Settings, LayoutDashboard, User } from "lucide-react";
+import { Beer, Calculator, FileText, List, Package, Settings, LayoutDashboard, User, Calendar } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -10,9 +10,9 @@ const navItems = [
   { name: "Ingredients", icon: Package, path: "/ingredients" },
   { name: "Equipment", icon: List, path: "/equipment" },
   { name: "Brewing Guide", icon: FileText, path: "/brewing-guide" },
+  { name: "Brewing Planner", icon: Calendar, path: "/brewing-planner" },
   { name: "Cost Calculator", icon: Calculator, path: "/calculator" },
-  { name: "My Account", icon: User, path: "/my-account" },
-  { name: "Settings", icon: Settings, path: "/settings" },
+  { name: "My Account", icon: User, path: "/my-account" }
 ];
 
 export function Sidebar() {

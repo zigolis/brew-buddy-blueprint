@@ -13,10 +13,14 @@ export function Layout({ children }: LayoutProps) {
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
       <div className="flex flex-1 w-full">
-        <div className="hidden md:block h-screen sticky top-0 overflow-y-auto">
+        <div className="hidden md:block h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto border-r border-border/50">
           <Sidebar />
         </div>
-        <main className="flex-1 p-4 md:p-8 overflow-y-auto">{children}</main>
+        <main className="flex-1 p-4 md:p-8 overflow-y-auto max-w-full">
+          <div className="mx-auto max-w-7xl">
+            {children}
+          </div>
+        </main>
       </div>
       <Footer />
     </div>
