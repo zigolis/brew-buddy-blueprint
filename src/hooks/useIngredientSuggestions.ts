@@ -47,11 +47,29 @@ export const useIngredientSuggestions = () => {
 
   // Add support for modals in hops and yeasts section
   const addNewHop = (hopData: any) => {
-    addIngredient({ ...hopData, type: "Hop", unit: "g", amount: hopData.amount || 0 });
+    const currentDate = new Date().toISOString();
+    addIngredient({ 
+      ...hopData, 
+      type: "Hop", 
+      unit: "g", 
+      amount: hopData.amount || 0,
+      notes: hopData.notes || "",
+      createdAt: currentDate,
+      updatedAt: currentDate
+    });
   };
 
   const addNewYeast = (yeastData: any) => {
-    addIngredient({ ...yeastData, type: "Yeast", unit: "pkg", amount: yeastData.amount || 1 });
+    const currentDate = new Date().toISOString();
+    addIngredient({ 
+      ...yeastData, 
+      type: "Yeast", 
+      unit: "pkg", 
+      amount: yeastData.amount || 1,
+      notes: yeastData.notes || "",
+      createdAt: currentDate,
+      updatedAt: currentDate
+    });
   };
 
   return {

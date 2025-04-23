@@ -1,7 +1,7 @@
 
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import FermentablesList from "./FermentablesList";
+import { FermentablesList } from "./FermentablesList";
 
 export const FermentablesSection = ({ form }) => {
   return (
