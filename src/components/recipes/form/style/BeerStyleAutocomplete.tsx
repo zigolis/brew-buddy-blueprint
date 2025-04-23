@@ -47,11 +47,11 @@ export function BeerStyleAutocomplete({
       <PopoverContent className="w-full p-0">
         <Command>
           <CommandInput placeholder="Search beer styles..." />
-          <CommandEmpty>No beer style found.</CommandEmpty>
           <CommandGroup className="max-h-[300px] overflow-y-auto">
             {beerStyles.map((style) => (
               <CommandItem
                 key={style.name}
+                value={style.name}
                 onSelect={() => {
                   onChange(style);
                   setOpen(false);
