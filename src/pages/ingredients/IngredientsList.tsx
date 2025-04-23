@@ -140,7 +140,7 @@ const IngredientsList = () => {
                 <SelectValue placeholder="Type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Types</SelectItem>
+                <SelectItem value="all">All Types</SelectItem>
                 {ingredientTypes.map(type => (
                   <SelectItem key={type} value={type}>
                     {getTypeDisplay(type)}
