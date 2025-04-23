@@ -1,3 +1,4 @@
+
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,10 +8,12 @@ import { waterProfiles } from "./style/beerStyles";
 
 export const GeneralInfoSection = ({ form }) => {
   const handleStyleChange = (style) => {
+    if (!style) return;
+    
     form.setValue("style", style);
     
     // Update water profile based on selected style
-    const waterProfile = waterProfiles[style.name];
+    const waterProfile = style.name && waterProfiles[style.name];
     if (waterProfile) {
       form.setValue("waterProfile", waterProfile);
     }

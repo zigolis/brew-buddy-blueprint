@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Command,
+  CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
@@ -34,12 +35,36 @@ export function BeerStyleAutocomplete({
     return Array.isArray(beerStyles) ? beerStyles : [];
   }, []);
 
+  // Safe filtering that handles undefined/null values
   const filteredStyles = React.useMemo(() => {
-    if (!searchQuery.trim()) return validBeerStyles;
-    return validBeerStyles.filter((style) =>
-      style.name.toLowerCase().includes(searchQuery.toLowerCase())
+    if (!searchQuery || !searchQuery.trim()) {
+      return validBeerStyles;
+    }
+    
+    const lowercaseQuery = searchQuery.toLowerCase().trim();
+    return validBeerStyles.filter((style) => 
+      style && style.name && typeof style.name === 'string' && 
+      style.name.toLowerCase().includes(lowercaseQuery)
     );
   }, [searchQuery, validBeerStyles]);
+
+  // Safely find the selected style
+  const selectedStyle = React.useMemo(() => {
+    if (!value) return null;
+    return validBeerStyles.find(style => style && style.name === value) || null;
+  }, [value, validBeerStyles]);
+
+  // Prevent trying to render when styles data isn't ready
+  if (!validBeerStyles || validBeerStyles.length === 0) {
+    return (
+      <Button
+        variant="outline"
+        className="w-full justify-between"
+      >
+        Loading beer styles...
+      </Button>
+    );
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -50,9 +75,7 @@ export function BeerStyleAutocomplete({
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {value
-            ? validBeerStyles.find((style) => style.name === value)?.name || value
-            : "Select beer style..."}
+          {selectedStyle ? selectedStyle.name : "Select beer style..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -67,7 +90,7 @@ export function BeerStyleAutocomplete({
             {filteredStyles.length > 0 ? (
               filteredStyles.map((style) => (
                 <CommandItem
-                  key={style.name}
+                  key={`${style.name}-${style.category}`}
                   value={style.name}
                   onSelect={() => {
                     onChange(style);

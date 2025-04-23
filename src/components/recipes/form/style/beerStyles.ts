@@ -71,7 +71,7 @@ export const beerStyles: Style[] = [
 ];
 
 // Water profiles mapped to beer styles
-export const waterProfiles: Record<string, any> = {
+export const waterProfiles = {
   "American IPA": {
     calcium: 75,
     magnesium: 5,
