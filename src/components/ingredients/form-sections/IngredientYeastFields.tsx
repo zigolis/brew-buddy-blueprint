@@ -14,7 +14,7 @@ export function IngredientYeastFields({ form }: { form: any }) {
             <FormLabel>Yeast Type</FormLabel>
             <Select
               onValueChange={field.onChange}
-              defaultValue={field.value}
+              defaultValue={field.value || "Ale"}
             >
               <FormControl>
                 <SelectTrigger>
@@ -42,7 +42,7 @@ export function IngredientYeastFields({ form }: { form: any }) {
             <FormLabel>Form</FormLabel>
             <Select
               onValueChange={field.onChange}
-              defaultValue={field.value}
+              defaultValue={field.value || "Dry"}
             >
               <FormControl>
                 <SelectTrigger>

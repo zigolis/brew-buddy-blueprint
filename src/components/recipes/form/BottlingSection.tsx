@@ -28,7 +28,7 @@ export const BottlingSection = ({ form }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} defaultValue={field.value || "Bottle"}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select type" />

@@ -28,7 +28,7 @@ export const CarbonationSection = ({ form }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} defaultValue={field.value || "Natural"}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select type" />

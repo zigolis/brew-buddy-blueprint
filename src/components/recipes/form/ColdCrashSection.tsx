@@ -28,7 +28,7 @@ export const ColdCrashSection = ({ form }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} defaultValue={field.value || "Standard"}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select type" />

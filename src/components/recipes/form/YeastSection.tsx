@@ -272,14 +272,13 @@ export const YeastSection = ({ form }) => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Flocculation</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value || ""}>
+                <Select onValueChange={field.onChange} defaultValue={field.value || "Medium"}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select flocculation" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="">Not specified</SelectItem>
                     <SelectItem value="Low">Low</SelectItem>
                     <SelectItem value="Medium">Medium</SelectItem>
                     <SelectItem value="High">High</SelectItem>
