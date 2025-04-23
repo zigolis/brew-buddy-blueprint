@@ -74,4 +74,9 @@ export interface Ingredient {
   notes: string;
   createdAt: string;
   updatedAt: string;
+  // Add optional properties for specific ingredient types
+  color?: number;
+  yield?: number;
+  alpha?: number;
+  potential?: number;
 }

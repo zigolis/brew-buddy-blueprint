@@ -31,7 +31,6 @@ const DEFAULT_FERMENTABLES: Ingredient[] = [
     notes: "",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    // Additional properties needed for fermentables display
     color: 2,
     yield: 80
   },
@@ -45,7 +44,6 @@ const DEFAULT_FERMENTABLES: Ingredient[] = [
     notes: "",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    // Additional properties needed for fermentables display
     color: 9,
     yield: 78
   },
@@ -59,7 +57,6 @@ const DEFAULT_FERMENTABLES: Ingredient[] = [
     notes: "",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    // Additional properties needed for fermentables display
     color: 60,
     yield: 75
   },
@@ -85,33 +82,26 @@ export const FermentableSearch = ({
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const { addIngredient, getFermentableSuggestions } = useIngredients();
   
-  // Only update the search query when the popover opens or value changes
   useEffect(() => {
     if (open) {
       setSearchQuery(value || '');
     }
   }, [open, value]);
   
-  // Get suggestions based on the current search query
   const getSuggestions = (query: string) => {
     try {
-      // Always show default suggestions if no search query
       if (!query || query.trim() === '') {
         return DEFAULT_FERMENTABLES;
       }
       
-      // Get suggestions from the hook
       const customSuggestions = getFermentableSuggestions(query);
       
-      // Filter default suggestions based on query
       const matchingDefaults = DEFAULT_FERMENTABLES.filter(item => 
         item.name.toLowerCase().includes(query.toLowerCase())
       );
       
-      // Combine custom suggestions with filtered defaults
       let combinedSuggestions = [...(Array.isArray(customSuggestions) ? customSuggestions : [])];
       
-      // Add default suggestions that aren't already in the custom suggestions
       matchingDefaults.forEach(defaultItem => {
         if (!combinedSuggestions.some(item => item.name === defaultItem.name)) {
           combinedSuggestions.push(defaultItem);
@@ -125,7 +115,6 @@ export const FermentableSearch = ({
     }
   };
 
-  // Get suggestions based on the current search query
   const suggestions = getSuggestions(searchQuery);
 
   const handleCreateClick = () => {
