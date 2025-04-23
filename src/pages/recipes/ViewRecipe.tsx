@@ -1,4 +1,3 @@
-
 import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { useBrewContext } from "@/contexts/BrewContext";
@@ -240,7 +239,7 @@ export function ViewRecipe() {
             </CardHeader>
             <CardContent className="space-y-6 mt-2">
 
-              <section className="rounded-lg p-4 space-y-2 border-l-4 border-brewing-amber shadow-sm">
+              <section className="rounded-lg p-4 space-y-2 border-l-4 border-brewing-amber shadow-sm bg-transparent">
                 <div className="flex items-center gap-2 pb-1">
                   <span className="bg-brewing-amber/90 text-white px-2 rounded text-xs font-bold uppercase tracking-wide shadow">Mash</span>
                   <span className="ml-2 font-semibold text-sm text-foreground">Mash Schedule</span>
@@ -264,7 +263,7 @@ export function ViewRecipe() {
                 )}
               </section>
 
-              <section className="rounded-lg p-4 space-y-2 border-l-4 border-green-600 shadow-sm">
+              <section className="rounded-lg p-4 space-y-2 border-l-4 border-green-600 shadow-sm bg-transparent">
                 <div className="flex items-center gap-2 pb-1">
                   <span className="bg-green-600 text-white px-2 rounded text-xs font-bold uppercase tracking-wide shadow">Fermentation</span>
                   <span className="ml-2 font-semibold text-sm text-foreground">Fermentation Schedule</span>

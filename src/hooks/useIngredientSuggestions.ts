@@ -3,19 +3,16 @@ import { useIngredients } from '@/hooks/useIngredients';
 import { Ingredient } from '@/types/ingredients';
 
 export const useIngredientSuggestions = () => {
-  const { ingredients } = useIngredients();
+  const { ingredients, addIngredient } = useIngredients();
 
-  // Ensure ingredients is always an array, even if undefined or null
   const safeIngredients = Array.isArray(ingredients) ? ingredients : [];
   
-  // Add console log to debug
+  // Debug log
   console.log('Available ingredients:', safeIngredients);
 
   const getFermentableSuggestions = (query: string): Ingredient[] => {
-    if (!query || typeof query !== 'string') return []; // Return empty array for empty or invalid queries
-    
-    // Filter for fermentable ingredients
-    const filteredIngredients = safeIngredients
+    if (!query || typeof query !== 'string') return [];
+    return safeIngredients
       .filter(ing => 
         ing && (
           ing.type === 'Grain' || 
@@ -28,40 +25,40 @@ export const useIngredientSuggestions = () => {
       .filter(ing => 
         ing && ing.name && ing.name.toLowerCase().includes(query.toLowerCase())
       );
-    
-    console.log('Fermentable suggestions for query:', query, filteredIngredients);
-    return filteredIngredients || [];
   };
 
   const getHopSuggestions = (query: string): Ingredient[] => {
-    if (!query || typeof query !== 'string') return []; // Return empty array for empty or invalid queries
-    
-    const filteredIngredients = safeIngredients
+    if (!query || typeof query !== 'string') return [];
+    return safeIngredients
       .filter(ing => ing && ing.type === 'Hop')
       .filter(ing => 
         ing && ing.name && ing.name.toLowerCase().includes(query.toLowerCase())
       );
-    
-    console.log('Hop suggestions for query:', query, filteredIngredients);
-    return filteredIngredients || [];
   };
 
   const getYeastSuggestions = (query: string): Ingredient[] => {
-    if (!query || typeof query !== 'string') return []; // Return empty array for empty or invalid queries
-    
-    const filteredIngredients = safeIngredients
+    if (!query || typeof query !== 'string') return [];
+    return safeIngredients
       .filter(ing => ing && ing.type === 'Yeast')
       .filter(ing => 
         ing && ing.name && ing.name.toLowerCase().includes(query.toLowerCase())
       );
-    
-    console.log('Yeast suggestions for query:', query, filteredIngredients);
-    return filteredIngredients || [];
+  };
+
+  // Add support for modals in hops and yeasts section
+  const addNewHop = (hopData: any) => {
+    addIngredient({ ...hopData, type: "Hop", unit: "g", amount: hopData.amount || 0 });
+  };
+
+  const addNewYeast = (yeastData: any) => {
+    addIngredient({ ...yeastData, type: "Yeast", unit: "pkg", amount: yeastData.amount || 1 });
   };
 
   return {
     getFermentableSuggestions,
     getHopSuggestions,
-    getYeastSuggestions
+    getYeastSuggestions,
+    addNewHop,
+    addNewYeast,
   };
 };

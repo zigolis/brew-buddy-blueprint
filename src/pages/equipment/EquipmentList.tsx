@@ -1,128 +1,132 @@
+
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
-import { useBrewContext } from "@/contexts/BrewContext";
 import { Button } from "@/components/ui/button";
-import { Plus, Pencil, Trash2 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { Equipment } from "@/types";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { Plus, Bookmark, Filter, Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+// Dummy equipment data for demonstration
+const defaultEquipment = [
+  { id: "1", name: "Brew Kettle", category: "Kettle", notes: "" },
+  { id: "2", name: "Fermenter", category: "Fermentation", notes: "" },
+  { id: "3", name: "Mash Tun", category: "Mash", notes: "" },
+];
+
+const categories = ["All", "Kettle", "Fermentation", "Mash", "Other"];
 
 const EquipmentList = () => {
-  const navigate = useNavigate();
-  const { equipment, deleteEquipment } = useBrewContext();
-  const { toast } = useToast();
-  const [equipmentToDelete, setEquipmentToDelete] = useState<Equipment | null>(null);
+  const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("All");
+  const [bookmarks, setBookmarks] = useState<string[]>([]);
 
-  const handleDelete = () => {
-    if (equipmentToDelete) {
-      deleteEquipment(equipmentToDelete.id);
-      toast({
-        title: "Success",
-        description: "Equipment deleted successfully"
-      });
-      setEquipmentToDelete(null);
-    }
+  // Search and filter logic
+  const filteredEquipment = defaultEquipment
+    .filter(eq => categoryFilter === "All" || eq.category === categoryFilter)
+    .filter(eq => eq.name.toLowerCase().includes(search.toLowerCase()));
+
+  const handleBookmark = (id: string) => {
+    setBookmarks(prev => prev.includes(id)
+      ? prev.filter(bid => bid !== id)
+      : [...prev, id]);
   };
 
   return (
     <Layout>
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
+      <div className="space-y-6 w-full">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold">Equipment</h1>
             <p className="text-muted-foreground">Manage your brewing equipment</p>
           </div>
-          <Button onClick={() => navigate("/equipment/new")}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Equipment
-          </Button>
-        </div>
-
-        {equipment.length > 0 ? (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Batch Size</TableHead>
-                <TableHead>Efficiency</TableHead>
-                <TableHead>Cost</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {equipment.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell className="font-medium">{item.name}</TableCell>
-                  <TableCell>{item.type}</TableCell>
-                  <TableCell>{item.batchSize}L</TableCell>
-                  <TableCell>{item.efficiency}%</TableCell>
-                  <TableCell>${item.cost}</TableCell>
-                  <TableCell className="text-right space-x-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => navigate(`/equipment/edit/${item.id}`)}
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setEquipmentToDelete(item)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
+          <div className="flex items-center gap-2 md:gap-4">
+            <Input
+              className="w-48"
+              placeholder="Search equipment..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              startIcon={<Search className="h-4 w-4" />}
+            />
+            <select
+              className="rounded-md border px-3 py-2 text-sm md:w-40"
+              value={categoryFilter}
+              onChange={e => setCategoryFilter(e.target.value)}
+            >
+              {categories.map(cat => (
+                <option key={cat} value={cat}>{cat}</option>
               ))}
-            </TableBody>
-          </Table>
-        ) : (
-          <div className="text-center py-6">
-            <p className="text-muted-foreground mb-4">No equipment added yet</p>
-            <Button onClick={() => navigate("/equipment/new")}>
+            </select>
+            <Button variant="outline" className="hidden md:inline-flex">
+              <Filter className="h-4 w-4 mr-2" /> Filters
+            </Button>
+            <Button>
               <Plus className="h-4 w-4 mr-2" />
-              Add Your First Equipment
+              Add Equipment
             </Button>
           </div>
-        )}
-      </div>
+        </div>
 
-      <AlertDialog open={!!equipmentToDelete} onOpenChange={() => setEquipmentToDelete(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This will permanently delete {equipmentToDelete?.name}. This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground">
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        {/* Bookmarks Filter */}
+        {bookmarks.length > 0 && (
+          <div className="flex items-center space-x-2 mb-2">
+            <span className="font-medium text-muted-foreground text-xs">Bookmarked:</span>
+            {bookmarks.map(bid => {
+              const eq = defaultEquipment.find(e => e.id === bid);
+              return eq ? (
+                <span
+                  key={bid}
+                  className="inline-flex items-center gap-1 px-2 rounded bg-accent text-xs cursor-pointer"
+                  onClick={() => handleBookmark(bid)}
+                >
+                  {eq.name} <Bookmark className="w-3 h-3" />
+                </span>
+              ) : null;
+            })}
+          </div>
+        )}
+
+        <Card>
+          <CardHeader>
+            <CardTitle>All Equipment</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <table className="w-full text-sm">
+              <thead className="bg-muted">
+                <tr>
+                  <th className="px-3 py-2 text-left">Name</th>
+                  <th className="px-3 py-2 text-left">Category</th>
+                  <th className="px-3 py-2 text-left">Notes</th>
+                  <th />
+                  <th />
+                </tr>
+              </thead>
+              <tbody>
+                {filteredEquipment.map(eq => (
+                  <tr key={eq.id} className="border-b hover:bg-muted/60">
+                    <td className="px-3 py-2">{eq.name}</td>
+                    <td className="px-3 py-2">{eq.category}</td>
+                    <td className="px-3 py-2">{eq.notes}</td>
+                    <td>
+                      <Button
+                        size="sm"
+                        variant={bookmarks.includes(eq.id) ? "default" : "outline"}
+                        onClick={() => handleBookmark(eq.id)}
+                      >
+                        <Bookmark className="h-4 w-4" />
+                      </Button>
+                    </td>
+                    <td>
+                      <Button size="sm" variant="outline">
+                        Edit
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </CardContent>
+        </Card>
+      </div>
     </Layout>
   );
 };
