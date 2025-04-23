@@ -21,6 +21,7 @@ import ViewEquipment from "@/pages/equipment/ViewEquipment";
 import CostCalculator from "@/pages/calculator/CostCalculator";
 import ImportRecipe from "@/pages/import/ImportRecipe";
 import EnhancedBrewingGuide from "@/pages/brewing-guide/EnhancedBrewingGuide";
+import BrewingPlanner from "@/pages/brewing-planner/BrewingPlanner";
 import Settings from "@/pages/settings/Settings";
 import NotFound from "@/pages/NotFound";
 import EditRecipe from "@/pages/recipes/EditRecipe";
@@ -58,6 +59,7 @@ const App = () => {
                 <Route path="/import" element={<ImportRecipe />} />
                 <Route path="/brewing-guide" element={<EnhancedBrewingGuide />} />
                 <Route path="/brewing-guide/:recipeId" element={<EnhancedBrewingGuide />} />
+                <Route path="/brewing-planner" element={<BrewingPlanner />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/my-account" element={<MyAccount />} />
                 <Route path="*" element={<NotFound />} />

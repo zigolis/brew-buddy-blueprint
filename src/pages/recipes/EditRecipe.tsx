@@ -9,7 +9,6 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { X, Save, ListTodo } from "lucide-react";
 import { recipeSteps } from "@/constants/recipeSteps";
-import { RecipeStepsNavigation } from "@/components/recipes/form/steps/RecipeStepsNavigation";
 import { RecipeStepNavButtons } from "@/components/recipes/form/steps/RecipeStepNavButtons";
 import { RecipeWizardHeader } from "@/components/recipes/form/RecipeWizardHeader";
 import { RecipeWizardProgress } from "@/components/recipes/form/RecipeWizardProgress";
@@ -73,14 +72,32 @@ const EditRecipe = () => {
       ...prev,
       ...stepData,
     }));
-    if (currentStep < recipeSteps.length - 1) setCurrentStep(currentStep + 1);
+    if (currentStep < recipeSteps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      // If last step, save the recipe
+      handleUpdateRecipe({
+        ...recipeFormData,
+        ...stepData
+      });
+    }
   };
 
-  const progress = ((currentStep + 1) / recipeSteps.length) * 100;
+  const handleNext = () => {
+    if (isDialogOpen.current) {
+      return;
+    }
+    
+    if (currentStep < recipeSteps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
 
   const handlePrevious = () => {
     if (currentStep > 0) setCurrentStep(currentStep - 1);
   };
+
+  const progress = ((currentStep + 1) / recipeSteps.length) * 100;
 
   return (
     <Layout>
@@ -114,6 +131,11 @@ const EditRecipe = () => {
               <Button 
                 form={singlePage ? "recipe-form" : undefined} 
                 type="submit"
+                onClick={() => {
+                  if (!singlePage) {
+                    handleUpdateRecipe(recipeFormData);
+                  }
+                }}
               >
                 <Save className="mr-2 h-4 w-4" />
                 Save Recipe
@@ -142,7 +164,7 @@ const EditRecipe = () => {
                 currentStep={currentStep}
                 totalSteps={recipeSteps.length}
                 onPrevious={handlePrevious}
-                onNext={null}
+                onNext={handleNext}
               />
             </div>
           </div>

@@ -7,6 +7,7 @@ interface FermentablesListProps {
   form: any;
   onRemove: (id: number) => void;
   onAdd: () => void;
+  onCreateNew?: () => void;
 }
 
 export const FermentablesList = ({
@@ -14,9 +15,10 @@ export const FermentablesList = ({
   form,
   onRemove,
   onAdd,
+  onCreateNew,
 }: FermentablesListProps) => {
   if (fermentables.length === 0) {
-    return <EmptyFermentables onAdd={onAdd} />;
+    return <EmptyFermentables onAdd={onAdd} onCreate={onCreateNew} />;
   }
 
   return (
@@ -28,6 +30,7 @@ export const FermentablesList = ({
           fermentable={fermentable}
           form={form}
           onRemove={onRemove}
+          onCreateNew={onCreateNew}
         />
       ))}
     </>

@@ -1,3 +1,4 @@
+
 import { Style } from './style';
 import { 
   MashProfile, 
@@ -53,6 +54,7 @@ export interface Recipe {
   recipeStats?: {
     notes?: string;
   };
+  isBrewed?: boolean;
 }
 
 export type Ingredients = {
