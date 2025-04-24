@@ -1,6 +1,7 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Beer, ChevronRight, Star } from "lucide-react";
+import { Beer, ChevronRight, Star, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AuthForm } from "@/components/auth/AuthForm";
 import { cn } from "@/lib/utils";
