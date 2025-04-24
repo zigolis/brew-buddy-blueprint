@@ -154,9 +154,13 @@ const generateBrewingSteps = (recipe: Recipe): BrewingStep[] => {
     temperature: 100
   });
   
-  const hopAdditions = recipe.ingredients?.hops
-    .filter(hop => hop.use === 'Boil')
-    .sort((a, b) => b.time - a.time);
+  // Fix the issue with hops filtering by checking if hops is an array first
+  let hopAdditions: any[] = [];
+  if (recipe.ingredients?.hops && Array.isArray(recipe.ingredients.hops)) {
+    hopAdditions = recipe.ingredients.hops
+      .filter(hop => hop.use === 'Boil')
+      .sort((a, b) => b.time - a.time);
+  }
   
   if (hopAdditions && hopAdditions.length > 0) {
     hopAdditions.forEach(hop => {
@@ -195,11 +199,16 @@ const generateBrewingSteps = (recipe: Recipe): BrewingStep[] => {
     temperature: recipe.fermentation?.temperature || 20
   });
   
+  // Check for yeasts existence and handle undefined
+  const yeastNames = recipe.ingredients?.yeasts && Array.isArray(recipe.ingredients.yeasts) 
+    ? recipe.ingredients.yeasts.map(y => y.name).join(', ')
+    : 'Brewing yeast';
+    
   steps.push({
     id: uuidv4(),
     type: 'Fermentation',
     name: 'Pitch Yeast',
-    instructions: `Pitch yeast (${recipe.ingredients?.yeasts.map(y => y.name).join(', ') || 'Brewing yeast'}) and seal fermenter with airlock.`,
+    instructions: `Pitch yeast (${yeastNames}) and seal fermenter with airlock.`,
     completed: false,
     description: 'Add yeast',
     duration: 5,
