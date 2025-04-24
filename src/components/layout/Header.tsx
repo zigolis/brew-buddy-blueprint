@@ -1,13 +1,25 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Beer, Menu } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Beer, Menu, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Sidebar } from "./Sidebar";
+import { useToast } from "@/hooks/use-toast";
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('ibeer-authenticated');
+    toast({
+      title: "Logged out successfully",
+      description: "See you soon!",
+    });
+    navigate('/');
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -36,8 +48,17 @@ export function Header() {
         </div>
 
         <div className="flex flex-1 items-center justify-end space-x-2">
-          <Button asChild size="sm">
+          <Button asChild size="sm" className="mr-2">
             <Link to="/brewing-guide">Start Brewing</Link>
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={handleLogout}
+            className="text-muted-foreground hover:text-foreground"
+          >
+            <LogOut className="h-5 w-5" />
+            <span className="sr-only">Logout</span>
           </Button>
         </div>
       </div>

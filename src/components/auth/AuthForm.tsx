@@ -102,7 +102,7 @@ export const AuthForm = () => {
             </CardContent>
             <CardFooter>
               <Button 
-                className="w-full group bg-gradient-to-r from-primary to-primary-foreground hover:opacity-90 transition-all duration-300" 
+                className="w-full group" 
                 type="submit" 
                 disabled={isLoading}
               >

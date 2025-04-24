@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { useBrewContext } from "@/contexts/BrewContext";
@@ -7,23 +6,40 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { formatDistanceToNow } from "date-fns";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 const BatchesList = () => {
   const { recipes } = useBrewContext();
+  const [searchQuery, setSearchQuery] = useState("");
   const brewedRecipes = recipes.filter(recipe => recipe.isBrewed);
+
+  const filteredRecipes = brewedRecipes.filter(recipe => 
+    recipe.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    recipe.style?.name?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <Layout>
       <div className="space-y-6">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h1 className="text-3xl font-bold">Batches</h1>
             <p className="text-muted-foreground">Track and manage your brewed recipes</p>
           </div>
+          <div className="relative w-full md:w-72">
+            <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search batches..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 w-full"
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {brewedRecipes.length > 0 ? (
+          {filteredRecipes.length > 0 ? (
             brewedRecipes.map((recipe) => {
               // Calculate time since brewing
               const brewDate = new Date(recipe.updatedAt);

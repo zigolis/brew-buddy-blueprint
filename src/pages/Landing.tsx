@@ -1,140 +1,42 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Beer, Check, ChevronRight, Settings, Brush, Clock, Database, Users, Star, Heart } from "lucide-react";
+import { Beer, ChevronRight, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AuthForm } from "@/components/auth/AuthForm";
 import { cn } from "@/lib/utils";
+import { Hero } from "@/components/landing/Hero";
+import { Features } from "@/components/landing/Features";
 
 export default function LandingPage() {
   const [selectedTier, setSelectedTier] = useState<string>("standard");
   
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <div className="relative overflow-hidden">
-        {/* Navigation */}
-        <header className="relative z-10">
-          <div className="container mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Beer className="h-8 w-8 text-primary" />
-              <span className="font-bold text-2xl">iBeer Brewing Pro</span>
-            </div>
-            <div className="hidden md:flex items-center space-x-8">
-              <Link to="#features" className="text-sm text-foreground hover:text-primary transition-colors">Features</Link>
-              <Link to="#pricing" className="text-sm text-foreground hover:text-primary transition-colors">Pricing</Link>
-              <Link to="#testimonials" className="text-sm text-foreground hover:text-primary transition-colors">Testimonials</Link>
-              <Button asChild variant="outline" size="sm">
-                <Link to="/brewing-guide">Learn Brewing</Link>
-              </Button>
-            </div>
+      {/* Navigation */}
+      <header className="relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <Beer className="h-8 w-8 text-primary" />
+            <span className="font-bold text-2xl">iBeer Brewing Pro</span>
           </div>
-        </header>
-        
-        {/* Hero Content */}
-        <div className="container mx-auto px-4 sm:px-6 pt-10 pb-24 md:pt-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6 max-w-xl">
-              <div className="inline-block rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-                Your Beer Broh, helping you step by step
-              </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-                Master Your Brewing Journey with 
-                <span className="text-primary"> iBeer Pro</span>
-              </h1>
-              <p className="text-xl text-muted-foreground">
-                Whether you're crafting your first batch or running a microbrewery, iBeer Pro guides you every step of the way. From beginner-friendly recipes to advanced brewing techniques.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <Button size="lg" className="group">
-                  Start Brewing
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
-                <Button variant="outline" size="lg">
-                  View Recipes
-                </Button>
-              </div>
-              <div className="flex items-center gap-4 text-sm">
-                <div className="flex -space-x-2">
-                  {[1, 2, 3, 4].map((id) => (
-                    <div 
-                      key={id} 
-                      className="h-8 w-8 rounded-full border-2 border-background bg-muted"
-                      style={{ backgroundImage: `url(https://i.pravatar.cc/150?u=${id})`, backgroundSize: 'cover' }}
-                    />
-                  ))}
-                </div>
-                <p className="text-muted-foreground">
-                  <span className="font-semibold text-foreground">1,000+</span> brewers joined this month
-                </p>
-              </div>
-            </div>
-            <div className="hidden md:block relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg blur-3xl opacity-50" />
-              <div className="relative">
-                <AuthForm />
-              </div>
-            </div>
+          <div className="hidden md:flex items-center space-x-8">
+            <Link to="#features" className="text-sm text-foreground hover:text-primary transition-colors">Features</Link>
+            <Link to="#pricing" className="text-sm text-foreground hover:text-primary transition-colors">Pricing</Link>
+            <Link to="#testimonials" className="text-sm text-foreground hover:text-primary transition-colors">Testimonials</Link>
+            <Button asChild variant="outline" size="sm">
+              <Link to="/brewing-guide">Learn Brewing</Link>
+            </Button>
           </div>
         </div>
+      </header>
+      
+      {/* Hero Section */}
+      <div className="relative overflow-hidden">
+        <Hero />
       </div>
       
       {/* Features Section */}
-      <section id="features" className="py-16 md:py-24 bg-muted/30">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">From First Brew to Perfect Pour</h2>
-            <p className="text-lg text-muted-foreground">
-              Whether you're just starting or perfecting your craft, we've got tools for every stage of your brewing journey.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                icon: <Brush className="h-6 w-6" />,
-                title: "Recipe Creation",
-                description: "Craft perfect beer recipes with our intuitive recipe builder. Track ingredients, calculate IBUs, ABV, and more."
-              },
-              {
-                icon: <Clock className="h-6 w-6" />,
-                title: "Brewing Sessions",
-                description: "Schedule and track your brewing sessions with detailed step-by-step guides and timers."
-              },
-              {
-                icon: <Database className="h-6 w-6" />,
-                title: "Inventory Management",
-                description: "Keep track of your ingredients inventory with automatic updates after each brewing session."
-              },
-              {
-                icon: <Settings className="h-6 w-6" />,
-                title: "Equipment Profiles",
-                description: "Create and manage equipment profiles for consistent brewing results across different setups."
-              },
-              {
-                icon: <Users className="h-6 w-6" />,
-                title: "Community Recipes",
-                description: "Share and discover recipes from the brewing community with ratings and reviews."
-              },
-              {
-                icon: <Heart className="h-6 w-6" />,
-                title: "Brewing Journal",
-                description: "Document your brewing journey with notes, photos, and tasting scores for each batch."
-              }
-            ].map((feature, index) => (
-              <div 
-                key={index} 
-                className="bg-card p-6 rounded-lg border hover:shadow-lg transition-all duration-300"
-              >
-                <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-4">
-                  {feature.icon}
-                </div>
-                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Features />
       
       {/* Pricing Section */}
       <section id="pricing" className="py-16 md:py-24">
