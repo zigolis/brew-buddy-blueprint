@@ -26,6 +26,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Recipe, BrewingStep } from "@/types";
 import { v4 as uuidv4 } from "uuid";
+import { BrewingStepCard } from "@/components/brewing-guide/BrewingStepCard";
 
 const BrewingGuideDashboard = () => {
   const { recipes } = useBrewContext();
