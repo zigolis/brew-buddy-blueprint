@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
@@ -143,14 +144,14 @@ const IngredientsList = () => {
             />
           </div>
           <Select
-            value={typeFilter || ""}
-            onValueChange={val => setTypeFilter(val.length ? val : null)}
+            value={typeFilter || "all-types"}
+            onValueChange={val => setTypeFilter(val === "all-types" ? null : val)}
           >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Filter by type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Types</SelectItem>
+              <SelectItem value="all-types">All Types</SelectItem>
               {ingredientTypes.map(type => (
                 <SelectItem key={type} value={type}>
                   {getTypeDisplay(type)}
