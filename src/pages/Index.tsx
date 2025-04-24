@@ -1,4 +1,3 @@
-
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,7 +11,6 @@ export default function HomePage() {
   const totalRecipes = recipes.length;
   const brewedRecipes = recipes.filter(recipe => recipe.isBrewed).length;
   
-  // Process chart data
   const chartData = recipes.map(recipe => ({
     date: new Date(recipe.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
     created: 1,
@@ -77,45 +75,96 @@ export default function HomePage() {
           
           <Card className="col-span-1 transition-all duration-200 hover:shadow-lg">
             <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-              <CardDescription>Common tasks and shortcuts</CardDescription>
+              <CardTitle className="text-2xl font-semibold">Quick Actions</CardTitle>
+              <CardDescription>Jump right into brewing</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
-                <Link to="/recipes/new" className="w-full group">
+                <Link to="/recipes/new" className="group">
                   <Button 
-                    className="w-full h-14 text-base bg-primary/5 hover:bg-primary/10 hover:text-primary transition-all duration-200 border-2 border-transparent hover:border-primary/20" 
+                    className="relative w-full h-[4.5rem] text-base flex items-center justify-start px-5 overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5 hover:from-primary/20 hover:to-primary/10 border-2 border-transparent hover:border-primary/20 transition-all duration-300"
                     variant="outline"
                   >
-                    <Plus className="mr-2 h-5 w-5 transition-transform group-hover:scale-110" />
-                    New Recipe
+                    <div className="flex items-center gap-3 z-10">
+                      <div className="p-2 rounded-md bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                        <Plus className="h-5 w-5 text-primary group-hover:scale-110 transition-transform" />
+                      </div>
+                      <div className="flex flex-col items-start">
+                        <span className="font-semibold">New Recipe</span>
+                        <span className="text-xs text-muted-foreground">Create a brew recipe</span>
+                      </div>
+                    </div>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 translate-x-4 transition-all duration-300">
+                      <div className="p-1.5 rounded-full bg-primary/10">
+                        <Plus className="h-3 w-3 text-primary" />
+                      </div>
+                    </div>
                   </Button>
                 </Link>
-                <Link to="/brewing-guide" className="w-full group">
+
+                <Link to="/brewing-guide" className="group">
                   <Button 
-                    className="w-full h-14 text-base bg-secondary/5 hover:bg-secondary/10 hover:text-secondary transition-all duration-200 border-2 border-transparent hover:border-secondary/20" 
+                    className="relative w-full h-[4.5rem] text-base flex items-center justify-start px-5 overflow-hidden bg-gradient-to-br from-secondary/10 to-secondary/5 hover:from-secondary/20 hover:to-secondary/10 border-2 border-transparent hover:border-secondary/20 transition-all duration-300"
                     variant="outline"
                   >
-                    <Beer className="mr-2 h-5 w-5 transition-transform group-hover:scale-110" />
-                    Start Brewing
+                    <div className="flex items-center gap-3 z-10">
+                      <div className="p-2 rounded-md bg-secondary/10 group-hover:bg-secondary/20 transition-colors">
+                        <Beer className="h-5 w-5 text-secondary group-hover:scale-110 transition-transform" />
+                      </div>
+                      <div className="flex flex-col items-start">
+                        <span className="font-semibold">Start Brewing</span>
+                        <span className="text-xs text-muted-foreground">Begin your brew day</span>
+                      </div>
+                    </div>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 translate-x-4 transition-all duration-300">
+                      <div className="p-1.5 rounded-full bg-secondary/10">
+                        <Beer className="h-3 w-3 text-secondary" />
+                      </div>
+                    </div>
                   </Button>
                 </Link>
-                <Link to="/import" className="w-full group">
+
+                <Link to="/import" className="group">
                   <Button 
-                    className="w-full h-14 text-base bg-accent/5 hover:bg-accent/10 hover:text-accent transition-all duration-200 border-2 border-transparent hover:border-accent/20" 
+                    className="relative w-full h-[4.5rem] text-base flex items-center justify-start px-5 overflow-hidden bg-gradient-to-br from-accent/10 to-accent/5 hover:from-accent/20 hover:to-accent/10 border-2 border-transparent hover:border-accent/20 transition-all duration-300"
                     variant="outline"
                   >
-                    <Database className="mr-2 h-5 w-5 transition-transform group-hover:scale-110" />
-                    Import BeerXML
+                    <div className="flex items-center gap-3 z-10">
+                      <div className="p-2 rounded-md bg-accent/10 group-hover:bg-accent/20 transition-colors">
+                        <Database className="h-5 w-5 text-accent-foreground group-hover:scale-110 transition-transform" />
+                      </div>
+                      <div className="flex flex-col items-start">
+                        <span className="font-semibold">Import BeerXML</span>
+                        <span className="text-xs text-muted-foreground">Import your recipes</span>
+                      </div>
+                    </div>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 translate-x-4 transition-all duration-300">
+                      <div className="p-1.5 rounded-full bg-accent/10">
+                        <Database className="h-3 w-3 text-accent-foreground" />
+                      </div>
+                    </div>
                   </Button>
                 </Link>
-                <Link to="/ingredients" className="w-full group">
+
+                <Link to="/ingredients" className="group">
                   <Button 
-                    className="w-full h-14 text-base bg-muted hover:bg-muted/80 transition-all duration-200 border-2 border-transparent hover:border-muted-foreground/20" 
+                    className="relative w-full h-[4.5rem] text-base flex items-center justify-start px-5 overflow-hidden bg-gradient-to-br from-muted/40 to-muted/30 hover:from-muted/60 hover:to-muted/40 border-2 border-transparent hover:border-muted-foreground/20 transition-all duration-300"
                     variant="outline"
                   >
-                    <FileText className="mr-2 h-5 w-5 transition-transform group-hover:scale-110" />
-                    Manage Inventory
+                    <div className="flex items-center gap-3 z-10">
+                      <div className="p-2 rounded-md bg-muted-foreground/10 group-hover:bg-muted-foreground/20 transition-colors">
+                        <FileText className="h-5 w-5 text-muted-foreground group-hover:scale-110 transition-transform" />
+                      </div>
+                      <div className="flex flex-col items-start">
+                        <span className="font-semibold">Manage Inventory</span>
+                        <span className="text-xs text-muted-foreground">Track ingredients</span>
+                      </div>
+                    </div>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 translate-x-4 transition-all duration-300">
+                      <div className="p-1.5 rounded-full bg-muted-foreground/10">
+                        <FileText className="h-3 w-3 text-muted-foreground" />
+                      </div>
+                    </div>
                   </Button>
                 </Link>
               </div>
