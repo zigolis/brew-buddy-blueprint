@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -28,6 +27,7 @@ import EditRecipe from "@/pages/recipes/EditRecipe";
 import MyAccount from "@/pages/my-account/MyAccount";
 import BatchesList from "@/pages/batches/BatchesList";
 import BatchDetail from "@/pages/batches/BatchDetail";
+import RefactoredBrewingGuide from "./pages/brewing-guide/RefactoredBrewingGuide";
 
 const queryClient = new QueryClient();
 
@@ -73,8 +73,8 @@ const App = () => {
                 <Route path="/import" element={isAuthenticated ? <ImportRecipe /> : <Navigate to="/" />} />
                 
                 {/* Brewing guide is accessible without authentication */}
-                <Route path="/brewing-guide" element={<EnhancedBrewingGuide />} />
-                <Route path="/brewing-guide/:recipeId" element={<EnhancedBrewingGuide />} />
+                <Route path="/brewing-guide" element={<RefactoredBrewingGuide />} />
+                <Route path="/brewing-guide/:recipeId" element={<RefactoredBrewingGuide />} />
                 <Route path="/my-account" element={isAuthenticated ? <MyAccount /> : <Navigate to="/" />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
