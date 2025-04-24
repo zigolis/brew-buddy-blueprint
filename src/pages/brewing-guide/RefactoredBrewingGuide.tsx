@@ -116,7 +116,8 @@ const generateBrewingSteps = (recipe: Recipe): BrewingStep[] => {
     temperature: recipe.mash?.mashTemp ? recipe.mash.mashTemp + 2 : 70
   });
   
-  if (recipe.mash?.steps) {
+  // Check if recipe.mash.steps exists and is an array before using forEach
+  if (recipe.mash?.steps && Array.isArray(recipe.mash.steps)) {
     recipe.mash.steps.forEach((mashStep, index) => {
       steps.push({
         id: uuidv4(),
@@ -157,7 +158,7 @@ const generateBrewingSteps = (recipe: Recipe): BrewingStep[] => {
     .filter(hop => hop.use === 'Boil')
     .sort((a, b) => b.time - a.time);
   
-  if (hopAdditions) {
+  if (hopAdditions && hopAdditions.length > 0) {
     hopAdditions.forEach(hop => {
       steps.push({
         id: uuidv4(),
@@ -205,7 +206,8 @@ const generateBrewingSteps = (recipe: Recipe): BrewingStep[] => {
     temperature: recipe.fermentation?.temperature || 20
   });
   
-  if (recipe.fermentation?.steps) {
+  // Check if fermentation steps exist and are an array
+  if (recipe.fermentation?.steps && Array.isArray(recipe.fermentation.steps)) {
     recipe.fermentation.steps.forEach((fermentationStep) => {
       steps.push({
         id: uuidv4(),
