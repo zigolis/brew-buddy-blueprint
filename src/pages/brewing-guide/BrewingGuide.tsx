@@ -1,6 +1,6 @@
+import React, { useState, useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { useBrewContext } from "@/contexts/BrewContext";
-import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,7 +26,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Recipe, BrewingStep } from "@/types";
 import { v4 as uuidv4 } from "uuid";
-import { BrewingStepCard } from "@/components/brewing-guide/BrewingStepCard";
+import { BrewingStepCard as BrewingStepCardComponent } from "@/components/brewing-guide/BrewingStepCard";
 
 const BrewingGuideDashboard = () => {
   const { recipes } = useBrewContext();
@@ -435,7 +435,7 @@ const BrewingGuideSession = () => {
           </div>
           
           <div className="md:w-2/3">
-            <BrewingStepCard
+            <BrewingStepCardComponent
               step={{...currentStep, savedData: stepData[currentStep.id]}}
               isActive={true}
               onComplete={() => toggleStepCompletion(activeStep)}
