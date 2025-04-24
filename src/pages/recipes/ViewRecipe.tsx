@@ -170,8 +170,8 @@ export function ViewRecipe() {
                     <thead className="text-muted-foreground bg-muted">
                       <tr>
                         <th className="px-2 py-1">Name</th>
-                        <th className="px-2 py-1">Form</th>
                         <th className="px-2 py-1">Amount (g)</th>
+                        <th className="px-2 py-1">Time (min)</th>
                         <th className="px-2 py-1">Purpose</th>
                       </tr>
                     </thead>
@@ -179,8 +179,8 @@ export function ViewRecipe() {
                       {recipe.ingredients.hops.map((h, i) => (
                         <tr key={h.id || `hop-${i}`} className="hover:bg-muted/60">
                           <td className="px-2 py-1">{h.name || "Unnamed"}</td>
-                          <td className="px-2 py-1">{h.form ?? '-'}</td>
                           <td className="px-2 py-1">{h.amount || 0}</td>
+                          <td className="px-2 py-1">{h.time || 0}</td>
                           <td className="px-2 py-1">{h.use || '-'}</td>
                         </tr>
                       ))}
@@ -196,24 +196,18 @@ export function ViewRecipe() {
                     <thead className="text-muted-foreground bg-muted">
                       <tr>
                         <th className="px-2 py-1">Name</th>
-                        <th className="px-2 py-1">Lab</th>
+                        <th className="px-2 py-1">Laboratory</th>
                         <th className="px-2 py-1">Form</th>
                         <th className="px-2 py-1">Amount</th>
-                        <th className="px-2 py-1">Attenuation (%)</th>
                       </tr>
                     </thead>
                     <tbody>
                       {recipe.ingredients.yeasts.map((y, i) => (
                         <tr key={y.id || `yeast-${i}`} className="hover:bg-muted/60">
-                          <td className="px-2 py-1 font-semibold">{y.name || "Unnamed"}</td>
+                          <td className="px-2 py-1">{y.name || "Unnamed"}</td>
                           <td className="px-2 py-1">{y.laboratory || "-"}</td>
                           <td className="px-2 py-1">{y.form || "-"}</td>
                           <td className="px-2 py-1">{y.amount || "-"}</td>
-                          <td className="px-2 py-1">
-                            {typeof y.minAttenuation === "number" && typeof y.maxAttenuation === "number"
-                              ? `${y.minAttenuation}–${y.maxAttenuation}`
-                              : "-"}
-                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -263,6 +257,56 @@ export function ViewRecipe() {
                 )}
               </section>
 
+              <section className="rounded-lg p-4 space-y-2 border-l-4 border-brewing-copper shadow-sm bg-transparent">
+                <div className="flex items-center gap-2 pb-1">
+                  <span className="bg-brewing-copper/80 text-white px-2 rounded text-xs font-bold uppercase tracking-wide shadow">Sparging</span>
+                </div>
+                {recipe.sparging ? (
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    <div>
+                      <span className="text-muted-foreground">Temperature:</span>
+                      <span className="ml-2">{recipe.sparging.temperature}°C</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Amount:</span>
+                      <span className="ml-2">{recipe.sparging.amount}L</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Time:</span>
+                      <span className="ml-2">{recipe.sparging.time} min</span>
+                    </div>
+                    {recipe.sparging.notes && (
+                      <div className="col-span-2">
+                        <span className="text-muted-foreground">Notes:</span>
+                        <span className="ml-2">{recipe.sparging.notes}</span>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-muted-foreground">No sparging info available.</div>
+                )}
+              </section>
+
+              <section className="flex flex-col sm:flex-row items-center gap-6 border-l-4 border-brewing-copper rounded-lg p-4 shadow-sm">
+                <div className="flex flex-col gap-2 flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="bg-brewing-copper/80 text-white px-2 rounded text-xs font-bold uppercase tracking-wide shadow">Boil</span>
+                    <span className="ml-2 font-semibold text-sm text-foreground">Boil Stage</span>
+                  </div>
+                  {recipe.boil ? (
+                    <div className="flex gap-3 items-center font-sans text-sm font-medium text-foreground">
+                      <span>{recipe.boil.name || "Standard Boil"}</span>
+                      <span>•</span>
+                      <span>{recipe.boil.time || 60} min</span>
+                      <span>•</span>
+                      <span>{recipe.boil.temperature || 100}°C</span>
+                    </div>
+                  ) : (
+                    <div className="text-muted-foreground">No boil info.</div>
+                  )}
+                </div>
+              </section>
+
               <section className="rounded-lg p-4 space-y-2 border-l-4 border-green-600 shadow-sm bg-transparent">
                 <div className="flex items-center gap-2 pb-1">
                   <span className="bg-green-600 text-white px-2 rounded text-xs font-bold uppercase tracking-wide shadow">Fermentation</span>
@@ -301,26 +345,6 @@ export function ViewRecipe() {
                 ) : (
                   <div className="text-muted-foreground">No fermentation info.</div>
                 )}
-              </section>
-
-              <section className="flex flex-col sm:flex-row items-center gap-6 border-l-4 border-brewing-copper rounded-lg p-4 shadow-sm">
-                <div className="flex flex-col gap-2 flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="bg-brewing-copper/80 text-white px-2 rounded text-xs font-bold uppercase tracking-wide shadow">Boil</span>
-                    <span className="ml-2 font-semibold text-sm text-foreground">Boil Stage</span>
-                  </div>
-                  {recipe.boil ? (
-                    <div className="flex gap-3 items-center font-sans text-sm font-medium text-foreground">
-                      <span>{recipe.boil.name || "Standard Boil"}</span>
-                      <span>•</span>
-                      <span>{recipe.boil.time || 60} min</span>
-                      <span>•</span>
-                      <span>{recipe.boil.temperature || 100}°C</span>
-                    </div>
-                  ) : (
-                    <div className="text-muted-foreground">No boil info.</div>
-                  )}
-                </div>
               </section>
 
               <div className="grid md:grid-cols-2 gap-4">

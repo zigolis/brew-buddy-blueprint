@@ -28,12 +28,12 @@ const BatchesList = () => {
             <p className="text-muted-foreground">Track and manage your brewed recipes</p>
           </div>
           <div className="relative w-full md:w-72">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search batches..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 w-full"
+              className="pl-10"
             />
           </div>
         </div>
