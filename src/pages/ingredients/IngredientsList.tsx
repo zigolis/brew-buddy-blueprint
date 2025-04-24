@@ -118,58 +118,65 @@ const IngredientsList = () => {
 
   return (
     <Layout>
-      <div className="space-y-6 w-full">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold">Ingredients</h1>
-            <p className="text-muted-foreground">Manage your brewing ingredients</p>
+            <p className="text-muted-foreground">
+              Manage your brewing ingredients
+            </p>
           </div>
-          <div className="flex items-center gap-2 md:gap-4">
-            <CustomInput
-              className="w-48"
-              placeholder="Search ingredients..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              startIcon={<Search className="h-4 w-4" />}
-            />
-            <Select
-              value={typeFilter || ""}
-              onValueChange={val => setTypeFilter(val.length ? val : null)}
-            >
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                {ingredientTypes.map(type => (
-                  <SelectItem key={type} value={type}>
-                    {getTypeDisplay(type)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {!isAddingIngredient && (
-              <Button onClick={handleAddNew}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Ingredient
-              </Button>
-            )}
-          </div>
+          {!isAddingIngredient && (
+            <Button onClick={handleAddNew}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Ingredient
+            </Button>
+          )}
         </div>
 
-        {/* Bookmarks Filter */}
+        <div className="flex justify-between gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search ingredients..."
+              className="pl-8"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+          <Select
+            value={typeFilter || ""}
+            onValueChange={val => setTypeFilter(val.length ? val : null)}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter by type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">All Types</SelectItem>
+              {ingredientTypes.map(type => (
+                <SelectItem key={type} value={type}>
+                  {getTypeDisplay(type)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Bookmarks section */}
         {bookmarks.length > 0 && (
-          <div className="flex items-center space-x-2 mb-2">
-            <span className="font-medium text-muted-foreground text-xs">Bookmarked:</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm text-muted-foreground">Bookmarked:</span>
             {bookmarks.map(bid => {
               const ing = getIngredientById(bid);
               return ing ? (
                 <Badge
                   key={bid}
-                  className="flex items-center gap-1"
+                  variant="secondary"
+                  className="flex items-center gap-1 cursor-pointer hover:bg-secondary/80"
                   onClick={() => handleBookmark(bid)}
                 >
-                  {ing.name} <Bookmark className="w-4 h-4" />
+                  {ing.name}
+                  <Bookmark className="w-3 h-3 ml-1" />
                 </Badge>
               ) : null;
             })}
@@ -195,13 +202,15 @@ const IngredientsList = () => {
             </CardContent>
           </Card>
         ) : (
-          <IngredientTable 
-            ingredients={filteredIngredients}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            onBookmark={handleBookmark}
-            bookmarks={bookmarks}
-          />
+          <div className="rounded-lg border">
+            <IngredientTable 
+              ingredients={filteredIngredients}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onBookmark={handleBookmark}
+              bookmarks={bookmarks}
+            />
+          </div>
         )}
       </div>
     </Layout>

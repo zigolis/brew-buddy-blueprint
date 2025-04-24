@@ -82,27 +82,39 @@ export default function HomePage() {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
-                <Link to="/recipes/new" className="w-full">
-                  <Button className="w-full h-12 text-base" variant="outline">
-                    <Plus className="mr-2 h-5 w-5" />
+                <Link to="/recipes/new" className="w-full group">
+                  <Button 
+                    className="w-full h-14 text-base bg-primary/5 hover:bg-primary/10 hover:text-primary transition-all duration-200 border-2 border-transparent hover:border-primary/20" 
+                    variant="outline"
+                  >
+                    <Plus className="mr-2 h-5 w-5 transition-transform group-hover:scale-110" />
                     New Recipe
                   </Button>
                 </Link>
-                <Link to="/brewing-guide" className="w-full">
-                  <Button className="w-full h-12 text-base" variant="outline">
-                    <Beer className="mr-2 h-5 w-5" />
+                <Link to="/brewing-guide" className="w-full group">
+                  <Button 
+                    className="w-full h-14 text-base bg-secondary/5 hover:bg-secondary/10 hover:text-secondary transition-all duration-200 border-2 border-transparent hover:border-secondary/20" 
+                    variant="outline"
+                  >
+                    <Beer className="mr-2 h-5 w-5 transition-transform group-hover:scale-110" />
                     Start Brewing
                   </Button>
                 </Link>
-                <Link to="/import" className="w-full">
-                  <Button className="w-full h-12 text-base" variant="outline">
-                    <Database className="mr-2 h-5 w-5" />
+                <Link to="/import" className="w-full group">
+                  <Button 
+                    className="w-full h-14 text-base bg-accent/5 hover:bg-accent/10 hover:text-accent transition-all duration-200 border-2 border-transparent hover:border-accent/20" 
+                    variant="outline"
+                  >
+                    <Database className="mr-2 h-5 w-5 transition-transform group-hover:scale-110" />
                     Import BeerXML
                   </Button>
                 </Link>
-                <Link to="/ingredients" className="w-full">
-                  <Button className="w-full h-12 text-base" variant="outline">
-                    <FileText className="mr-2 h-5 w-5" />
+                <Link to="/ingredients" className="w-full group">
+                  <Button 
+                    className="w-full h-14 text-base bg-muted hover:bg-muted/80 transition-all duration-200 border-2 border-transparent hover:border-muted-foreground/20" 
+                    variant="outline"
+                  >
+                    <FileText className="mr-2 h-5 w-5 transition-transform group-hover:scale-110" />
                     Manage Inventory
                   </Button>
                 </Link>
