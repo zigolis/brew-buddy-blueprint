@@ -105,7 +105,17 @@ const BrewingGuideSession = () => {
   const [brewingSteps, setBrewingSteps] = useState<BrewingStep[]>([]);
   const [timerActive, setTimerActive] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(0);
-  
+  const [stepData, setStepData] = useState<{[key: string]: any}>({});
+
+  const handleStepDataSave = (stepId: string, data: any) => {
+    setStepData(prev => ({
+      ...prev,
+      [stepId]: data
+    }));
+    
+    localStorage.setItem(`brewing-session-${recipeId}-${stepId}`, JSON.stringify(data));
+  };
+
   useEffect(() => {
     if (recipeId) {
       const found = recipes.find(r => r.id === recipeId);
@@ -135,6 +145,18 @@ const BrewingGuideSession = () => {
       if (timer) clearTimeout(timer);
     };
   }, [timerActive, timeRemaining]);
+  
+  useEffect(() => {
+    const savedData = brewingSteps.reduce((acc, step) => {
+      const saved = localStorage.getItem(`brewing-session-${recipeId}-${step.id}`);
+      if (saved) {
+        acc[step.id] = JSON.parse(saved);
+      }
+      return acc;
+    }, {});
+    
+    setStepData(savedData);
+  }, [recipeId, brewingSteps]);
   
   const generateBrewingSteps = (recipe: Recipe): BrewingStep[] => {
     const steps: BrewingStep[] = [];
@@ -412,202 +434,13 @@ const BrewingGuideSession = () => {
           </div>
           
           <div className="md:w-2/3">
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Badge variant="outline" className="mb-2">{currentStep.type}</Badge>
-                    <CardTitle>{currentStep.name}</CardTitle>
-                  </div>
-                  <div 
-                    className={`
-                      w-6 h-6 rounded-sm border flex items-center justify-center cursor-pointer 
-                      ${completedSteps.has(activeStep) ? 'bg-primary border-primary' : 'border-primary'}
-                    `}
-                    onClick={() => toggleStepCompletion(activeStep)}
-                  >
-                    {completedSteps.has(activeStep) && <Check className="h-4 w-4 text-primary-foreground" />}
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="text-lg">{currentStep.instructions}</div>
-                
-                {currentStep.type === 'Mash' && (
-                  <div className="flex flex-col space-y-3 bg-accent p-4 rounded-lg">
-                    <h3 className="text-sm font-medium flex items-center">
-                      <ThermometerSnowflake className="mr-2 h-4 w-4 text-brewing-amber" />
-                      Temperature Monitoring
-                    </h3>
-                    <div className="text-sm">
-                      Maintain mash temperature as close as possible to the target. Stir occasionally and check temperature.
-                    </div>
-                    <div className="flex space-x-2">
-                      <Button variant="outline" size="sm" className="flex-1">
-                        Log Temperature
-                      </Button>
-                      <Button variant="outline" size="sm" className="flex-1">
-                        Set Reminder
-                      </Button>
-                    </div>
-                  </div>
-                )}
-                
-                {currentStep.type === 'Boil' && (
-                  <div className="flex flex-col space-y-3 bg-accent p-4 rounded-lg">
-                    <h3 className="text-sm font-medium flex items-center">
-                      <Clock className="mr-2 h-4 w-4 text-brewing-amber" />
-                      Boil Timer
-                    </h3>
-                    <div className="text-center text-3xl font-mono">
-                      {formatTime(timeRemaining)}
-                    </div>
-                    <div className="grid grid-cols-3 gap-2">
-                      {!timerActive ? (
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => {
-                            const timeMatch = currentStep.instructions.match(/(\d+)\s*minutes/);
-                            const minutes = timeMatch ? parseInt(timeMatch[1]) : 60;
-                            startTimer(minutes);
-                          }}
-                          className="col-span-2"
-                        >
-                          Start Timer
-                        </Button>
-                      ) : (
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={pauseTimer}
-                          className="col-span-2"
-                        >
-                          Pause Timer
-                        </Button>
-                      )}
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={resetTimer}
-                      >
-                        Reset
-                      </Button>
-                    </div>
-                  </div>
-                )}
-                
-                <Tabs defaultValue="ingredients">
-                  <TabsList>
-                    <TabsTrigger value="ingredients">
-                      <Package className="h-4 w-4 mr-2" />
-                      Ingredients
-                    </TabsTrigger>
-                    <TabsTrigger value="recipe">
-                      <FileText className="h-4 w-4 mr-2" />
-                      Recipe Details
-                    </TabsTrigger>
-                    <TabsTrigger value="notes">
-                      <List className="h-4 w-4 mr-2" />
-                      Notes
-                    </TabsTrigger>
-                  </TabsList>
-                  
-                  <TabsContent value="ingredients" className="space-y-4">
-                    <div>
-                      <h3 className="text-sm font-medium mb-2">Fermentables</h3>
-                      <ScrollArea className="h-[120px]">
-                        <div className="space-y-2">
-                          {recipe.ingredients.fermentables.map(fermentable => (
-                            <div key={fermentable.id} className="flex justify-between text-sm">
-                              <span>{fermentable.name}</span>
-                              <span>{fermentable.amount.toFixed(2)} kg</span>
-                            </div>
-                          ))}
-                        </div>
-                      </ScrollArea>
-                    </div>
-                    
-                    <Separator />
-                    
-                    <div>
-                      <h3 className="text-sm font-medium mb-2">Hops</h3>
-                      <ScrollArea className="h-[120px]">
-                        <div className="space-y-2">
-                          {recipe.ingredients.hops.map(hop => (
-                            <div key={hop.id} className="flex justify-between text-sm">
-                              <span>{hop.name} ({hop.time} min, {hop.use})</span>
-                              <span>{(hop.amount * 1000).toFixed(0)} g</span>
-                            </div>
-                          ))}
-                        </div>
-                      </ScrollArea>
-                    </div>
-                  </TabsContent>
-                  
-                  <TabsContent value="recipe" className="space-y-4">
-                    <div className="grid grid-cols-2 gap-2 text-sm">
-                      <div><span className="font-medium">Batch Size:</span> {recipe.batchSize}L</div>
-                      <div><span className="font-medium">Boil Time:</span> {recipe.boilTime} min</div>
-                      <div><span className="font-medium">Efficiency:</span> {recipe.efficiency}%</div>
-                      <div><span className="font-medium">Style:</span> {recipe.style.name}</div>
-                      <div><span className="font-medium">Est. ABV:</span> {((recipe.style.minAbv + recipe.style.maxAbv) / 2).toFixed(1)}%</div>
-                      <div><span className="font-medium">Est. IBU:</span> {((recipe.style.minIbu + recipe.style.maxIbu) / 2).toFixed(0)}</div>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-sm font-medium mb-2">Mash Schedule</h3>
-                      <div className="space-y-2">
-                        {recipe.mash.steps.map((step, index) => (
-                          <div key={index} className="flex justify-between text-sm">
-                            <span>{step.name}</span>
-                            <span>{step.temperature}°C for {step.time} min</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </TabsContent>
-                  
-                  <TabsContent value="notes">
-                    <div className="space-y-4">
-                      <div>
-                        <h3 className="text-sm font-medium mb-2">Recipe Notes</h3>
-                        <p className="text-sm">{recipe.notes || "No recipe notes available."}</p>
-                      </div>
-                      
-                      <Separator />
-                      
-                      <div>
-                        <h3 className="text-sm font-medium mb-2">Brewing Session Notes</h3>
-                        <textarea 
-                          className="w-full min-h-[100px] p-2 text-sm border rounded-md" 
-                          placeholder="Add your brewing notes here..."
-                        />
-                      </div>
-                    </div>
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-              <CardFooter className="justify-between border-t">
-                <Button 
-                  variant="outline"
-                  onClick={() => setActiveStep(prev => Math.max(0, prev - 1))}
-                  disabled={activeStep === 0}
-                >
-                  Previous Step
-                </Button>
-                <Button 
-                  onClick={() => {
-                    toggleStepCompletion(activeStep);
-                    if (activeStep < brewingSteps.length - 1) {
-                      setActiveStep(prev => prev + 1);
-                    }
-                  }}
-                >
-                  {completedSteps.has(activeStep) ? "Mark Incomplete" : "Complete Step"}
-                </Button>
-              </CardFooter>
-            </Card>
+            <BrewingStepCard
+              step={{...currentStep, savedData: stepData[currentStep.id]}}
+              isActive={true}
+              onComplete={() => toggleStepCompletion(activeStep)}
+              onDataSave={(data) => handleStepDataSave(currentStep.id, data)}
+              completed={completedSteps.has(activeStep)}
+            />
           </div>
         </div>
       </div>
