@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
+import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
@@ -207,30 +207,32 @@ export const StepDataForm = ({ stepType, onSave, initialData }: StepDataFormProp
   );
 
   return (
-    <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-      {stepType === 'Mash' && renderMashingFields()}
-      {stepType === 'Sparging' && renderSpargingFields()}
-      {stepType === 'Boil' && renderBoilFields()}
-      {stepType === 'Fermentation' && renderFermentationFields()}
-      
-      <FormField
-        control={form.control}
-        name="notes"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Notes</FormLabel>
-            <FormControl>
-              <Textarea
-                placeholder="Enter your notes for this step..."
-                className="min-h-[100px]"
-                {...field}
-              />
-            </FormControl>
-          </FormItem>
-        )}
-      />
-      
-      <Button type="submit">Save Data</Button>
-    </form>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+        {stepType === 'Mash' && renderMashingFields()}
+        {stepType === 'Sparging' && renderSpargingFields()}
+        {stepType === 'Boil' && renderBoilFields()}
+        {stepType === 'Fermentation' && renderFermentationFields()}
+        
+        <FormField
+          control={form.control}
+          name="notes"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Notes</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Enter your notes for this step..."
+                  className="min-h-[100px]"
+                  {...field}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        
+        <Button type="submit">Save Data</Button>
+      </form>
+    </Form>
   );
 };
