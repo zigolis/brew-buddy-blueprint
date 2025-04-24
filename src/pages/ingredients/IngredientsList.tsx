@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
@@ -12,6 +11,7 @@ import { CustomInput } from "@/components/ui/custom-input";
 import { Select, SelectItem, SelectTrigger, SelectContent, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
 
 const ingredientTypes = [
   "Grain", "Sugar", "Extract", "Dry Extract", "Adjunct", "Hop", "Yeast", "Other"
@@ -27,7 +27,6 @@ const IngredientsList = () => {
   const [bookmarks, setBookmarks] = useState<string[]>([]);
   const { ingredients, addIngredient, updateIngredient, deleteIngredient, getIngredientById } = useIngredients();
 
-  // Search and filter logic
   const filteredIngredients = ingredients
     .filter((ing) => (typeFilter ? ing.type === typeFilter : true))
     .filter((ing) =>
@@ -79,7 +78,6 @@ const IngredientsList = () => {
       deleteIngredient(id);
       toast.success("Ingredient deleted successfully");
       
-      // Also remove from bookmarks if it was there
       if (bookmarks.includes(id)) {
         setBookmarks(prev => prev.filter(bid => bid !== id));
       }
@@ -162,7 +160,6 @@ const IngredientsList = () => {
           </Select>
         </div>
 
-        {/* Bookmarks section */}
         {bookmarks.length > 0 && (
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-sm text-muted-foreground">Bookmarked:</span>
